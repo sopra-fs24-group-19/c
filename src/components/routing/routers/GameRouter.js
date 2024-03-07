@@ -23,4 +23,5 @@ const GameRouter = () => {
 GameRouter.propTypes = {
   base: PropTypes.string
 }
+
 export default GameRouter;
