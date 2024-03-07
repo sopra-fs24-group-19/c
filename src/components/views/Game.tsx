@@ -9,8 +9,7 @@ import "styles/views/Game.scss";
 import { User } from "types";
 
 const Player = ({ user }: { user: User }) => (
-  <div className=
-  "player container">
+  <div className="player container">
     {/* this to make a link on the username */}
     <Link to={"/game/user/" + user.id}> <div className="player username">{user.username}</div></Link>
     <div className="player id">id: {user.id}</div>

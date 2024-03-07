@@ -41,7 +41,7 @@ const Login = () => {
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({ username, password });
-      //QUESTION ok? Modificato per fare la post a /login
+
       const response = await api.post("/login", requestBody);
 
       // Get the returned user and update a new object.

@@ -144,6 +144,7 @@ const UserDetails = () => {
     );
   }
   //what i print on the webpage
+  
   return (
     <BaseContainer className="userDetails container">
       <h2>User details</h2>
