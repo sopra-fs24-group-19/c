@@ -35,19 +35,22 @@ FormField.propTypes = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
+  const [password, setPassword] = useState<string>(null);
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name });
-      const response = await api.post("/users", requestBody);
+      const requestBody = JSON.stringify({ username, password });
+      //QUESTION ok? Modificato per fare la post a /login
+      const response = await api.post("/login", requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
+      // Saving in local storage the user just logged in
+      localStorage.setItem("userObject", JSON.stringify(user));
 
       // Store the token into the local storage.
-      localStorage.setItem("token", user.token);
+      localStorage.setItem("token", response.headers["authorization"]);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/game");
@@ -57,6 +60,9 @@ const Login = () => {
       );
     }
   };
+  // MODIFIED 
+  const navigateToRegister = async () => {
+    navigate("/register");}
 
   return (
     <BaseContainer>
@@ -68,17 +74,25 @@ const Login = () => {
             onChange={(un: string) => setUsername(un)}
           />
           <FormField
-            label="Name"
-            value={name}
-            onChange={(n) => setName(n)}
+            label="Password"
+            value={password}
+            onChange={(n) => setPassword(n)}
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !name}
+              disabled={!username || !password}
               width="100%"
               onClick={() => doLogin()}
             >
               Login
+            </Button>
+            
+            <Button
+              disabled={false}
+              width="100%"
+              onClick={() => navigateToRegister()}
+            >
+              New user? Register!
             </Button>
           </div>
         </div>
