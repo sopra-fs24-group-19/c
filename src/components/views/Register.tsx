@@ -23,12 +23,15 @@ const FormField = (props) => {
         placeholder="enter here.."
         type={props.fieldType}
         value={props.value}
+        // onChange: An event handler that triggers on input change, 
+        // calling props.onChange and passing the changed value.
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
   );
 };
 
+//propTypes is to ensure that the passed data is of the correct datatype.
 FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
@@ -44,7 +47,7 @@ const Register = () => {
   const doRegister = async () => {
     try {
       const requestBody = JSON.stringify({ username, password });
-      //TODO: Controlla perché spara GET invece di POST, wrapper fatto male
+      
       const response = await api.post("/users", requestBody);
 
       const token = response.headers["authorization"];

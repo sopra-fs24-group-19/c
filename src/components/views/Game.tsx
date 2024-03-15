@@ -43,7 +43,7 @@ const Game = () => {
   // in this case, the effect hook is only run once, the first time the component is mounted
   // this can be achieved by leaving the second argument an empty array.
   // for more information on the effect hook, please see https://react.dev/reference/react/useEffect 
-  useEffect(() => {
+  useEffect(() => { 
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     async function fetchData() {
       try {

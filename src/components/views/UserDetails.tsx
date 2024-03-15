@@ -32,7 +32,7 @@ FormField.propTypes = {
 };
 
 const Player = ({ user, setUser }: { user: User, setUser: any }) => {
-  // const [userToEdit, setUserToEdit] = useState<User>(user);
+
   return <>
     <div className="playerDetails container" >
       <span>ID:</span>
@@ -74,7 +74,7 @@ Player.propTypes = {
 const UserDetails = () => {
 
   const navigate = useNavigate();
-  //with useParams() i get all the parameters present in the URL(in this case the id)
+  //ID Custom Link: with useParams() i get all the parameters present in the URL(in this case the id)
   const routeParams = useParams();
 
   const [user, setUser] = useState<User>(null);
@@ -89,10 +89,10 @@ const UserDetails = () => {
 
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed
-        // feel free to remove it :)
+        // feel free to remove it :) 
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // Get the returned users and update the state.
+        // Get the returned users and update the state. .data is the body of the response
         setUser(response.data);
 
         // See here to get more data.
@@ -152,7 +152,8 @@ const UserDetails = () => {
         These are the details:
       </p>
       {content}
-      {/* if the user is not loaded the save button is grayed out */}
+      {/* if the user is not loaded (i check the user instance is not null and the username is not null)
+       the save button is grayed out */}
       <Button disabled={user && !user.username} onClick={updateUser}>Save</Button>
       <Button onClick={() => navigate("/game/dashboard")}>Go back to dashboard</Button>
     </BaseContainer>

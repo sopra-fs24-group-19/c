@@ -60,7 +60,7 @@ const Login = () => {
       );
     }
   };
-  // MODIFIED 
+
   const navigateToRegister = async () => {
     navigate("/register");}
 
