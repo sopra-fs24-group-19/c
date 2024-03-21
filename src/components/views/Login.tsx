@@ -35,22 +35,19 @@ FormField.propTypes = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
-  const [password, setPassword] = useState<string>(null);
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({ username, password });
-
-      const response = await api.post("/login", requestBody);
+      const requestBody = JSON.stringify({ username, name });
+      const response = await api.post("/users", requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
-      // Saving in local storage the user just logged in
-      localStorage.setItem("userObject", JSON.stringify(user));
 
       // Store the token into the local storage.
-      localStorage.setItem("token", response.headers["authorization"]);
+      localStorage.setItem("token", user.token);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/game");
@@ -60,9 +57,6 @@ const Login = () => {
       );
     }
   };
-
-  const navigateToRegister = async () => {
-    navigate("/register");}
 
   return (
     <BaseContainer>
@@ -74,25 +68,17 @@ const Login = () => {
             onChange={(un: string) => setUsername(un)}
           />
           <FormField
-            label="Password"
-            value={password}
-            onChange={(n) => setPassword(n)}
+            label="Name"
+            value={name}
+            onChange={(n) => setName(n)}
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !password}
+              disabled={!username || !name}
               width="100%"
               onClick={() => doLogin()}
             >
               Login
-            </Button>
-            
-            <Button
-              disabled={false}
-              width="100%"
-              onClick={() => navigateToRegister()}
-            >
-              New user? Register!
             </Button>
           </div>
         </div>

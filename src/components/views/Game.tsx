@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import { Button } from "components/ui/Button";
-import {useNavigate, Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
@@ -10,8 +10,8 @@ import { User } from "types";
 
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
-    {/* this to make a link on the username */}
-    <Link to={"/game/user/" + user.id}> <div className="player username">{user.username}</div></Link>
+    <div className="player username">{user.username}</div>
+    <div className="player name">{user.name}</div>
     <div className="player id">id: {user.id}</div>
   </div>
 );
@@ -31,11 +31,8 @@ const Game = () => {
   // more information can be found under https://react.dev/learn/state-a-components-memory and https://react.dev/reference/react/useState 
   const [users, setUsers] = useState<User[]>(null);
 
-  const logout  = async () => {
-    //first param of put is always the path, second one is the body, third are the options(header in this case)
-    const response = await api.put("/logout", undefined, {headers: { "Authorization" : localStorage.getItem("token") }});
+  const logout = (): void => {
     localStorage.removeItem("token");
-
     navigate("/login");
   };
 
@@ -43,11 +40,11 @@ const Game = () => {
   // in this case, the effect hook is only run once, the first time the component is mounted
   // this can be achieved by leaving the second argument an empty array.
   // for more information on the effect hook, please see https://react.dev/reference/react/useEffect 
-  useEffect(() => { 
+  useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     async function fetchData() {
       try {
-        const response = await api.get("/users", {headers: {"Authorization": localStorage.getItem("token")}});
+        const response = await api.get("/users");
 
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed

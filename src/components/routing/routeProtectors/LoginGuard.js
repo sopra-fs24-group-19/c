@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
  * instead of 'export default' at the end of the file.
  */
 export const LoginGuard = () => {
-  //If i don't have a token i get back to login page.
   if (!localStorage.getItem("token")) {
     
     return <Outlet />;
