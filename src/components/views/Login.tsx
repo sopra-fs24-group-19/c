@@ -2,7 +2,7 @@ import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/Login.scss";
