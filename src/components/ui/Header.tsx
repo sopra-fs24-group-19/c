@@ -7,7 +7,6 @@ function Header() {
   return (
     <Navbar expand="lg" className="bg-green-200 text-brown-500">
       <Container>
-        <Navbar.Brand as={Link} to="/game" className="text-2xl font-bold">Helping Hands</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" role="navigation">
           <Nav className="me-auto">
