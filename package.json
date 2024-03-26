@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@mui/icons-material": "^5.15.14",
     "autoprefixer": "^9.8.8",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",

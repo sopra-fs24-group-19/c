@@ -1,9 +1,11 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+
+
 function Header() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary text-white">
+    <Navbar expand="lg" className="bg-green-200 text-brown-500">
       <Container>
         <Navbar.Brand as={Link} to="/game" className="text-2xl font-bold">Helping Hands</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
