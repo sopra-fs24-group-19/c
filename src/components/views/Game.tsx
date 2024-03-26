@@ -1,8 +1,9 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import Header from "components/ui/Header";
 import { Spinner } from "components/ui/Spinner";
 import { api, handleError } from "helpers/api";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "styles/views/Game.scss";
@@ -120,13 +121,16 @@ const Game = () => {
   }
 
   return (
-    <BaseContainer className="game container">
-      <h2>Users Overview</h2>
-      <p className="game paragraph">
-        Click on a user to see more details.
-      </p>
-      {content}
-    </BaseContainer>
+    <>
+      <Header />
+      <BaseContainer className="game container">
+        <h2>Users Overview</h2>
+        <p className="game paragraph">
+          Click on a user to see more details.
+        </p>
+        {content}
+      </BaseContainer>
+    </>
   );
 };
 

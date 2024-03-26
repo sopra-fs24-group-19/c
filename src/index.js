@@ -1,7 +1,8 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import {createRoot} from "react-dom/client";
-import "./styles/index.scss";
+import { createRoot } from "react-dom/client";
 import App from "./App";
+import "./styles/index.scss";
 
 /**
  * This is the entry point of your React application where the root element is in the public/index.html.
