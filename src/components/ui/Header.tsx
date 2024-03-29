@@ -10,7 +10,7 @@ function Header() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" role="navigation">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/game" className="text-lg">HomeFeed</Nav.Link>
+            <Nav.Link as={Link} to="/homefeed" className="text-lg">HomeFeed</Nav.Link>
             <Nav.Link as={Link} to="/addtasks" className="text-lg">Add Tasks</Nav.Link>
           </Nav>
           <Nav className="ml-auto">

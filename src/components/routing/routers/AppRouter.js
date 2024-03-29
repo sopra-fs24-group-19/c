@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
 import Edit from "../../views/Edit";
+import HomeFeed from "../../views/HomeFeed";
 import Login from "../../views/Login";
 import MyProfile from "../../views/MyProfile";
 import MyTasks from "../../views/MyTasks";
@@ -9,6 +10,7 @@ import Register from "../../views/Register";
 import UserProfile from "../../views/UserProfile";
 import { AddTasksGuard } from "../routeProtectors/AddTasksGuard";
 import { GameGuard } from "../routeProtectors/GameGuard";
+import { HomeFeedGuard } from "../routeProtectors/HomeFeedGuard";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { MyProfileGuard } from "../routeProtectors/MyProfileGuard";
 import { MyTasksGuard } from "../routeProtectors/MyTasksGuard";
@@ -61,6 +63,10 @@ const AppRouter = () => {
 
         <Route path="/addtasks" element={<AddTasksGuard />}>
           <Route path="/addtasks" element={<AddTasks />} />
+        </Route>
+
+        <Route path="/homefeed" element={<HomeFeedGuard />}>
+          <Route path="/homefeed" element={<HomeFeed />} />
         </Route>
 
         <Route path="/" element={
