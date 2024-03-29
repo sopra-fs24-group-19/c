@@ -81,8 +81,8 @@ const Register = () => {
   return (
     <BaseContainer>
       <div className="register container">
-        <h1 style={{ color: '#201d18' }}>Register</h1>
-        <p style={{ color: '#201d18' }}>Use unique username and name</p>
+        <h1 style={{ color: '#765341' }}>Register</h1>
+        <p style={{ color: '#765341' }}>Use unique username and name</p>
         <div className="register form">
           <FormField
             label="Username"

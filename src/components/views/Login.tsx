@@ -83,8 +83,8 @@ const Login = () => {
   return (
     <BaseContainer>
       <div className="login container">
-        <h1 style={{ color: '#201d18' }}>Login</h1>
-        <h5 style={{ color: '#201d18' }}>If you do not have an account yet, use Register button</h5>
+        <h1 style={{ color: '#765341' }}>Login</h1>
+        <h5 style={{ color: '#765341' }}>If you do not have an account yet, use Register button</h5>
         <div className="login form">
           <FormField
             label="Username"
