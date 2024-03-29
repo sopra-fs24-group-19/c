@@ -30,8 +30,9 @@ import GameRouter from "./GameRouter";
 const AppRouter = () => {
   return (
     <BrowserRouter>
+      
       <Routes>
-
+        
         <Route path="/game/*" element={<GameGuard />}>
           <Route path="/game/*" element={<GameRouter base="/game"/>} />
         </Route>

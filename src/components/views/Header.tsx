@@ -1,4 +1,5 @@
-import PropTypes from "prop-types";
+
+import * as PropTypes from "prop-types";
 import "../../styles/views/Header.scss";
 
 /**
