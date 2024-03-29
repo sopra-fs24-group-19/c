@@ -83,7 +83,7 @@ const Login = () => {
   return (
     <BaseContainer>
       <div className="login container">
-        <h1>Login</h1>
+        <h1 style={{ color: '#201d18' }}>Login</h1>
         <h5>If you do not have an account yet, use Register button</h5>
         <div className="login form">
           <FormField
@@ -102,7 +102,7 @@ const Login = () => {
             onChange={(n) => setPassword(n)}
           />
           <div className="login button-container">
-            <Button
+            <Button 
               disabled={!username || !name || !password}
               width="100%"
               onClick={() => doLogin()}
