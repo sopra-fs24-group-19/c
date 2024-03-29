@@ -1,9 +1,8 @@
-import Header from 'components/ui/Header';
-
+import NavBar from 'components/ui/NavBar';
 const HomeFeed = () => {
   return (
     <>
-      <Header />
+      <NavBar />
         <h2>HomeFeed Page</h2>
         <p>This is a placeholder for the HomeFeed page content.</p>
     </>
