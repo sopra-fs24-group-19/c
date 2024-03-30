@@ -3,13 +3,13 @@
 .navbar {
     display: flex;
     justify-content: space-around;
-    background-color: #bbd4ac;
+    background-color: $our_green;
     padding: 10px 0;
     font-family: $fontDefault;
   }
   
   .nav-link {
-    color: #765341;
+    color: $our_brown;
     text-decoration: none;
     font-family: $fontDefault;
   }

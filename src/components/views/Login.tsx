@@ -86,8 +86,8 @@ const Login = () => {
     <BaseContainer>
       <div className="login container">
         <img src="HHlogo.png" alt="Company Logo" className="logo" />
-        <h1 style={{ color: '#765341' }}>Hi there!</h1>
-        <h5 style={{ color: '#765341' }}>Please enter your credentials</h5>
+        <h1>Hi there!</h1>
+        <h5>Please enter your credentials</h5>
         <div className="login form">
           <FormField
             label="Username"
