@@ -19,6 +19,7 @@ const FormField = (props) => {
       <label className="register label">{props.label}</label>
       <input
         className="register input"
+        type={props.isPassword ? "password" : "text"}
         placeholder="enter here.."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -31,6 +32,7 @@ FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  isPassword: PropTypes.bool
 };
 
 const Register = () => {
@@ -81,8 +83,9 @@ const Register = () => {
   return (
     <BaseContainer>
       <div className="register container">
-        <h1>Register</h1>
-        <p>Use unique username and name</p>
+        <img src="HHlogo.png" alt="Company Logo" className="logo" />
+        <h1>Create your account</h1>
+        <p>Please make sure your username and name are unique</p>
         <div className="register form">
           <FormField
             label="Username"
@@ -97,7 +100,8 @@ const Register = () => {
           <FormField
             label="Password"
             value={password}
-            onChange={(n) => setPassword(n)}
+            isPassword={true}
+            onChange={(pw) => setPassword(pw)}
           />
           <div className="register button-container">
             <Button
@@ -108,6 +112,17 @@ const Register = () => {
               Register
             </Button>
           </div>
+
+          <div className="login button-container">
+                <p>
+                  <span style={{ color: 'black' }}>Already have an account? Click&nbsp;</span>
+                  <a href="/login" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
+                    here
+                  </a>
+                  <span style={{ color: 'black' }}>&nbsp;to login.</span>
+                </p>
+              </div>
+
         </div>
       </div>
     </BaseContainer>
