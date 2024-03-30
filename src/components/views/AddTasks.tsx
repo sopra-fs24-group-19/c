@@ -1,3 +1,4 @@
+import NavBar from 'components/ui/NavBar';
 import Header from 'components/ui/Header';
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
@@ -34,6 +35,12 @@ FormField.propTypes = {
 
 const AddTasks = () => {
   return (
+    <>
+      <NavBar />
+        <h2>Add Tasks Page</h2>
+        <p>This is a placeholder for the Add Tasks page content.</p>
+      
+    </>
     <BaseContainer>
           <div className="register container">
             <h1>Create a new task</h1>

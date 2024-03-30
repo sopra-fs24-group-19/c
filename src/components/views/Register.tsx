@@ -84,8 +84,8 @@ const Register = () => {
     <BaseContainer>
       <div className="register container">
         <img src="HHlogo.png" alt="Company Logo" className="logo" />
-        <h1>Create your account</h1>
-        <p>Please make sure your username and name are unique</p>
+        <h1 style={{ color: '#765341' }}>Create your account</h1>
+        <p style={{ color: '#765341' }}>Please make sure your username and name are unique</p>
         <div className="register form">
           <FormField
             label="Username"

@@ -1,13 +1,24 @@
 @import "../theme";
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 .header {
+  background-color: #bbd4ac; // green
+  width: 100%;
+
   &.container {
     @include center;
+    width: 100%;
+    max-width: 100%; 
+   
   }
 
   &.title {
     font-weight: bold;
-    color: $background;
+    color: #765341;
     text-align: center;
   }
 }

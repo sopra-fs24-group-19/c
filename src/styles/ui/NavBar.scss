@@ -1,0 +1,15 @@
+@import "../theme";
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #bbd4ac;
+    padding: 10px 0;
+    font-family: $fontDefault;
+  }
+  
+  .nav-link {
+    color: #765341;
+    text-decoration: none;
+    font-family: $fontDefault;
+  }

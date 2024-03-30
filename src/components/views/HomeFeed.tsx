@@ -1,12 +1,10 @@
-import Header from 'components/ui/Header';
-
-
+import NavBar from 'components/ui/NavBar';
 const HomeFeed = () => {
   return (
     <>
-        <Header />
-        <h2>Home Feed Page</h2>
-        <p>This is a placeholder for the Home Feed page content.</p>
+      <NavBar />
+        <h2>HomeFeed Page</h2>
+        <p>This is a placeholder for the HomeFeed page content.</p>
     </>
   );
 };

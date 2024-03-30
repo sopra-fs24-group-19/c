@@ -1,10 +1,10 @@
-import Header from 'components/ui/Header';
+import NavBar from 'components/ui/NavBar';
 
 
 const MyTasks = () => {
   return (
     <>
-        <Header />
+        <NavBar />
         <h2>My Tasks Page</h2>
         <p>This is a placeholder for the My Tasks page content.</p>
     </>
