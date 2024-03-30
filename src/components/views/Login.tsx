@@ -19,6 +19,7 @@ const FormField = (props) => {
       <label className="login label">{props.label}</label>
       <input
         className="login input"
+        type={props.isPassword ? "password" : "text"}
         placeholder="enter here.."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -31,6 +32,7 @@ FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  isPassword: PropTypes.bool
 };
 
 const Login = () => {
@@ -83,8 +85,9 @@ const Login = () => {
   return (
     <BaseContainer>
       <div className="login container">
-        <h1>Login</h1>
-        <h5>If you do not have an account yet, use Register button</h5>
+        <img src="HHlogo.png" alt="Company Logo" className="logo" />
+        <h1>Hi there!</h1>
+        <h5>Please enter your credentials</h5>
         <div className="login form">
           <FormField
             label="Username"
@@ -99,7 +102,8 @@ const Login = () => {
           <FormField
             label="Password"
             value={password}
-            onChange={(n) => setPassword(n)}
+            isPassword={true}
+            onChange={(pw) => setPassword(pw)}
           />
           <div className="login button-container">
             <Button
@@ -110,14 +114,15 @@ const Login = () => {
               Login
             </Button>
           </div>
-          <div className="login button-container">
-            <Button
-              width="100%"
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </Button>
-          </div>
+        <div className="login button-container">
+              <p>
+                <span style={{ color: 'black' }}>Not a member yet? Click&nbsp;</span>
+                <a href="/register" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
+                  here
+                </a>
+                <span style={{ color: 'black' }}>&nbsp;to register.</span>
+              </p>
+            </div>
         </div>
       </div>
     </BaseContainer>
