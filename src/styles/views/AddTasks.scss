@@ -15,7 +15,7 @@
     justify-content: center;
     width: 100%;
     max-width: 30em;
-    height: 35em;
+    height: 38em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -31,6 +31,7 @@
     justify-content: center;
   }
   &.input {
+    width: 100% !important;
     height: 35px;
     padding-left: 15px;
     margin-left: -4px;

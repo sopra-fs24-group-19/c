@@ -8,8 +8,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Task from "models/Tasks"
 import "styles/views/AddTasks.scss";
-
-
+//In order to work with the DatePicker, type in the terminal: "npm install react-datepicker --save"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const FormField = (props) => {
   return (
@@ -46,11 +47,11 @@ const PriceDropdown = (props) => {
           className="addtasks input"
           value={props.value !== null ? props.value : ''}
           onChange={handleChange}
-          style={{ width: '410px'}}
+          style={{color: props.value === null ? '#999999' : '#553842'}}
         >
-          {<option value="" disabled>{props.placeholder}</option>}
+          <option value="" disabled >{props.placeholder}</option>
           {[...Array(20)].map((_, index) => (
-            <option key={index + 1} value={index + 1}>
+            <option key={index + 1} value={index + 1} >
               {index + 1}
             </option>
           ))}
@@ -79,7 +80,7 @@ const DurationDropdown = (props) => {
           className="addtasks input"
           value={props.value !== null ? props.value : ''}
           onChange={handleChange}
-          style={{ width: '410px' }}
+          style={{color: props.value === null ? '#999999' : '#553842'}}
         >
           <option value="" disabled hidden>{props.placeholder}</option>
           <option value="10">10 minutes</option>
@@ -102,6 +103,32 @@ DurationDropdown.propTypes = {
   placeholder: PropTypes.string
 };
 
+
+const OurDatePicker = (props) => {
+  return (
+    <div className="addtasks field">
+      <label className="addtasks label">{props.label}</label>
+          <DatePicker
+            className="addtasks input"
+            selected={props.value}
+            onChange={props.onChange}
+            placeholderText={props.placeholder}
+            minDate={new Date()}
+            showTimeSelect // Add this prop to enable time selection
+            dateFormat="yyyy-MM-dd HH:mm"
+            style={{width: "410px !important"}}
+          />
+    </div>
+  );
+};
+OurDatePicker.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.instanceOf(Date),
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+
 const AddTasks = () => {
   const navigate = useNavigate();
   const currentUserId = localStorage.getItem("currentUserId")
@@ -109,12 +136,13 @@ const AddTasks = () => {
   const [description, setDescription] = useState<string>(null);
   const [price, setPrice] = useState<int>(null);
   const [address, setAddress] = useState<string>(null);
+  const [date, setDate] = useState<Date>(null);
   const [duration, setDuration] = useState<float>(null);
 
   const doCreateTask = async () => {
     // Send all the info for the new task to the backend
     try {
-      const requestBody = JSON.stringify({ title, description, price, address, duration, currentUserId });
+      const requestBody = JSON.stringify({ title, description, price, address, date, duration, currentUserId });
       const response = await api.post("/tasks", requestBody, {
       });
 
@@ -161,6 +189,12 @@ const AddTasks = () => {
                 value={address}
                 onChange={(a: int) => setAddress(a)}
               />
+              <OurDatePicker
+                label="Date"
+                placeholder={"When should this task be done?"}
+                value={date}
+                onChange={(d: Date) => setDate(d)}
+              />
               <DurationDropdown
                 label="Estimated duration"
                 placeholder={"How long will the task approximately take?"}
@@ -180,7 +214,8 @@ const AddTasks = () => {
                 </Button>
                 <Button
                   width="100%"
-                  disabled={!title || !description || !price || !address || !duration}
+                  disabled={!title || !description || !price || !address || !date || !duration}
+                  onClick={() => doCreateTask()}
                  >
                   Create task
                 </Button>

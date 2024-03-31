@@ -42,7 +42,7 @@ const RadiusDropdown = (props) => {
           className="myprofile input"
           value={props.value !== null ? props.value : ''}
           onChange={handleChange}
-          style={{ width: '410px' }}
+          style={{width: '410px', color: props.value === null ? '#999999' : '#553842'}}
         >
           <option value="" disabled >{props.placeholder}</option>
           <option value="1">1 km</option>
@@ -88,9 +88,9 @@ const MyProfile = () => {
   const [radius, setRadius] = useState<int>(null);
 
 
-  const doSaveUpdates = async (username, name, phonenumber, address, radius) => {
+  const doSaveUpdates = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name, phonenumber, address, radius });
+      const requestBody = JSON.stringify({ username, name, phonenumber, address, radius});
       const response = await api.put(`/users/${currentUser.id}`, requestBody);
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
@@ -105,10 +105,10 @@ const MyProfile = () => {
   return (
         <>
           <NavBar />
-          <div className="addtasks container">
+          <div className="myprofile container">
             <h1 >My profile</h1>
             <p>Here, you can edit your profile</p>
-            <div className="addtasks form">
+            <div className="myprofile form">
 
               {/*Define all needed attributes for a new task*/}
               <FormField
@@ -153,7 +153,7 @@ const MyProfile = () => {
                 <Button
                   width="100%"
                   disabled={!username && !name && !phonenumber && !address && !radius}
-                  onClick={() => doSaveUpdates(username, name, phonenumber, address, radius)}
+                  onClick={() => doSaveUpdates()}
                  >
                   Save changes
                 </Button>
