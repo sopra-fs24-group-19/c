@@ -114,8 +114,8 @@ const AddTasks = () => {
   const doCreateTask = async () => {
     // Send all the info for the new task to the backend
     try {
-      const requestBody = JSON.stringify({ title, description, price, address, duration });
-      const response = await api.post(`/tasks/${currentUserId}`, requestBody, {
+      const requestBody = JSON.stringify({ title, description, price, address, duration, currentUserId });
+      const response = await api.post("/tasks", requestBody, {
       });
 
     // After successful task creation --> navigate to the homefeed

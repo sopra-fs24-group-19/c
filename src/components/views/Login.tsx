@@ -67,6 +67,7 @@ const Login = () => {
       console.log("Saving token in local storage:", token);
 
       localStorage.setItem("token", token);
+      localStorage.setItem("currentUser", user);
       localStorage.setItem("currentUserId", user.id);
 
       // Debugging: Log after saving the token
