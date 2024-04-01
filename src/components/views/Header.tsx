@@ -1,6 +1,8 @@
 
 import * as PropTypes from "prop-types";
+import { Button } from "components/ui/Button";
 import "../../styles/views/Header.scss";
+import { Link } from "react-router-dom";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -10,19 +12,42 @@ import "../../styles/views/Header.scss";
  * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
  * @FunctionalComponent
  */
-const Header = props => (
-  <div className="header container" style={{height: props.height}}>
-    <img src="HHlogo.png" alt="Company Logo" className="logo" style={{ width: '80px', height: 'auto', marginTop: '10px', marginBottom: '10px'}}
-    />
-    <h1 className="header title">Helping Hands</h1>
-  </div>
-);
+const Header = (props) => {
+
+  const doLogout = async (): void => {
+    localStorage.removeItem("token");
+    try {
+
+      //const currentUserId = localStorage.currentUserId
+      //Mock object:
+      const currentUserId = 1
+      const requestBody = JSON.stringify({ currentUserId });
+      //const response = await api.put("/logout", requestBody);
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+    };
+
+
+    return(
+      <div className="header container" style={{ height: props.height }}>
+        <img src="HHlogo.png" alt="Company Logo" className="logo" style={{ width: '80px', height: 'auto', margin: '10px' }} />
+        <h1 className="header title">Helping Hands</h1>
+        {localStorage.getItem("token") !== null && (
+            <Button
+            style={{color: "#ebe8e5", background: "#553842", width: "120px"}}
+            onClick={doLogout}>
+                Log out
+            </Button>
+           )}
+      </div>
+    )
+};
 
 Header.propTypes = {
   height: PropTypes.string,
+  //navigate: PropTypes.func.isRequired
 };
 
-/**
- * Don't forget to export your component!
- */
 export default Header;

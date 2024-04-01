@@ -131,10 +131,11 @@ OurDatePicker.propTypes = {
 
 const AddTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
+  //const creatorId = localStorage.getItem("currentUserId")
+  const creatorId = 1
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);
-  const [price, setPrice] = useState<int>(null);
+  const [compensation, setCompensation] = useState<int>(null);
   const [address, setAddress] = useState<string>(null);
   const [date, setDate] = useState<Date>(null);
   const [duration, setDuration] = useState<float>(null);
@@ -142,7 +143,7 @@ const AddTasks = () => {
   const doCreateTask = async () => {
     // Send all the info for the new task to the backend
     try {
-      const requestBody = JSON.stringify({ title, description, price, address, date, duration, currentUserId });
+      const requestBody = JSON.stringify({description, title, compensation, date, address, duration, creatorId });
       const response = await api.post("/tasks", requestBody, {
       });
 
@@ -180,8 +181,8 @@ const AddTasks = () => {
               <PriceDropdown
                 label="Compensation"
                 placeholder={"How many coins will you offer to your helper?"}
-                value={price}
-                onChange={(p: int) => setPrice(p)}
+                value={compensation}
+                onChange={(p: int) => setCompensation(p)}
                 />
               <FormField
                 label="Address"
@@ -214,7 +215,7 @@ const AddTasks = () => {
                 </Button>
                 <Button
                   width="100%"
-                  disabled={!title || !description || !price || !address || !date || !duration}
+                  disabled={!title || !description || !compensation || !address || !date || !duration}
                   onClick={() => doCreateTask()}
                  >
                   Create task
