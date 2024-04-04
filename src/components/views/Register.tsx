@@ -20,7 +20,7 @@ const FormField = (props) => {
       <input
         className="register input"
         type={props.isPassword ? "password" : "text"}
-        placeholder="enter here.."
+        placeholder="enter here..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -73,7 +73,7 @@ const Register = () => {
       console.log("Token saved");
 
       // Register successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/game");
+      navigate("/homefeed");
     } catch (error) {
       alert(
         `Something went wrong during the register: \n${handleError(error)}`
@@ -86,7 +86,7 @@ const Register = () => {
       <div className="register container">
         <img src="HHlogo.png" alt="Company Logo" className="logo" />
         <h1>Create your account</h1>
-        <p>Please make sure your username and name are unique</p>
+        <p>Please make sure your username is unique</p>
         <div className="register form">
           <FormField
             label="Username"
