@@ -20,7 +20,7 @@ const FormField = (props) => {
       <input
         className="login input"
         type={props.isPassword ? "password" : "text"}
-        placeholder="enter here.."
+        placeholder="enter here..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -37,14 +37,13 @@ FormField.propTypes = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
   const [password, setPassword] = useState<string>(null);
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name, password });
-      const response = await api.post("/login", requestBody, {
+      const requestBody = JSON.stringify({ username, password });
+      const response = await api.put("/login", requestBody, {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
@@ -75,7 +74,7 @@ const Login = () => {
       
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/game");
+      navigate("/homefeed");
     } catch (error) {
       alert(
         `Something went wrong during the login: \n${handleError(error)}`
@@ -96,11 +95,6 @@ const Login = () => {
             onChange={(un: string) => setUsername(un)}
           />
           <FormField
-            label="Name"
-            value={name}
-            onChange={(n) => setName(n)}
-          />
-          <FormField
             label="Password"
             value={password}
             isPassword={true}
@@ -108,7 +102,7 @@ const Login = () => {
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !name || !password}
+              disabled={!username || !password}
               width="100%"
               onClick={() => doLogin()}
             >
