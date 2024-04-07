@@ -105,7 +105,7 @@ const HomeFeed = () => {
     <>
       <NavBar />
         <BaseContainer className="homefeed container">
-          <h2>All the tasks in your local community</h2>
+          <h2 className="homefeed-title">All the tasks in your local community</h2>
           {content}
       </BaseContainer>
     </>

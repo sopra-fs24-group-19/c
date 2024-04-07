@@ -1,5 +1,13 @@
 @import "../theme";
 
+.homefeed-title {
+  color: $our_brown;
+  margin-top: 0.5em;
+  min-height: 150px;
+  @include center;
+  flex-direction: column;
+}
+
 .task {
   &.container {
     color: $our_brown;
