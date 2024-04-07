@@ -1,6 +1,7 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
+import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,31 @@ type Task = {
   date: string;
 };
 
-const TaskItem = ({ task }: { task: Task }) => (
+const TaskItem = ({ task }: { task: Task }) => {
+  const handleHelpClick = async () => {
+    const userId = localStorage.getItem('currentUserId'); 
+    if (!userId) {
+      console.error('User is not logged in');
+      return;
+    }
+
+    const requestBody = {
+      taskId: task.id,
+      userId: userId,
+    };
+
+    try {
+      const response = await api.put('/apply', requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error(`Something went wrong: ${error}`);
+    }
+  };
+
+  return (
     <div className="task container">
       <div className="task field">
         <span className="task label">Id of a person that created the task:</span>
@@ -38,11 +63,13 @@ const TaskItem = ({ task }: { task: Task }) => (
         <span className="task answer">{task.date}</span>
       </div>
       <div className="addtasks button-container">
-        <Button width="100%" >Help</Button>
+        <Button width="100%" onClick={handleHelpClick}>Help</Button>
       </div>
-      
     </div>
-);
+  );
+};
+
+    
 
 TaskItem.propTypes = {
   task: PropTypes.object,
@@ -59,7 +86,7 @@ const HomeFeed = () => {
   const [tasks, setTasks] = useState<Task[]>(null);
 
   useEffect(() => {
-    /*
+    /* UNCOMMENT THIS ONCE THE BACKEND IS CONNECTED
     async function fetchData() {
       try {
         const response = await api.get("/tasks", {
