@@ -18,24 +18,24 @@ type Task = {
 const TaskItem = ({ task }: { task: Task }) => (
     <div className="task container">
       <div className="task field">
-        <label className="task label">Id of a person that created the task:</label>
-        <div className="task creatorId">{task.creatorId}</div>
+        <span className="task label">Id of a person that created the task:</span>
+        <span className="task answer">{task.creatorId}</span>
       </div>
       <div className="task field">
-        <label className="task label">Description:</label>
-        <div className="task description">{task.description}</div>
+        <span className="task label">Description:</span>
+        <span className="task answer">{task.description}</span>
       </div>
       <div className="task field">
-        <label className="task label">Compensation:</label>
-        <div className="task price">{task.price}</div>
+        <span className="task label">Compensation:</span>
+        <span className="task answer">{task.price} tokens</span>
       </div>
       <div className="task field">
-        <label className="task label">Time needed to complete the task:</label>
-        <div className="task time">{task.time}</div>
+        <span className="task label">Time needed to complete the task:</span>
+        <span className="task answer">{task.time}</span>
       </div>
       <div className="task field">
-        <label className="task label">Date:</label>
-        <div className="task date">{task.date}</div>
+        <span className="task label">Date:</span>
+        <span className="task answer">{task.date}</span>
       </div>
     </div>
 );
@@ -45,8 +45,8 @@ TaskItem.propTypes = {
 };
 
 const mockTasks: Task[] = [
-  { id: 1, creatorId: 1, description: 'Task 1', price: 100, time: '10:00', date: '2022-01-01' },
-  { id: 2, creatorId: 2, description: 'Task 2', price: 200, time: '11:00', date: '2022-01-02' },
+  { id: 1, creatorId: 1, description: 'Description of Task 1', price: 20, time: '1:00', date: '2024-05-05' },
+  { id: 2, creatorId: 2, description: 'Description of Task 2', price: 35, time: '2:00', date: '2024-06-52' },
 ];
 
 const HomeFeed = () => {
