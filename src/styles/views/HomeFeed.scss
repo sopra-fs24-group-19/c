@@ -1,13 +1,18 @@
 @import "../theme";
 
-.myprofile {
+.task {
   &.container {
     color: $our_brown;
     margin-top: 2em;
     min-height: 300px;
-    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: $our_green;
+    box-shadow: $dropShadow;
   }
   &.form {
     display: flex;
@@ -30,7 +35,11 @@
     flex-direction: column;
     justify-content: center;
   }
-  &.input {
+  &.creatorId,
+  &.description,
+  &.price,
+  &.time,
+  &.date  {
     height: 35px;
     padding-left: 15px;
     margin-left: -4px;

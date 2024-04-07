@@ -17,11 +17,26 @@ type Task = {
 
 const TaskItem = ({ task }: { task: Task }) => (
     <div className="task container">
-      <div className="task creatorId">{task.creatorId}</div>
-      <div className="task Description">{task.description}</div>
-      <div className="task Price">{task.price}</div>
-      <div className="task Time">{task.time}</div>
-      <div className="task Date">{task.date}</div>
+      <div className="task field">
+        <label className="task label">Id of a person that created the task:</label>
+        <div className="task creatorId">{task.creatorId}</div>
+      </div>
+      <div className="task field">
+        <label className="task label">Description:</label>
+        <div className="task description">{task.description}</div>
+      </div>
+      <div className="task field">
+        <label className="task label">Compensation:</label>
+        <div className="task price">{task.price}</div>
+      </div>
+      <div className="task field">
+        <label className="task label">Time needed to complete the task:</label>
+        <div className="task time">{task.time}</div>
+      </div>
+      <div className="task field">
+        <label className="task label">Date:</label>
+        <div className="task date">{task.date}</div>
+      </div>
     </div>
 );
 
