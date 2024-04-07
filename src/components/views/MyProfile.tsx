@@ -142,7 +142,7 @@ const MyProfile = () => {
                 onChange={(r: int) => setRadius(r)}
               />
 
-              <div className="addtasks button-container">
+              <div className="myprofile button-container">
                 <Button
                   style={{ marginRight: '10px' }}
                   width="100%"

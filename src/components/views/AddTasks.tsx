@@ -6,7 +6,7 @@ import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Task from "models/Tasks"
+import Task from "models/Task"
 import "styles/views/AddTasks.scss";
 //In order to work with the DatePicker, type in the terminal: "npm install react-datepicker --save"
 import DatePicker from "react-datepicker";

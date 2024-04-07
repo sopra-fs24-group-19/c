@@ -34,7 +34,8 @@ const Header = (props) => {
       <div className="header container" style={{ height: props.height }}>
         <img src="HHlogo.png" alt="Company Logo" className="logo" style={{ width: '80px', height: 'auto', margin: '10px' }} />
         <h1 className="header title">Helping Hands</h1>
-        {localStorage.getItem("token") !== null && (
+        {/* once the login works, replace the true with: localStorage.getItem("token") !== null */}
+        {true && (
             <Button
             style={{color: "#ebe8e5", background: "#553842", width: "120px"}}
             onClick={doLogout}>
