@@ -1,10 +1,10 @@
 import BaseContainer from "components/ui/BaseContainer";
+import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/HomeFeed.scss";
-
 
 type Task = {
   id: number;
@@ -37,6 +37,10 @@ const TaskItem = ({ task }: { task: Task }) => (
         <span className="task label">Date:</span>
         <span className="task answer">{task.date}</span>
       </div>
+      <div className="addtasks button-container">
+        <Button width="100%" >Help</Button>
+      </div>
+      
     </div>
 );
 
@@ -105,7 +109,7 @@ const HomeFeed = () => {
     <>
       <NavBar />
         <BaseContainer className="homefeed container">
-          <h2 className="homefeed-title">All the tasks in your local community</h2>
+          <h2 className="homefeed-title">Discover all tasks in your local community!</h2>
           {content}
       </BaseContainer>
     </>
