@@ -43,7 +43,7 @@ const Login = () => {
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({ username, password });
-      const response = await api.put("/login", requestBody, {
+      const response = await api.put("/users", requestBody, {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"

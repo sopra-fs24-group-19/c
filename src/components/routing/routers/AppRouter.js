@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
-import Edit from "../../views/Edit";
 import HomeFeed from "../../views/HomeFeed";
 import Login from "../../views/Login";
 import MyProfile from "../../views/MyProfile";
@@ -42,7 +41,6 @@ const AppRouter = () => {
         
         <Route path="/userprofile" element={<UserProfileGuard />}>
           <Route path=":id" element={<UserProfile />} />
-          <Route path=":id/edit" element={<Edit />} />
         </Route>
 
         <Route path="/myprofile" element={<MyProfileGuard />}>

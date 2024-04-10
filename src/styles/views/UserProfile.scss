@@ -2,25 +2,26 @@
 
 .userprofile {
   &.container {
+    color: $our_brown;
     margin-top: 2em;
     min-height: 300px;
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
   }
-  &.form {
+  .form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 60%;
+    width: 100%;
     max-width: 30em;
-    height: 33em;
+    height: 20em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
     padding-right: 37px;
     border-radius: 0.75em;
-    background-color: $background;
+    background-color: $our_green;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
   }
@@ -29,7 +30,9 @@
     flex-direction: column;
     justify-content: center;
   }
-  &.input {
+  .input {
+    display: flex;
+    align-items: center;
     height: 35px;
     padding-left: 15px;
     margin-left: -4px;
@@ -37,17 +40,22 @@
     border-radius: 0.75em;
     margin-bottom: 20px;
     background: transparentize(white, 0.85);
-    color: $textColor;
+    color: $our_brown;
+
   }
-  &.label {
-    color: $textColor;
-    margin-bottom: 10px;
-    text-transform: lowercase;
-    font-weight: 300;
+  .label {
+    color: $our_brown;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-weight: 600;
   }
-  &.button-container {
+  .button-container {
     display: flex;
     justify-content: center;
     margin-top: 2em;
+    button {
+      color: $our_beige;
+      background-color: $our_brown;
+    }
   }
 }
