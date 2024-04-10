@@ -9,14 +9,12 @@ import MyTasks from "../../views/MyTasks";
 import Register from "../../views/Register";
 import UserProfile from "../../views/UserProfile";
 import { AddTasksGuard } from "../routeProtectors/AddTasksGuard";
-import { GameGuard } from "../routeProtectors/GameGuard";
 import { HomeFeedGuard } from "../routeProtectors/HomeFeedGuard";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { MyProfileGuard } from "../routeProtectors/MyProfileGuard";
 import { MyTasksGuard } from "../routeProtectors/MyTasksGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import { UserProfileGuard } from "../routeProtectors/UserProfileGuard";
-import GameRouter from "./GameRouter";
 
 /**
  * Main router of your application.
@@ -33,9 +31,6 @@ const AppRouter = () => {
       
       <Routes>
         
-        <Route path="/game/*" element={<GameGuard />}>
-          <Route path="/game/*" element={<GameRouter base="/game"/>} />
-        </Route>
 
         <Route path="/login" element={<LoginGuard />}>
           <Route path="/login" element={<Login/>} />
@@ -44,10 +39,6 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterGuard />}>
           <Route path="/register" element={<Register/>} />
         </Route>
-
-        {/* <Route path="/userprofile" element={<UserProfileGuard />}>
-          <Route path=":id" element={<UserProfile />} />
-        </Route> */}
         
         <Route path="/userprofile" element={<UserProfileGuard />}>
           <Route path=":id" element={<UserProfile />} />

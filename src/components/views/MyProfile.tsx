@@ -1,12 +1,10 @@
-import NavBar from 'components/ui/NavBar';
-import Header from 'components/ui/Header';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
+import User from "models/User";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import User from "models/User"
 import "styles/views/MyProfile.scss";
 
 const FormField = (props) => {
