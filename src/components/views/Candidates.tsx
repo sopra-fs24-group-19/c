@@ -25,8 +25,7 @@ const Candidates = () => {
 
     async function fetchData() {
     try {
-        const requestBody = JSON.stringify({taskId});
-        const response = await api.get(`/candidates/${taskId}`, requestBody);
+        const response = await api.get(`/candidates/${taskId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setCandidates(response.data);
       } catch (error) {

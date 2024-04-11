@@ -13,7 +13,7 @@ import { Navigate, Outlet } from "react-router-dom";
  */
 
 export const UserProfileGuard = () => {
-  if (!localStorage.getItem("token")) {
+  if (localStorage.getItem("token")) {
     return <Outlet />;
   }
   
