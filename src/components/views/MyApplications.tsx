@@ -6,28 +6,28 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Task from "models/Task"
-import "styles/views/MyTasks.scss";
+import "styles/views/MyApplications.scss";
 
 const FormField = (props) => {
   return (
-    <div className="mytasks field">
+    <div className="myapplications field">
       {/* Task details */}
-      <title className="mytasks split-wrapper">
-      <label className="mytasks title">{props.task}</label>
-      <div className="mytasks status-box">{props.status}</div>
+      <title className="myapplications split-wrapper">
+      <label className="myapplications title">{props.task}</label>
+      <div className="myapplications status-box">{props.status}</div>
       </title>
-      <content className="mytasks split-wrapper">
-      <left className="mytasks left-wrapper">
-      <label className="mytasks label">{"Description"}</label>
-      <label className="mytasks content">{props.desc}</label>
+      <content className="myapplications split-wrapper">
+      <left className="myapplications left-wrapper">
+      <label className="myapplications label">{"Description"}</label>
+      <label className="myapplications content">{props.desc}</label>
       </left>
-      <right className="mytasks right-wrapper">
-      <label className="mytasks label">{"Date"}</label>
-      <label className="mytasks content">{props.date}</label>
-      <label className="mytasks label">{"Duration"}</label>
-      <label className="mytasks content">{`${props.dur/60} hrs`}</label>
-      <label className="mytasks label">{"Compensation"}</label>
-      <label className="mytasks content">{`${props.comp} coins`}</label>
+      <right className="myapplications right-wrapper">
+      <label className="myapplications label">{"Date"}</label>
+      <label className="myapplications content">{props.date}</label>
+      <label className="myapplications label">{"Duration"}</label>
+      <label className="myapplications content">{`${props.dur/60} hrs`}</label>
+      <label className="myapplications label">{"Compensation"}</label>
+      <label className="myapplications content">{`${props.comp} coins`}</label>
       </right>
       </content>
     </div>
@@ -43,7 +43,7 @@ FormField.propTypes = {
 };
 
 
-const MyTasks = () => {
+const MyApplications = () => {
   const navigate = useNavigate();
   //const currentUserId = localStorage.getItem("UserId")
   const currentUserId = 1
@@ -54,13 +54,13 @@ const MyTasks = () => {
     setTasks([
       { id: "1", title: "Gardening", description: "...", date:"a date", price: "10", address: "...", duration: "30", status:"Undone"},
       { id: "2", title: "Homework", description: "...", date:"a date", price: "15", address: "...", duration: "120", status:"In Progress"},
-      { id: "3", title: "Moving", description: "...", date:"a date", price: "20", address: "...", duration: "120", status:"Done"},
+      { id: "2", title: "Moving", description: "...", date:"a date", price: "20", address: "...", duration: "120", status:"Done"},
     ]);
 
 
     async function fetchData() {
     try {
-        const response = await api.get(`/tasks/created/${currentUserId}`);
+        const response = await api.get(`/tasks/${userId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setTasks(response.data);
       } catch (error) {
@@ -77,14 +77,14 @@ const MyTasks = () => {
     }
     //fetchData();
 
-  const doDeleteTask = async (task) => {
+  const doWithdraw = async (task) => {
     try {
       const requestBody = JSON.stringify({description, title, compensation, date, address, duration, creatorId });
-      const response = await api.delete(`/tasks/${task.id}`, {}, {});
+      const response = await api.delete(`/tasks/${task.id}/candidates/${currentUserId}`, {}, {});
 
     } catch (error) {
             alert(
-              `Something went wrong during the task deleteion: \n${handleError(error)}`
+              `Something went wrong during the withdrawal: \n${handleError(error)}`
             );
     }
   }
@@ -95,14 +95,14 @@ const MyTasks = () => {
   return (
         <>
           <NavBar />
-          <div className="mytasks container">
-            <h1 >My tasks</h1>
-            <p>Here is an overview of all tasks you posted</p>
+          <div className="myapplications container">
+            <h1 >My applications</h1>
+            <p>Here is an overview of all tasks you{"'"}ve applied to</p>
 
           {/* Wrap the tasks in a scrollable element*/}
           <tasks style={{height:600, overflow: "auto", width: 1000}}>
           {tasks.map((task: Task) => (
-          <div className="mytasks form" key={task.id}>
+          <div className="myapplications form" key={task.id}>
 
             {/*Show all needed attributes for a task*/}
             <div className="task-wrapper">
@@ -116,28 +116,20 @@ const MyTasks = () => {
 
               />
             </div>
-            <div className="mytasks button-container">
+            <div className="myapplications button-container">
               <Button
-              style={{ marginRight: '300px' }}
-              width="30%"
-              disabled={task.status === "Done"}
-              //onClick={() => doDeleteTask(task)}
-              >
-              Delete task
-              </Button>
-              <Button
-              width="30%"
+              width="40%"
               disabled={task.status !== "Undone"}
-              onClick={() => navigate(`/candidates`, {state: task.id} )}
+              //onClick={() => doWithdraw(task)}
               >
-              Check out helpers
+              Withdraw my application
               </Button>
             </div>
 
           </div>
           ))}
           </tasks>
-             <div className="mytasks button-container">
+             <div className="myapplications button-container">
                 <Button
                   style={{ marginRight: '10px' }}
                   width="100%"
@@ -151,4 +143,4 @@ const MyTasks = () => {
   );
 };
 
-export default MyTasks;
+export default MyApplications;

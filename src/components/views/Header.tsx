@@ -29,19 +29,30 @@ const Header = (props) => {
     }
     };
 
+  const doCreateTask = async (): void => {
+    window.location.href = "/addtasks";
+    };
+
 
     return(
-      <div className="header container" style={{ height: props.height }}>
-        <img src="HHlogo.png" alt="Company Logo" className="logo" style={{ width: '80px', height: 'auto', margin: '10px' }} />
+      <div className="header container">
+        <div className="header logo">
+        <img src="HHlogo.png" alt="Company Logo" style={{width: "80px"}}/>
+        </div>
         <h1 className="header title">Helping Hands</h1>
         {/* once the login works, replace the true with: localStorage.getItem("token") !== null */}
-        {true && (
-            <Button
-            style={{color: "#ebe8e5", background: "#553842", width: "120px"}}
-            onClick={doLogout}>
-                Log out
+        {true ? (
+          <div className="header button-container">
+            <Button className="header button" onClick={doCreateTask}>
+              Create a new task
             </Button>
-           )}
+            <Button className="header button" onClick={doLogout}>
+              Log out
+            </Button>
+          </div>
+        ) : (
+          <div className="header button-container"></div> // Render an empty div when condition is false
+        )}
       </div>
     )
 };

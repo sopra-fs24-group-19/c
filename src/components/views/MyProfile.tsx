@@ -104,17 +104,11 @@ const MyProfile = () => {
         <>
           <NavBar />
           <div className="myprofile container">
-            <h1 >My profile</h1>
+            <h1 >{currentUser.username}{"'"}s profile</h1>
             <p>Here, you can edit your profile</p>
             <div className="myprofile form">
 
-              {/*Define all needed attributes for a new task*/}
-              <FormField
-                label="Username"
-                placeholder={currentUser.username}
-                value={username}
-                onChange={(u: string) => setUsername(u)}
-              />
+              {/*Define all needed attributes that can be changed by a user*/}
               <FormField
                 label="Name"
                 placeholder={currentUser.name}
@@ -150,7 +144,7 @@ const MyProfile = () => {
                 </Button>
                 <Button
                   width="100%"
-                  disabled={!username && !name && !phonenumber && !address && !radius}
+                  disabled={!name && !phonenumber && !address && !radius}
                   onClick={() => doSaveUpdates()}
                  >
                   Save changes

@@ -5,6 +5,8 @@ import HomeFeed from "../../views/HomeFeed";
 import Login from "../../views/Login";
 import MyProfile from "../../views/MyProfile";
 import MyTasks from "../../views/MyTasks";
+import MyApplications from "../../views/MyApplications";
+import Candidates from "../../views/Candidates";
 import Register from "../../views/Register";
 import UserProfile from "../../views/UserProfile";
 import { AddTasksGuard } from "../routeProtectors/AddTasksGuard";
@@ -49,6 +51,14 @@ const AppRouter = () => {
 
         <Route path="/mytasks" element={<MyTasksGuard />}>
           <Route path="/mytasks" element={<MyTasks />} />
+        </Route>
+
+        <Route path="/myapplications" element={<MyTasksGuard />}>
+          <Route path="/myapplications" element={<MyApplications />} />
+        </Route>
+
+        <Route path="/candidates" element={<MyTasksGuard />}>
+          <Route path="/candidates" element={<Candidates />} />
         </Route>
 
         <Route path="/addtasks" element={<AddTasksGuard />}>

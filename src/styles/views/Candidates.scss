@@ -1,6 +1,6 @@
 @import "../theme";
 
-.mytasks {
+.candidates {
 
   //General container
   &.container {
@@ -16,10 +16,11 @@
   &.form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 60%;
     max-width: 70em;
-    height: 22em;
+    height: 12em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -28,6 +29,7 @@
     background-color: $our_green;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
+    margin: 0 auto;
     margin-bottom: 2em;
   }
 
@@ -53,14 +55,16 @@
 
   //Title, label and content define the type of text that is shown
   &.title {
-    height: 35px;
+    height: 45px;
+    width: 500px;
     margin-top: 22px;
     margin-bottom: 20px;
     color: $our_brown;
     text-transform: uppercase;
     font-size: 30px;
     font-weight: 700;
-    display: block;
+    display: flex;
+    justify-content: space-between;
   }
   &.label {
     color: $our_brown;
@@ -97,11 +101,14 @@
 
   //Regular button container
   &.button-container {
+    width: 80%;
+    display: flex;
     justify-content: space-between;
     margin-top: 2em;
     button {
       color: $our_beige;
       background-color: $our_brown;
+      width: 40%;
     }
   }
 }
