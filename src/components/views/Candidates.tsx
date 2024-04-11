@@ -25,7 +25,8 @@ const Candidates = () => {
 
     async function fetchData() {
     try {
-        const response = await api.get(`/candidates/${taskId}`);
+        const requestBody = JSON.stringify({taskId});
+        const response = await api.get(`/candidates/${taskId}`, requestBody);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setCandidates(response.data);
       } catch (error) {
@@ -42,8 +43,8 @@ const Candidates = () => {
 
   const doAcceptHelper = async (helperId) => {
     try {
-      const requestBody = JSON.stringify({helperId});
-      const response = await api.put(`/tasks/${setCandidates}`, {requestBody}, {});
+      const requestBody = JSON.stringify({taskId, helperId});
+      const response = await api.put(`/tasks/${taskId}`, requestBody, {});
     } catch (error) {
             alert(
               `Something went wrong during the selection: \n${handleError(error)}`

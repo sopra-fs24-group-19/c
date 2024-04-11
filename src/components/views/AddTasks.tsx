@@ -131,8 +131,8 @@ OurDatePicker.propTypes = {
 
 const AddTasks = () => {
   const navigate = useNavigate();
-  //const creatorId = localStorage.getItem("currentUserId")
-  const creatorId = 1
+  //const currentUserId = localStorage.getItem("currentUserId")
+  const currentUserId = 1
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);
   const [compensation, setCompensation] = useState<int>(null);
@@ -143,9 +143,8 @@ const AddTasks = () => {
   const doCreateTask = async () => {
     // Send all the info for the new task to the backend
     try {
-      const requestBody = JSON.stringify({description, title, compensation, date, address, duration, creatorId });
-      const response = await api.post("/tasks", requestBody, {
-      });
+      const requestBody = JSON.stringify({description, title, compensation, date, address, duration, currentUserId });
+      const response = await api.post("/tasks", requestBody);
 
     // After successful task creation --> navigate to the homefeed
           navigate("/homefeed");

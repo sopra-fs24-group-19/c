@@ -60,7 +60,8 @@ const MyTasks = () => {
 
     async function fetchData() {
     try {
-        const response = await api.get(`/tasks/created/${currentUserId}`);
+        const requestBody = JSON.stringify({currentUserId});
+        const response = await api.get(`/tasks/created/${currentUserId}`, requestBody);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setTasks(response.data);
       } catch (error) {
@@ -78,9 +79,10 @@ const MyTasks = () => {
     //fetchData();
 
   const doDeleteTask = async (task) => {
+    taskId = task.id;
     try {
-      const requestBody = JSON.stringify({description, title, compensation, date, address, duration, creatorId });
-      const response = await api.delete(`/tasks/${task.id}`, {}, {});
+      const requestBody = JSON.stringify({taskId});
+      const response = await api.delete(`/tasks/${taskId}`, requestBody);
 
     } catch (error) {
             alert(

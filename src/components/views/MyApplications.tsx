@@ -60,7 +60,8 @@ const MyApplications = () => {
 
     async function fetchData() {
     try {
-        const response = await api.get(`/tasks/${userId}`);
+        const requestBody = JSON.stringify({currentUserId});
+        const response = await api.get(`/tasks/appliedfor/${userId}`, requestBody);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setTasks(response.data);
       } catch (error) {
@@ -78,9 +79,10 @@ const MyApplications = () => {
     //fetchData();
 
   const doWithdraw = async (task) => {
+    taskId = task.id;
     try {
-      const requestBody = JSON.stringify({description, title, compensation, date, address, duration, creatorId });
-      const response = await api.delete(`/tasks/${task.id}/candidates/${currentUserId}`, {}, {});
+      const requestBody = JSON.stringify({taskId, currentUserId});
+      const response = await api.delete(`/tasks/${taskId}/candidates/${currentUserId}`, requestBody);
 
     } catch (error) {
             alert(
