@@ -10,11 +10,14 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   
+  // for scrollable element
+  const reviewItemHeight = 30;
+  
   // Mock user's review data
   const mockReview = new Review({
-    no_of_stars: 126,
-    no_of_votes: 28,
-    reviews: ["Great user!", "Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
+    no_of_stars: 27,
+    no_of_votes: 6,
+    reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
   });
 
   // Mock user data
@@ -89,7 +92,6 @@ const UserProfile = () => {
   return (
     <>
       <NavBar />
-      
       <div className="userprofile container">
         <h1>{username}</h1>
         <p>Here, you can see details of {name}</p>
@@ -111,13 +113,18 @@ const UserProfile = () => {
       </div>
 
       <div className="userprofile container">
+        <h1>Reviews</h1>
+        <p>Scroll down for more reviews</p>
         <div className="userprofile commentsform">
-          <p className="label">Comments:</p>
-          <div className="userprofile review-list" style={{overflowY: 'scroll', maxHeight: '200px'}}>
-            {reviews.slice(0, 3).map((review, index) => (
-              <p key={index}>{review}</p>
+          <div className="userprofile review-list" style={{
+            maxHeight: `${reviewItemHeight * 3}px`, 
+            overflowY: 'auto' 
+            }}>
+            {reviews.map((review, index) => (
+              <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
             ))}
           </div>
+          
         </div>
       </div>
     </>
