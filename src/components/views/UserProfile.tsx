@@ -93,6 +93,7 @@ const UserProfile = () => {
       <div className="userprofile container">
         <h1>{username}</h1>
         <p>Here, you can see details of {name}</p>
+        <p className="rating">{averageReview} &#9733; &nbsp; {noOfReviews} reviews</p>
         <div className="userprofile form">
           <div className="userprofile field">
             <p className="label">Username:</p>
@@ -110,11 +111,7 @@ const UserProfile = () => {
       </div>
 
       <div className="userprofile container">
-        <div className="userprofile reviewform">
-          <p className="label">Number of reviews:</p>
-          <p className="input">{noOfReviews}</p>
-          <p className="label">Average review:</p>
-          <p className="input">{averageReview}</p>
+        <div className="userprofile commentsform">
           <p className="label">Comments:</p>
           <div className="userprofile review-list" style={{overflowY: 'scroll', maxHeight: '200px'}}>
             {reviews.slice(0, 3).map((review, index) => (
