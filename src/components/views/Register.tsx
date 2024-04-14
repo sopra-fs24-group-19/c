@@ -54,13 +54,9 @@ const Register = () => {
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
-      // Debugging: Log the received token
-      console.log("Received token:", response.data.token);
-
-      // Store the token into the local storage.
-      // localStorage.setItem("token", user.token);
-
-      const token = response.data.token;
+      // // const token = response.data.token;
+      // const token = user.token;
+      const token = response.headers["authorization"];
 
       // Debugging: Log before saving the token
       console.log("Saving token in local storage:", token);
