@@ -52,7 +52,7 @@ const TaskItem = ({ task }: { task: Task }) => {
       </div>
       <div className="task field">
         <span className="task label">Duration</span>
-        <span className="task answer">{task.time}</span>
+        <span className="task answer">{task.duration}</span>
       </div>
       <div className="task field">
         <span className="task label">Date</span>
