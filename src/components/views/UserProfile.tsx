@@ -1,7 +1,6 @@
 import NavBar from 'components/ui/NavBar';
-import { handleError } from "helpers/api";
+import { api, handleError } from "helpers/api";
 import Review from "models/Review";
-import User from "models/User";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "styles/views/UserProfile.scss";
@@ -21,12 +20,12 @@ const UserProfile = () => {
   });
 
   // // Mock user data
-  const mockUser = new User({
-    id: 1,
-    name: "testname",
-    username: "testusername",
-    phonenumber: "1234567890"
-  });
+  // const mockUser = new User({
+  //   id: 1,
+  //   name: "testname",
+  //   username: "testusername",
+  //   phonenumber: "1234567890"
+  // });
 
 
   // State variables for the user's reviews
@@ -44,15 +43,15 @@ const UserProfile = () => {
     const fetchUser = async () => {
       try {
         // Uncomment this once the backend is done
-        // const response = await api.get(`/users/${id}`, , {
-        //   headers: {
-        //     "Accept": "application/json"
-        //   }
-        // });
-        // const user = response.data;
+        const response = await api.get(`/users/${id}`, {
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        const user = response.data;
   
         // Mock user data - remove this line after backend is done
-        const user = mockUser;
+        // const user = mockUser;
   
         setUsername(user.username);
         setName(user.name);
