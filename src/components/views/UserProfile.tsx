@@ -13,14 +13,14 @@ const UserProfile = () => {
   // for scrollable element
   const reviewItemHeight = 30;
   
-  // Mock user's review data
+  // // Mock user's review data
   const mockReview = new Review({
     no_of_stars: 27,
     no_of_votes: 6,
     reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
   });
 
-  // Mock user data
+  // // Mock user data
   const mockUser = new User({
     id: 1,
     name: "testname",
@@ -93,21 +93,21 @@ const UserProfile = () => {
     <>
       <NavBar />
       <div className="userprofile container">
-        <h1>{username}</h1>
-        <p>Here, you can see details of {name}</p>
-        <p className="rating">{averageReview} &#9733; &nbsp; {noOfReviews} reviews</p>
+        <h1>{username ? username : "Loading username..."}</h1>
+        <p>Here, you can see details of {name ? name : "Loading name..."}</p>
+        <p className="rating">{averageReview ? averageReview : "Loading average review..."} &#9733; &nbsp; {noOfReviews} reviews</p>
         <div className="userprofile form">
           <div className="userprofile field">
             <p className="label">Username:</p>
-            <p className="input">{username}</p>
+            <p className="input">{username ? username : "Loading username..."}</p>
           </div>
           <div className="userprofile field">
             <p className="label">Name:</p>
-            <p className="input">{name}</p>
+            <p className="input">{name ? name : "Loading name..."}</p>
           </div>
           <div className="userprofile field">
             <p className="label">Phone Number:</p>
-            <p className="input">{phonenumber}</p>
+            <p className="input">{phonenumber ? phonenumber : "Loading phone number..."}</p>
           </div>
         </div>
       </div>
@@ -120,9 +120,17 @@ const UserProfile = () => {
             maxHeight: `${reviewItemHeight * 3}px`, 
             overflowY: 'auto' 
             }}>
-            {reviews.map((review, index) => (
+            {/* {reviews.map((review, index) => (
               <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
-            ))}
+            ))
+            } */}
+            {reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
+            ))
+          ) : (
+            <p>Loading reviews...</p>
+          )}
           </div>
           
         </div>
