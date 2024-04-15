@@ -48,7 +48,7 @@ const TaskItem = ({ task }: { task: Task }) => {
       </div>
       <div className="task field">
         <span className="task label">Compensation</span>
-        <span className="task answer">{task.price} tokens</span>
+        <span className="task answer">{task.compensation} tokens</span>
       </div>
       <div className="task field">
         <span className="task label">Duration</span>
