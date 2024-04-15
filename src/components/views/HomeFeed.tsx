@@ -43,23 +43,19 @@ const TaskItem = ({ task }: { task: Task }) => {
   return (
     <div className="task container">
       <div className="task field">
-        <span className="task label">Id of a person that created the task:</span>
-        <span className="task answer">{task.creatorId}</span>
-      </div>
-      <div className="task field">
-        <span className="task label">Description:</span>
+        <span className="task label">Description</span>
         <span className="task answer">{task.description}</span>
       </div>
       <div className="task field">
-        <span className="task label">Compensation:</span>
+        <span className="task label">Compensation</span>
         <span className="task answer">{task.price} tokens</span>
       </div>
       <div className="task field">
-        <span className="task label">Time needed to complete the task:</span>
+        <span className="task label">Duration</span>
         <span className="task answer">{task.time}</span>
       </div>
       <div className="task field">
-        <span className="task label">Date:</span>
+        <span className="task label">Date</span>
         <span className="task answer">{task.date}</span>
       </div>
       <div className="addtasks button-container">
@@ -75,10 +71,10 @@ TaskItem.propTypes = {
   task: PropTypes.object,
 };
 
-const mockTasks: Task[] = [
-  { id: 1, creatorId: 1, description: 'Description of Task 1', price: 20, time: '1:00', date: '2024-05-05' },
-  { id: 2, creatorId: 2, description: 'Description of Task 2', price: 35, time: '2:00', date: '2024-06-52' },
-];
+// const mockTasks: Task[] = [
+//   { id: 1, creatorId: 1, description: 'Description of Task 1', price: 20, time: '1:00', date: '2024-05-05' },
+//   { id: 2, creatorId: 2, description: 'Description of Task 2', price: 35, time: '2:00', date: '2024-06-52' },
+// ];
 
 const HomeFeed = () => {
 
@@ -86,7 +82,6 @@ const HomeFeed = () => {
   const [tasks, setTasks] = useState<Task[]>(null);
 
   useEffect(() => {
-    /* UNCOMMENT THIS ONCE THE BACKEND IS CONNECTED
     async function fetchData() {
       try {
         const response = await api.get("/tasks", {
@@ -111,8 +106,8 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    */
-    setTasks(mockTasks);
+    
+    // setTasks(mockTasks);
 
   }, []);
 
