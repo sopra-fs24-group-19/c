@@ -17,6 +17,7 @@ type Task = {
 };
 
 const TaskItem = ({ task }: { task: Task }) => {
+  const navigate = useNavigate();
   const handleHelpClick = async () => {
     const userId = localStorage.getItem('currentUserId'); 
     if (!userId) {
@@ -35,6 +36,7 @@ const TaskItem = ({ task }: { task: Task }) => {
           'Content-Type': 'application/json',
         },
       });
+      navigate('/myapplications');
     } catch (error) {
       console.error(`Something went wrong: ${error}`);
     }
