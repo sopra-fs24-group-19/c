@@ -16,6 +16,12 @@ type Task = {
   date: string;
 };
 
+const formatDate = (dateString: string) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+
 const TaskItem = ({ task }: { task: Task }) => {
   const navigate = useNavigate();
   const handleHelpClick = async () => {
@@ -58,7 +64,7 @@ const TaskItem = ({ task }: { task: Task }) => {
       </div>
       <div className="task field">
         <span className="task label">Date</span>
-        <span className="task answer">{task.date}</span>
+        <span className="task answer">{formatDate(task.date)}</span>
       </div>
       <div className="addtasks button-container">
         <Button width="100%" onClick={handleHelpClick}>Help</Button>
