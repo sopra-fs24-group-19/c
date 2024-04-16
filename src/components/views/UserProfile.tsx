@@ -1,6 +1,5 @@
 import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
-import Review from "models/Review";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "styles/views/UserProfile.scss";
@@ -13,11 +12,11 @@ const UserProfile = () => {
   const reviewItemHeight = 30;
   
   // // Mock user's review data
-  const mockReview = new Review({
-    no_of_stars: 27,
-    no_of_votes: 6,
-    reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
-  });
+  // const mockReview = new Review({
+  //   no_of_stars: 27,
+  //   no_of_votes: 6,
+  //   reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
+  // });
 
   // // Mock user data
   // const mockUser = new User({
@@ -56,6 +55,8 @@ const UserProfile = () => {
         setUsername(user.username);
         setName(user.name);
         setPhonenumber(user.phonenumber);
+        setNoOfReviews(user.totalComments); 
+        setAverageReview(user.averageStars);
       } catch (error) {
         console.error("Something went wrong while fetching the user: \n" + handleError(error));
         alert("Something went wrong while fetching the user! See the console for details.");
@@ -94,7 +95,7 @@ const UserProfile = () => {
       <div className="userprofile container">
         <h1>{username ? username : "Loading username..."}</h1>
         <p>Here, you can see details of {name ? name : "Loading name..."}</p>
-        <p className="rating">{averageReview ? averageReview : "Loading average review..."} &#9733; &nbsp; {noOfReviews} reviews</p>
+        <p className="rating">{averageReview ? averageReview.toFixed(2) : "Loading average review..."} &#9733; &nbsp; {noOfReviews} reviews</p>
         <div className="userprofile form">
           <div className="userprofile field">
             <p className="label">Username:</p>
