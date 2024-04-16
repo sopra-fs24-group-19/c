@@ -66,19 +66,27 @@ const UserProfile = () => {
     const fetchRatings = async () => {
       try {
         // Uncomment this once the backend is done
-        // const response = await api.get(`/ratings/${id}`, , {
-        //   headers: {
-        //     "Accept": "application/json"
-        //   }
-        // });
-        // const ratings = response.data;
-  
+        const response = await api.get(`/ratings/${id}`, {
+          headers: {
+            "Accept": "application/json",
+            "Authorization": "39be0ed6-a0b4-48f3-9517-03ca508dbc53"
+
+          }
+        });
+        const ratings = response.data;
+
+        const reviews = ratings.map(rating => ({
+          comment: rating.comment,
+          reviewer: rating.reviewer ? rating.reviewer.username : "Anonymous"
+        }));
+        
+        setReviews(reviews);
         // Mock ratings data - remove this line after backend is done
-        const ratings = mockReview;
+        //const ratings = mockReview;
   
-        setNoOfReviews(ratings.no_of_votes);
-        setAverageReview(ratings.no_of_stars / ratings.no_of_votes);
-        setReviews(ratings.reviews);
+        // setNoOfReviews(ratings.no_of_votes);
+        // setAverageReview(ratings.no_of_stars / ratings.no_of_votes);
+        // setReviews(ratings.reviews);
       } catch (error) {
         console.error("Something went wrong while fetching the ratings: \n" + handleError(error));
         alert("Something went wrong while fetching the ratings! See the console for details.");
@@ -120,17 +128,23 @@ const UserProfile = () => {
             maxHeight: `${reviewItemHeight * 3}px`, 
             overflowY: 'auto' 
             }}>
-            {/* {reviews.map((review, index) => (
-              <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
-            ))
-            } */}
-            {reviews.length > 0 ? (
+            {/* {reviews.length > 0 ? (
             reviews.map((review, index) => (
               <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
             ))
           ) : (
             <p>Loading reviews...</p>
-          )}
+          )} */}
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <p key={index} style={{ height: `${reviewItemHeight}px` }}>
+                  {review.reviewer}: {review.comment}
+                </p>
+              ))
+            ) : (
+              <p>Loading reviews...</p>
+            )}
+
           </div>
           
         </div>
