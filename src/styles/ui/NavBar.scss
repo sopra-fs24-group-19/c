@@ -1,0 +1,15 @@
+@import "../theme";
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: $our_green;
+    padding: 10px 0;
+    font-family: $fontDefault;
+  }
+  
+  .nav-link {
+    color: $our_brown;
+    text-decoration: none;
+    font-family: $fontDefault;
+  }

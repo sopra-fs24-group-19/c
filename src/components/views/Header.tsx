@@ -1,7 +1,8 @@
-import React from "react";
-import {ReactLogo} from "../ui/ReactLogo";
-import PropTypes from "prop-types";
+
+import * as PropTypes from "prop-types";
+import { Button } from "components/ui/Button";
 import "../../styles/views/Header.scss";
+import { Link } from "react-router-dom";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -11,18 +12,51 @@ import "../../styles/views/Header.scss";
  * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
  * @FunctionalComponent
  */
-const Header = props => (
-  <div className="header container" style={{height: props.height}}>
-    <h1 className="header title">Group 19, SoPra FS24!</h1>
-    <ReactLogo width="60px" height="60px"/>
-  </div>
-);
+const Header = (props) => {
+
+
+  const doLogout = async (): void => {
+    try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("currentUserId");
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+    };
+  const doCreateTask = async (): void => {
+    window.location.href = "/addtasks";
+    };
+
+
+    return(
+      <div className="header container">
+        <div className="header logo">
+        <img src="HHlogo.png" alt="Company Logo" style={{width: "80px"}}/>
+        </div>
+        <h1 className="header title">Helping Hands</h1>
+        {localStorage.getItem("token") !== null ? (
+          <div className="header button-container">
+            <Button className="header button" onClick={doCreateTask}>
+              Create a new task
+            </Button>
+            <Button
+              className="header button"
+              onClick={doLogout}>
+              Log out
+            </Button>
+          </div>
+        ) : (
+          <div className="header button-container"></div> // Render an empty div when condition is false
+        )}
+      </div>
+    )
+};
 
 Header.propTypes = {
   height: PropTypes.string,
+  navigate: PropTypes.func.isRequired
 };
 
-/**
- * Don't forget to export your component!
- */
 export default Header;

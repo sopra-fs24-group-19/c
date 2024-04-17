@@ -1,6 +1,6 @@
 @import "../theme";
 
-.login {
+.register {
   &.container {
     color: $our_brown;
     margin-top: 2em;
@@ -50,6 +50,7 @@
     display: flex;
     justify-content: center;
     margin-top: 2em;
+
     button {
       color: $our_beige;
       background-color: $our_brown;

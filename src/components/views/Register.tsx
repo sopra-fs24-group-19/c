@@ -2,10 +2,10 @@ import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import * as PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "styles/views/Login.scss";
+import "styles/views/Register.scss";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -15,10 +15,10 @@ specific components that belong to the main one in the same file.
  */
 const FormField = (props) => {
   return (
-    <div className="login field">
-      <label className="login label">{props.label}</label>
+    <div className="register field">
+      <label className="register label">{props.label}</label>
       <input
-        className="login input"
+        className="register input"
         type={props.isPassword ? "password" : "text"}
         placeholder="enter here..."
         value={props.value}
@@ -35,15 +35,16 @@ FormField.propTypes = {
   isPassword: PropTypes.bool
 };
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
   const [password, setPassword] = useState<string>(null);
 
-  const doLogin = async () => {
+  const doRegister = async () => {
     try {
-      const requestBody = JSON.stringify({ username, password });
-      const response = await api.put("/users", requestBody, {
+      const requestBody = JSON.stringify({ username, name, password });
+      const response = await api.post("/users", requestBody, {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
@@ -53,49 +54,43 @@ const Login = () => {
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
-      // Debugging: Log the received token
-      // console.log("Received token:", response.data.token);
-      // console.log("Received token:", user.token);
-      console.log("Name of logged in user:", user.name);
-
-
-      // Store the token into the local storage.
-      // localStorage.setItem("token", user.token);
-      // console.log("Header:", response.headers);
-
-      // const token = response.data.token;
+      // // const token = response.data.token;
+      // const token = user.token;
       const token = response.headers["authorization"];
 
       // Debugging: Log before saving the token
-      console.log("Token from header:", token);
+      console.log("Saving token in local storage:", token);
 
       localStorage.setItem("token", token);
       localStorage.setItem("currentUser", user);
       localStorage.setItem("currentUserId", user.id);
 
-      
-      
 
-      // Login successfully worked --> navigate to the route /game in the GameRouter
+      // Register successfully worked --> navigate to the route /game in the GameRouter
       window.location.href = "/homefeed";
     } catch (error) {
       alert(
-        `Something went wrong during the login: \n${handleError(error)}`
+        `Something went wrong during the register: \n${handleError(error)}`
       );
     }
   };
 
   return (
     <BaseContainer>
-      <div className="login container">
+      <div className="register container">
         <img src="HHlogo.png" alt="Company Logo" className="logo" />
-        <h1>Hi there!</h1>
-        <h5>Please enter your credentials</h5>
-        <div className="login form">
+        <h1>Create your account</h1>
+        <p>Please make sure your username is unique</p>
+        <div className="register form">
           <FormField
             label="Username"
             value={username}
             onChange={(un: string) => setUsername(un)}
+          />
+          <FormField
+            label="Name"
+            value={name}
+            onChange={(n) => setName(n)}
           />
           <FormField
             label="Password"
@@ -103,24 +98,26 @@ const Login = () => {
             isPassword={true}
             onChange={(pw) => setPassword(pw)}
           />
-          <div className="login button-container">
+          <div className="register button-container">
             <Button
-              disabled={!username || !password}
+              disabled={!username || !name || !password}
               width="100%"
-              onClick={() => doLogin()}
+              onClick={() => doRegister()}
             >
-              Login
+              Register
             </Button>
           </div>
-        <div className="login button-container">
-              <p>
-                <span style={{ color: 'black' }}>Not a member yet? Click&nbsp;</span>
-                <a href="/register" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
-                  here
-                </a>
-                <span style={{ color: 'black' }}>&nbsp;to register.</span>
-              </p>
-            </div>
+
+          <div className="login button-container">
+                <p>
+                  <span style={{ color: 'black' }}>Already have an account? Click&nbsp;</span>
+                  <a href="/login" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
+                    here
+                  </a>
+                  <span style={{ color: 'black' }}>&nbsp;to login.</span>
+                </p>
+              </div>
+
         </div>
       </div>
     </BaseContainer>
@@ -130,4 +127,4 @@ const Login = () => {
 /**
  * You can get access to the history object's properties via the useLocation, useNavigate, useParams, ... hooks.
  */
-export default Login;
+export default Register;

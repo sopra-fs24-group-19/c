@@ -1,13 +1,50 @@
 @import "../theme";
 
+html, body {
+  margin: 0;
+  padding: 0;
+  text-align: center !important;
+}
+
 .header {
+  background-color: $our_green;
+  width: 100%;
+
   &.container {
     @include center;
+    width: 100%;
+    max-width: 100%; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &.logo {
+    margin: 10px;
+    flex: 1;
+    display: flex;
   }
 
   &.title {
     font-weight: bold;
-    color: $background;
+    color: $our_brown;
     text-align: center;
+    flex: 1;
   }
+
+ &.button-container {
+    display: flex;
+    margin-top: 2em;
+    flex: 1; /* Let the button container take 1/3 of the space */
+    display: flex;
+    justify-content: flex-end;
+    button {
+      color: $our_beige;
+      background-color: $our_brown;
+      margin-right: 1em;
+      display: inline-block;
+      width: auto;
+    }
+  }
+
 }

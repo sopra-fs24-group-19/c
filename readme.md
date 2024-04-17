@@ -1,5 +1,7 @@
 # SoPra FS24 - Client Template with build pack
 
+// This is a new comment to trigger the deployment
+
 ## Getting started
 
 Read and go through these Tutorials. It will make your life easier:)
@@ -63,4 +65,3 @@ To learn React, check out the [React documentation](https://react.dev/).
 
 
 > Thanks to Lucas Pelloni Kyrill Hux and Marco Leder for working on the template.
-
