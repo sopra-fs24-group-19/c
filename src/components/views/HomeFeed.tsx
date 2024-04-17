@@ -1,7 +1,7 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
-import { api } from "helpers/api";
+import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
