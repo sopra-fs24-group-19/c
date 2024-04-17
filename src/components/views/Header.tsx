@@ -46,7 +46,9 @@ const Header = (props) => {
             <Button className="header button" onClick={doCreateTask}>
               Create a new task
             </Button>
-            <Button className="header button" onClick={doLogout}>
+            <Button
+              className="header button"
+              onClick={doLogout}>
               Log out
             </Button>
           </div>

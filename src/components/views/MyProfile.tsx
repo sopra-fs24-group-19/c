@@ -67,17 +67,7 @@ RadiusDropdown.propTypes = {
 const MyProfile = () => {
   const navigate = useNavigate();
   const currentUserId = localStorage.getItem("currentUserId");
-  //const [currentUser, setCurrentUser] = useState<User>(null);
-  // Once we are connected to the backend, use the actual current user
-  //const currentUser = localStorage.getItem("currentUser")
-  const xxx = new User({
-    id: 1,
-    name: "testname",
-    username: "testusername",
-    token: "some-token",
-    status: "online"
-  });
-  const currentUser = localStorage.getItem("currentUser");
+  const [currentUser, setCurrentUser] = useState<User>(null);
 
   // Define variables for the attributes that can be changed
   const [username, setUsername] = useState<string>(null);
@@ -88,11 +78,12 @@ const MyProfile = () => {
 
   useEffect(() => {
 
-    async function fetchData() {
+    const fetchUserData = async () => {
     try {
         const response = await api.get(`/users/${currentUserId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setCurrentUser(response.data);
+        console.log(currentUser)
       } catch (error) {
         console.error(
           `Something went wrong while fetching the tasks: \n${handleError(
@@ -104,15 +95,20 @@ const MyProfile = () => {
           "Something went wrong while fetching the tasks! See the console for details."
         );
       }
-    }
-    //fetchData();
+    };
+    fetchUserData();
 
-  });
+  }, []);
+
+  if (!currentUser) {
+    return <div>Loading...</div>;
+  }
 
   const doSaveUpdates = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name, phonenumber, address, radius});
-      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Token": currentUser.token}});
+      const requestBody = JSON.stringify({"name":name,"username": currentUser.username,"address" :address,"phoneNumber": phonenumber,"radius": radius});
+
+      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": currentUser.token}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
 

@@ -41,11 +41,20 @@ FormField.propTypes = {
   comp: PropTypes.int,
   status: PropTypes.string,
 };
+  const doDeleteTask = async (taskId) => {
+    try {
+      const response = await api.delete(`/tasks/${taskId}`, {header: {"AuthorizationToken":localStorage.getItem("token")}});
 
+    } catch (error) {
+            alert(
+              `Something went wrong during the task deletion: \n${handleError(error)}`
+            );
+    }
+  }
 
 const MyTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("UserId")
+  const currentUserId = localStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
@@ -67,20 +76,7 @@ const MyTasks = () => {
         );
       }
     }
-    //fetchData();
-
-  const doDeleteTask = async (task) => {
-    taskId = task.id;
-    try {
-      const requestBody = JSON.stringify({taskId});
-      const response = await api.delete(`/tasks/${taskId}`, requestBody);
-
-    } catch (error) {
-            alert(
-              `Something went wrong during the task deleteion: \n${handleError(error)}`
-            );
-    }
-  }
+    fetchData();
 
 
   }, []); // Empty dependency array to run the effect only once
@@ -114,7 +110,7 @@ const MyTasks = () => {
               style={{ marginRight: '300px' }}
               width="30%"
               disabled={task.status === "Done"}
-              //onClick={() => doDeleteTask(task)}
+              onClick={() => doDeleteTask(task.id)}
               >
               Delete task
               </Button>
