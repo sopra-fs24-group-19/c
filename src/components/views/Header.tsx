@@ -15,14 +15,14 @@ import { Link } from "react-router-dom";
 const Header = (props) => {
 
   const doLogout = async (): void => {
-    localStorage.removeItem("token");
     try {
 
-      //const currentUserId = localStorage.currentUserId
-      //Mock object:
-      const currentUserId = 1
+      const currentUserId = localStorage.currentUserId
       const requestBody = JSON.stringify({ currentUserId });
-      //const response = await api.put("/logout", requestBody);
+      const response = await api.put("/logout", requestBody);
+      localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("currentUserId");
       window.location.href = "/login";
     } catch (error) {
       console.error("Error logging out:", error);
@@ -59,7 +59,7 @@ const Header = (props) => {
 
 Header.propTypes = {
   height: PropTypes.string,
-  //navigate: PropTypes.func.isRequired
+  navigate: PropTypes.func.isRequired
 };
 
 export default Header;

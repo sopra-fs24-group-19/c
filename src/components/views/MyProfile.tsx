@@ -3,7 +3,7 @@ import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyProfile.scss";
 
@@ -66,17 +66,18 @@ RadiusDropdown.propTypes = {
 
 const MyProfile = () => {
   const navigate = useNavigate();
-
+  const currentUserId = localStorage.getItem("currentUserId");
+  //const [currentUser, setCurrentUser] = useState<User>(null);
   // Once we are connected to the backend, use the actual current user
   //const currentUser = localStorage.getItem("currentUser")
-  const currentUser = new User({
+  const xxx = new User({
     id: 1,
     name: "testname",
     username: "testusername",
     token: "some-token",
     status: "online"
   });
-
+  const currentUser = localStorage.getItem("currentUser");
 
   // Define variables for the attributes that can be changed
   const [username, setUsername] = useState<string>(null);
@@ -85,6 +86,28 @@ const MyProfile = () => {
   const [address, setAddress] = useState<string>(null);
   const [radius, setRadius] = useState<int>(null);
 
+  useEffect(() => {
+
+    async function fetchData() {
+    try {
+        const response = await api.get(`/users/${currentUserId}`);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error(
+          `Something went wrong while fetching the tasks: \n${handleError(
+            error
+          )}`
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the tasks! See the console for details."
+        );
+      }
+    }
+    //fetchData();
+
+  });
 
   const doSaveUpdates = async () => {
     try {
