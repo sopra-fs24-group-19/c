@@ -36,8 +36,7 @@ const Header = (props) => {
         <img src="HHlogo.png" alt="Company Logo" style={{width: "80px"}}/>
         </div>
         <h1 className="header title">Helping Hands</h1>
-        {/* once the login works, replace the true with: localStorage.getItem("token") !== null */}
-        {true ? (
+        {localStorage.getItem("token") !== null ? (
           <div className="header button-container">
             <Button className="header button" onClick={doCreateTask}>
               Create a new task

@@ -4,7 +4,7 @@ import { api, handleError } from "helpers/api";
 import User from "models/User";
 import * as PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "styles/views/Login.scss";
 
 /*
@@ -77,7 +77,7 @@ const Login = () => {
       
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/homefeed");
+      window.location.href = "/homefeed";
     } catch (error) {
       alert(
         `Something went wrong during the login: \n${handleError(error)}`
