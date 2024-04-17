@@ -73,8 +73,7 @@ const Login = () => {
       localStorage.setItem("currentUser", user);
       localStorage.setItem("currentUserId", user.id);
 
-      // Debugging: Log after saving the token
-      console.log("Token saved");
+      
       
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
