@@ -24,8 +24,11 @@ const formatDate = (dateString: string) => {
 
 const TaskItem = ({ task }: { task: Task }) => {
   const navigate = useNavigate();
+  const userId = localStorage.getItem("currentUserId");
+
   const handleHelpClick = async () => {
-    const userId = localStorage.getItem('currentUserId'); 
+    const userId = localStorage.getItem('currentUserId');
+    const token = localStorage.getItem("token")
     if (!userId) {
       console.error('User is not logged in');
       return;
@@ -40,6 +43,7 @@ const TaskItem = ({ task }: { task: Task }) => {
       const response = await api.put('/apply', requestBody, {
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": token
         },
       });
       navigate('/myapplications');
@@ -66,14 +70,19 @@ const TaskItem = ({ task }: { task: Task }) => {
         <span className="task label">Date</span>
         <span className="task answer">{formatDate(task.date)}</span>
       </div>
-      <div className="addtasks button-container">
+      {/*<div className="addtasks button-container">
         <Button width="100%" onClick={handleHelpClick}>Help</Button>
+      </div>*/}
+      <div className="addtasks button-container">
+      {task.creatorId.toString() !== userId && (
+          <Button width="100%" onClick={handleHelpClick}>Help</Button>
+        )}
       </div>
     </div>
   );
 };
 
-    
+
 
 TaskItem.propTypes = {
   task: PropTypes.object,
@@ -114,7 +123,7 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    
+
     // setTasks(mockTasks);
 
   }, []);
@@ -125,7 +134,7 @@ const HomeFeed = () => {
     content = (
       <div className="homefeed">
         <ul className="homefeed task-list">
-          {tasks.map((task: Task) => (
+          {tasks && tasks.map((task: Task) => (
             <li key={task.id}>
               <TaskItem task={task} />
             </li>
