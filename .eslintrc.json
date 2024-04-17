@@ -24,7 +24,7 @@
         "no-duplicate-imports": "error",
         "no-multiple-empty-lines": "warn",
         "indent": ["warn", 2],
-        "quotes": ["warn", "double"],
+        "quotes": ["off", "double"],
         "newline-before-return": "warn",
         "padding-line-between-statements": [
             "warn",
