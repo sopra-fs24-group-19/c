@@ -14,12 +14,9 @@ import { Link } from "react-router-dom";
  */
 const Header = (props) => {
 
+
   const doLogout = async (): void => {
     try {
-
-      const currentUserId = localStorage.currentUserId
-      const requestBody = JSON.stringify({ currentUserId });
-      const response = await api.put("/logout", requestBody);
       localStorage.removeItem("token");
       localStorage.removeItem("currentUser");
       localStorage.removeItem("currentUserId");
@@ -28,7 +25,6 @@ const Header = (props) => {
       console.error("Error logging out:", error);
     }
     };
-
   const doCreateTask = async (): void => {
     window.location.href = "/addtasks";
     };
