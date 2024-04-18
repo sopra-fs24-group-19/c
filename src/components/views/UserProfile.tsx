@@ -54,7 +54,7 @@ const UserProfile = () => {
   
         setUsername(user.username);
         setName(user.name);
-        setPhonenumber(user.phonenumber);
+        setPhonenumber(user.phoneNumber);
         setNoOfReviews(user.totalComments); 
         setAverageReview(user.averageStars);
       } catch (error) {
