@@ -47,8 +47,16 @@ const TaskItem = ({ task }: { task: Task }) => {
         },
       });
       navigate('/myapplications');
-    } catch (error) {
-      console.error(`Something went wrong: ${error}`);
+    } 
+    // catch (error) {
+    //   console.error(`Something went wrong: ${error}`);
+    // }
+    catch (error) {
+      if (error.response && error.response.status === 409) {
+        alert('You have already applied for this task.');
+      } else {
+        console.error(`Something went wrong: ${error}`);
+      }
     }
   };
 
