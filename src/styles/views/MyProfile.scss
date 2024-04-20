@@ -15,7 +15,7 @@
     justify-content: center;
     width: 100%;
     max-width: 30em;
-    height: 30em;
+    height: 35em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -32,6 +32,7 @@
   }
   &.input {
     height: 35px;
+    width: 410px;
     padding-left: 15px;
     margin-left: -4px;
     border: none;
@@ -63,12 +64,19 @@
       box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.1);
       border-top: none;
       background-color: #fff;
-
       z-index: 99;
       top: calc(100% + 2px);
       left: 0;
       right: 0;
-    }
+    //height: 35px;
+    //padding-left: 15px;
+    //margin-left: -4px;
+    //border: none;
+    //border-radius: 0.75em;
+    //margin-bottom: 20px;
+    //background: transparentize(white, 0.85);
+    //color: $our_brown;
+        }
 
    &.input-container {
       display: flex;
@@ -78,11 +86,11 @@
    &.input-container input {
       flex: 1;
       outline: none;
-
       border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 10px;
       padding-right: 31px;
       font-size: 16px;
+      background: $our_brown;
     }
     &.autocomplete-items div {
       padding: 10px;

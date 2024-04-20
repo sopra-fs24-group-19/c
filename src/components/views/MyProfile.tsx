@@ -74,6 +74,7 @@ function addressAutocomplete(containerElement, callback, options) {
   // create input element
   const inputElement = document.createElement("input");
   inputElement.setAttribute("type", "text");
+  inputElement.setAttribute("class", "myprofile input")
   inputElement.setAttribute("placeholder", options.placeholder);
   inputContainerElement.appendChild(inputElement);
 
@@ -304,9 +305,12 @@ const MyProfile = () => {
     if (currentUser && !addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         console.log("Selected option: ");
-        console.log(data);
+        // Access to input by using "data"
+        /*console.log(data.formatted);
+        console.log(data.lat);
+        console.log(data.lon);*/
       }, {
-        placeholder: "Enter an address here"
+        placeholder: "Add your location"
       });
       setAddressFieldAdded(true);
     }
@@ -364,10 +368,16 @@ const MyProfile = () => {
                 value={radius}
                 onChange={(r: int) => setRadius(r)}
               />
-              <div
-                id="autocomplete-container"
-                label="Find your address"
-              />
+
+              <div className="myprofile field">
+                <label className="myprofile label">Address</label>
+                <div
+                  id="autocomplete-container">
+                </div>
+
+              </div>
+
+
 
               <div className="myprofile button-container">
                 <Button
