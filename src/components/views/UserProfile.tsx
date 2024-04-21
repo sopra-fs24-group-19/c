@@ -102,7 +102,7 @@ const UserProfile = () => {
       <NavBar />
       <div className="userprofile container">
         <h1>{username ? username : "Loading username..."}</h1>
-        <p>Here, you can see details of {name ? name : "Loading name..."}</p>
+        {/* <p>Here, you can see details of {name ? name : "Loading name..."}</p> */}
         <p className="rating">{averageReview ? averageReview.toFixed(2) : "Loading average review..."} &#9733; &nbsp; {noOfReviews} reviews</p>
         <div className="userprofile form">
           <div className="userprofile field">
