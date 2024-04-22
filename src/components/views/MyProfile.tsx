@@ -65,13 +65,14 @@ RadiusDropdown.propTypes = {
   placeholder: PropTypes.string
 };
 
-function addressAutocomplete(containerElement, callback, options) {
+function addressAutocomplete(containerElement, callback, options, clearAddress) {
 
+  // Create a box where all elements will be put together
   const inputContainerElement = document.createElement("div");
-  inputContainerElement.setAttribute("class", "input-container");
+  inputContainerElement.setAttribute("class", "myprofile input-container");
   containerElement.appendChild(inputContainerElement);
 
-  // create input element
+  // create input element (actual box in which users type)
   const inputElement = document.createElement("input");
   inputElement.setAttribute("type", "text");
   inputElement.setAttribute("class", "myprofile input")
@@ -87,28 +88,33 @@ function addressAutocomplete(containerElement, callback, options) {
   /* Current autocomplete items data */
   var currentItems;
 
-  // add input field clear button
+  // add input field clear button to the container
   const clearButton = document.createElement("div");
+  clearButton.setAttribute("class", "myprofile clear-button");
+  console.log(clearButton.classList)
   clearButton.classList.add("clear-button");
   addIcon(clearButton);
   clearButton.addEventListener("click", (e) => {
     e.stopPropagation();
     inputElement.value = '';
     callback(null);
-    clearButton.classList.remove("visible");
     closeDropDownList();
+    clearAddress();
+    clearButton.classList.remove("visible");
   });
   inputContainerElement.appendChild(clearButton);
 
-    /* Process a user input: */
-    inputElement.addEventListener("input", function(e) {
-        const currentValue = this.value;
-        if (!currentValue) {
-          clearButton.classList.remove("visible");
-        }
+  /* Process a user input: */
+  inputElement.addEventListener("input", function(e) {
+      const currentValue = this.value;
+      if (!currentValue) {
+        clearButton.classList.remove("visible");
+      }
 
-        // Show clearButton when there is a text
+      // Show clearButton when there is a text
+      if (currentValue) {
         clearButton.classList.add("visible");
+      }
 
       // Cancel previous timeout
       if (currentTimeout) {
@@ -157,7 +163,7 @@ function addressAutocomplete(containerElement, callback, options) {
           // here we get address suggestions
           currentItems = data.results;
 
-        /*create a DIV element that will contain the items (values):*/
+        /*create a DIV element that will contain the proposed items*/
         const autocompleteItemsElement = document.createElement("div");
         autocompleteItemsElement.setAttribute("class", "myprofile autocomplete-items");
         inputContainerElement.appendChild(autocompleteItemsElement);
@@ -191,61 +197,29 @@ function addressAutocomplete(containerElement, callback, options) {
       inputContainerElement.removeChild(autocompleteItemsElement);
     }
   }
-  /* Focused item in the autocomplete list. This variable is used to navigate with buttons */
-  let focusedItemIndex;
 
-  /* Add support for keyboard navigation */
-  inputElement.addEventListener("keydown", function(e) {
-    var autocompleteItemsElement = containerElement.querySelector(".autocomplete-items");
-    if (autocompleteItemsElement) {
-      var itemElements = autocompleteItemsElement.getElementsByTagName("div");
-      if (e.keyCode === 40) {
-        e.preventDefault();
-        /*If the arrow DOWN key is pressed, increase the focusedItemIndex variable:*/
-        focusedItemIndex = focusedItemIndex !== itemElements.length - 1 ? focusedItemIndex + 1 : 0;
-        /*and and make the current item more visible:*/
-        setActive(itemElements, focusedItemIndex);
-      } else if (e.keyCode === 38) {
-        e.preventDefault();
-
-        /*If the arrow UP key is pressed, decrease the focusedItemIndex variable:*/
-        focusedItemIndex = focusedItemIndex !== 0 ? focusedItemIndex - 1 : focusedItemIndex = (itemElements.length - 1);
-        /*and and make the current item more visible:*/
-        setActive(itemElements, focusedItemIndex);
-      } else if (e.keyCode === 13) {
-        /* If the ENTER key is pressed and value as selected, close the list*/
-        e.preventDefault();
-        if (focusedItemIndex > -1) {
-          closeDropDownList();
-        }
-      }
-    } else {
-      if (e.keyCode === 40) {
-        /* Open dropdown list again */
-        var event = document.createEvent('Event');
-        event.initEvent('input', true, true);
-        inputElement.dispatchEvent(event);
-      }
-    }
-    });
+  // Function that sets the value of the textbox to the selected item
   function setActive(items, index) {
     if (!items || !items.length) return false;
 
+    // Only mark the currently selected item as active
     for (var i = 0; i < items.length; i++) {
       items[i].classList.remove("autocomplete-active");
     }
-
     /* Add class "autocomplete-active" to the active element*/
     items[index].classList.add("autocomplete-active");
 
     // Change input value and notify
     inputElement.value = currentItems[index].formatted;
     callback(currentItems[index]);
+    closeDropDownList();
   }
+
   function addIcon(buttonElement) {
     const svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
     svgElement.setAttribute('viewBox', "0 0 24 24");
     svgElement.setAttribute('height', "24");
+    svgElement.style.marginTop = "-20px";
 
     const iconElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');
     iconElement.setAttribute("d", "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z");
@@ -278,8 +252,14 @@ const MyProfile = () => {
   const [name, setName] = useState<string>(null);
   const [phonenumber, setPhonenumber] = useState<string>(null);
   const [address, setAddress] = useState<string>(null);
+  const [latitude, setLatitude] = useState<float>(null);
+  const [longitude, setLongitude] = useState<float>(null);
   const [radius, setRadius] = useState<int>(null);
-
+  const clearAddress = () => {
+    setAddress(null);
+    setLatitude(null);
+    setLongitude(null);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
     try {
@@ -304,14 +284,18 @@ const MyProfile = () => {
   useEffect(() => {
     if (currentUser && !addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
+        if (data) {
         console.log("Selected option: ");
-        // Access to input by using "data"
-        /*console.log(data.formatted);
-        console.log(data.lat);
-        console.log(data.lon);*/
-      }, {
-        placeholder: "Add your location"
-      });
+                // Access to input by using "data"
+                console.log(data.formatted);
+                console.log(data.lat);
+                console.log(data.lon);
+                // Set the three values
+                setAddress(data.formatted);
+                setLatitude(data.lat);
+                setLongitude(data.lon);
+        }
+      }, {placeholder: "Add your location"}, clearAddress);
       setAddressFieldAdded(true);
     }
   }, [currentUser, addressFieldAdded]);
@@ -322,7 +306,8 @@ const MyProfile = () => {
 
   const doSaveUpdates = async () => {
     try {
-      const requestBody = JSON.stringify({"name":name,"username": currentUser.username,"address" :address,"phoneNumber": phonenumber,"radius": radius});
+      //const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"latitude":latitude,"longitude":longitude,"phoneNumber": phonenumber,"radius": radius});
+      const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"phoneNumber": phonenumber,"radius": radius});
 
       const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": currentUser.token}});
       // Get the returned user and update a new object.
@@ -356,29 +341,20 @@ const MyProfile = () => {
                 value={phonenumber}
                 onChange={(pn: string) => setPhonenumber(pn)}
               />
-              <FormField
-                label="Address"
-                placeholder={currentUser.address ? currentUser.address : "Add your location"}
-                value={address}
-                onChange={(a: string) => setAddress(a)}
-              />
+              <div className="myprofile field">
+                <label className="myprofile label">Address</label>
+                <div
+                  id="autocomplete-container"
+                  placeholder={currentUser.address ? currentUser.address: "Add your location"}
+                >
+                </div>
+              </div>
               <RadiusDropdown
                 label="Radius in which to look for tasks"
                 placeholder={currentUser.radius ? currentUser.radius : "Choose radius"}
                 value={radius}
                 onChange={(r: int) => setRadius(r)}
               />
-
-              <div className="myprofile field">
-                <label className="myprofile label">Address</label>
-                <div
-                  id="autocomplete-container">
-                </div>
-
-              </div>
-
-
-
               <div className="myprofile button-container">
                 <Button
                   style={{ marginRight: '10px' }}

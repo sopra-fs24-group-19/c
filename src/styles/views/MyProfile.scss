@@ -15,7 +15,7 @@
     justify-content: center;
     width: 100%;
     max-width: 30em;
-    height: 35em;
+    height: 30em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -68,51 +68,64 @@
       top: calc(100% + 2px);
       left: 0;
       right: 0;
-    //height: 35px;
-    //padding-left: 15px;
-    //margin-left: -4px;
-    //border: none;
-    //border-radius: 0.75em;
-    //margin-bottom: 20px;
-    //background: transparentize(white, 0.85);
-    //color: $our_brown;
         }
 
    &.input-container {
       display: flex;
       position: relative;
+      align-items: center;
+      width: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
 
+   // This component puts the field where users type in together with the clear button
+   &.input-composed{
+     display: flex;
+     flex-direction: row;
+   }
+
    &.input-container input {
-      flex: 1;
       outline: none;
-      border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 10px;
       padding-right: 31px;
       font-size: 16px;
-      background: $our_brown;
+      flex: 0 0 calc(100%);
     }
-    &.autocomplete-items div {
+    /* Adjust width to 95% when the input field is not empty */
+    .input-container input:not(:placeholder-shown) {
+      flex: 0 0 95%;
+    }
+    div.autocomplete-items {
       padding: 10px;
       cursor: pointer;
+      background: $our_beige;
+      color: $our_brown;
+      width: 378px;
+      max-height: 800px;
+    }
+    &.autocomplete-items {
+      position: absolute;
+      max-height: 200px;
+      z-index: 1;
+      overflow-y: auto;
+      top: calc(70%);
     }
 
     &.autocomplete-items div:hover {
       /*when hovering an item:*/
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: $our_brown;
+      color: $our_beige;
     }
    &.autocomplete-items .autocomplete-active {
       /*when navigating through the items using the arrow keys:*/
       background-color: rgba(0, 0, 0, 0.1);
     }
     &.clear-button {
-      color: rgba(0, 0, 0, 0.4);
+      color: $our_brown;
       cursor: pointer;
-
       position: absolute;
-      right: 5px;
-      top: 0;
-
+      right: 0px;
       height: 100%;
       display: none;
       align-items: center;
