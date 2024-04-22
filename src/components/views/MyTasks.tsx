@@ -77,8 +77,6 @@ const MyTasks = () => {
       }
     }
     fetchData();
-
-
   }, []); // Empty dependency array to run the effect only once
 
   return (
@@ -116,7 +114,8 @@ const MyTasks = () => {
               </Button>
               <Button
               width="30%"
-              disabled={task.status !== "Undone"}
+              // Maybe we have to think about the status and when to give this option
+              disabled={task.status === "Undone"}
               onClick={() => navigate(`/candidates`, {state: task.id} )}
               >
               Check out helpers
