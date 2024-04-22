@@ -255,11 +255,13 @@ const MyProfile = () => {
   const [latitude, setLatitude] = useState<float>(null);
   const [longitude, setLongitude] = useState<float>(null);
   const [radius, setRadius] = useState<int>(null);
+
   const clearAddress = () => {
     setAddress(null);
     setLatitude(null);
     setLongitude(null);
   };
+
   useEffect(() => {
     const fetchUserData = async () => {
     try {
@@ -295,7 +297,7 @@ const MyProfile = () => {
                 setLatitude(data.lat);
                 setLongitude(data.lon);
         }
-      }, {placeholder: "Add your location"}, clearAddress);
+      }, {placeholder: currentUser.address ? currentUser.address: "Add your location"}, clearAddress);
       setAddressFieldAdded(true);
     }
   }, [currentUser, addressFieldAdded]);
@@ -345,9 +347,7 @@ const MyProfile = () => {
                 <label className="myprofile label">Address</label>
                 <div
                   id="autocomplete-container"
-                  placeholder={currentUser.address ? currentUser.address: "Add your location"}
-                >
-                </div>
+                />
               </div>
               <RadiusDropdown
                 label="Radius in which to look for tasks"
