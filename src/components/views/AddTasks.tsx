@@ -167,10 +167,14 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
   });
   inputContainerElement.appendChild(clearButton);
 
+  // Add a flag if the user changed the suggestion after clicking on it
+  let chosenItem = "";
+
   /* Process a user input: */
   inputElement.addEventListener("input", function(e) {
       const currentValue = this.value;
       if (!currentValue) {
+        closeDropDownList();
         clearButton.classList.remove("visible");
       }
 
@@ -242,6 +246,8 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
           itemElement.addEventListener("click", function(e) {
             inputElement.value = currentItems[index].formatted;
             callback(currentItems[index]);
+            // Store the chosen item to make sure the user doesn't change it before submission
+            chosenItem = inputElement.value;
             /* Close the list of autocompleted values: */
             closeDropDownList();
           });
@@ -254,6 +260,15 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
         });
       }, DEBOUNCE_DELAY);
     });
+
+  // Every time the user adjusts the selected item, we need to set the flag to false as it is not in the desired format anymore
+  inputElement.addEventListener("input", function(e) {
+    const currentValue = this.value;
+    if (currentValue !== chosenItem || chosenItem==="") {
+        clearAddress();
+    }
+  });
+
   function closeDropDownList() {
     var autocompleteItemsElement = inputContainerElement.querySelector(".autocomplete-items");
     if (autocompleteItemsElement) {
@@ -342,7 +357,6 @@ const AddTasks = () => {
   }
 
   useEffect(() => {
-    console.log(!addressFieldAdded)
     if (!addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
@@ -357,7 +371,7 @@ const AddTasks = () => {
                 setLongitude(data.lon);
         }
       }, {placeholder: "Where will you need your helper?"}, clearAddress);
-      //setAddressFieldAdded(true);
+      setAddressFieldAdded(true);
     }
   }, [addressFieldAdded]);
 

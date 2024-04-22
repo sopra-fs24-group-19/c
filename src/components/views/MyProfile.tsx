@@ -309,9 +309,8 @@ const MyProfile = () => {
   const doSaveUpdates = async () => {
     try {
       //const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"latitude":latitude,"longitude":longitude,"phoneNumber": phonenumber,"radius": radius});
-      const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"phoneNumber": phonenumber,"radius": radius});
-
-      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": currentUser.token}});
+      const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"phoneNumber":phonenumber,"radius": radius});
+      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
 
