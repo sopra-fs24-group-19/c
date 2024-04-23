@@ -323,7 +323,7 @@ const MyProfile = () => {
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
       // After successful update, reload the page
-      //window.location.href = "/myprofile";
+      window.location.href = "/myprofile";
     } catch (error) {
       alert(
         `Your updates could not be saved: \n${handleError(error)}`

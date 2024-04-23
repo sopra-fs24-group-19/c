@@ -9,6 +9,8 @@ import Task from "models/Task"
 import "styles/views/MyApplications.scss";
 
 const FormField = (props) => {
+  const dateTime = new Date(props.date);
+  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
   return (
     <div className="myapplications field">
       {/* Task details */}
@@ -23,9 +25,9 @@ const FormField = (props) => {
       </left>
       <right className="myapplications right-wrapper">
       <label className="myapplications label">{"Date"}</label>
-      <label className="myapplications content">{props.date}</label>
+      <label className="myapplications content">{formattedDateTime}</label>
       <label className="myapplications label">{"Duration"}</label>
-      <label className="myapplications content">{`${props.dur/60} hrs`}</label>
+      <label className="myapplications content">{`${(props.dur / 60).toFixed(2)} hrs`}</label>
       <label className="myapplications label">{"Compensation"}</label>
       <label className="myapplications content">{`${props.comp} coins`}</label>
       </right>
@@ -49,14 +51,6 @@ const MyApplications = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    // Fetch tasks from an API or use any other method to retrieve data
-    /*setTasks([
-      { id: "1", title: "Gardening", description: "...", date:"a date", price: "10", address: "...", duration: "30", status:"Undone"},
-      { id: "2", title: "Homework", description: "...", date:"a date", price: "15", address: "...", duration: "120", status:"In Progress"},
-      { id: "2", title: "Moving", description: "...", date:"a date", price: "20", address: "...", duration: "120", status:"Done"},
-    ]);*/
-
-
     async function fetchData() {
     try {
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
@@ -111,7 +105,7 @@ const MyApplications = () => {
                 desc={task.description}
                 date={task.date}
                 dur={task.duration}
-                comp={task.price}
+                comp={task.compensation}
                 status={task.status}
 
               />
