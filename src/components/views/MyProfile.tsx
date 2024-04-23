@@ -309,11 +309,17 @@ const MyProfile = () => {
   const doSaveUpdates = async () => {
     try {
       //const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"latitude":latitude,"longitude":longitude,"phoneNumber": phonenumber,"radius": radius});
-      const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"phoneNumber":phonenumber,"radius": radius});
+      // Specify if we send the current values or if the user has updated these values:
+      const newName = name ? name: currentUser.name;
+      const newAddress = address ? address: currentUser.address;
+      const newPhonenumber = phonenumber ? phonenumber: currentUser.phonenumber;
+      const newRadius = radius ? radius: currentUser.radius;
+      const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhonenumber,"radius": newRadius});
       const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
-
+      // After successful update, reload the page
+      window.location.href = "/myprofile";
     } catch (error) {
       alert(
         `Your updates could not be saved: \n${handleError(error)}`

@@ -269,6 +269,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
     }
   });
 
+
   function closeDropDownList() {
     var autocompleteItemsElement = inputContainerElement.querySelector(".autocomplete-items");
     if (autocompleteItemsElement) {
