@@ -250,7 +250,7 @@ const MyProfile = () => {
   // Define variables for the attributes that can be changed
   const [username, setUsername] = useState<string>(null);
   const [name, setName] = useState<string>(null);
-  const [phonenumber, setPhonenumber] = useState<string>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string>(null);
   const [address, setAddress] = useState<string>(null);
   const [latitude, setLatitude] = useState<float>(null);
   const [longitude, setLongitude] = useState<float>(null);
@@ -268,6 +268,8 @@ const MyProfile = () => {
         const response = await api.get(`/users/${currentUserId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setCurrentUser(response.data);
+        console.log(response.data);
+        console.log(currentUser);
       } catch (error) {
         console.error(
           `Something went wrong while fetching the tasks: \n${handleError(
@@ -285,6 +287,7 @@ const MyProfile = () => {
 
   useEffect(() => {
     if (currentUser && !addressFieldAdded) {
+      console.log(currentUser);
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
         console.log("Selected option: ");
@@ -307,19 +310,20 @@ const MyProfile = () => {
   }
 
   const doSaveUpdates = async () => {
+    console.log(currentUser);
     try {
       //const requestBody = JSON.stringify({"name":name,"username":currentUser.username,"address":address,"latitude":latitude,"longitude":longitude,"phoneNumber": phonenumber,"radius": radius});
       // Specify if we send the current values or if the user has updated these values:
       const newName = name ? name: currentUser.name;
       const newAddress = address ? address: currentUser.address;
-      const newPhonenumber = phonenumber ? phonenumber: currentUser.phonenumber;
+      const newPhoneNumber = phoneNumber ? phoneNumber: currentUser.phoneNumber;
       const newRadius = radius ? radius: currentUser.radius;
-      const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhonenumber,"radius": newRadius});
+      const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhoneNumber,"radius": newRadius});
       const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
       // After successful update, reload the page
-      window.location.href = "/myprofile";
+      //window.location.href = "/myprofile";
     } catch (error) {
       alert(
         `Your updates could not be saved: \n${handleError(error)}`
@@ -344,9 +348,9 @@ const MyProfile = () => {
               />
               <FormField
                 label="Phone Number"
-                placeholder={currentUser.phonenumber ? currentUser.phonenumber: "Add your phone number"}
-                value={phonenumber}
-                onChange={(pn: string) => setPhonenumber(pn)}
+                placeholder={currentUser.phoneNumber ? currentUser.phoneNumber: "Add your phone number"}
+                value={phoneNumber}
+                onChange={(pn: string) => setPhoneNumber(pn)}
               />
               <div className="myprofile field">
                 <label className="myprofile label">Address</label>
@@ -370,7 +374,7 @@ const MyProfile = () => {
                 </Button>
                 <Button
                   width="100%"
-                  disabled={!name && !phonenumber && !address && !radius}
+                  disabled={!name && !phoneNumber && !address && !radius}
                   onClick={() => doSaveUpdates()}
                  >
                   Save changes
