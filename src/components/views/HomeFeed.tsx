@@ -84,6 +84,10 @@ const TaskItem = ({ task }: { task: Task }) => {
   return (
     <div className="task container">
       <div className="task field">
+        <span className="task label">Title</span>
+        <span className="task answer">{task.title}</span>
+      </div>
+      <div className="task field">
         <span className="task label">Description</span>
         <span className="task answer">{task.description}</span>
       </div>
