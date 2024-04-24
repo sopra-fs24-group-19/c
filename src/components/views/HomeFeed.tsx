@@ -4,7 +4,7 @@ import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "styles/views/HomeFeed.scss";
 
 type Task = {
@@ -15,6 +15,7 @@ type Task = {
   time: string;
   date: string;
 };
+
 
 const formatDate = (dateString: string) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -163,11 +164,13 @@ const HomeFeed = () => {
           }
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        let tasksData = response.data;
 
-        ///// REMOVE THE LINE BELOW ONCE BACKEND IS DONE /////
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        setTasks(response.data);
+        // ///// REMOVE THE LINE BELOW ONCE BACKEND IS DONE /////
+
+        // setTasks(response.data);
 
 
         ///// UNCOMMENT THIS OUT ONCE BACKEND IS DONE /////
@@ -179,7 +182,16 @@ const HomeFeed = () => {
         //   tasksData = tasksData.filter(task => calculateDistance({longitude: user.longitude, latitude: user.latitude}, {longitude: task.longitude, latitude: task.latitude}) <= user.radius);
         // }
 
-        // setTasks(tasksData);
+        if (user && user.radius) {
+          tasksData = tasksData.filter(task => 
+            calculateDistance(
+              {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)}, 
+              {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
+            ) <= user.radius
+          );
+        }
+
+        setTasks(tasksData);
 
 
       } catch (error) {
@@ -195,21 +207,19 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    ///// WHEN BACKEND IS DONE USE [user] /////
-  }, []);
+  }, [user]);
 
   let content = <div>Loading...</div>;
 
   ///// UNCOMMENT THIS OUT ONCE BACKEND IS DONE /////
 
-  // if (user && !user.radius) {
-  //   content = <div>
-  //     Hello, we have noticed that your profile is missing a radius setting.<br /><br />
-  //     To ensure you are seeing all available tasks within your community, <br />
-  // please visit your <Link to="/myprofile">user profile</Link> to update this information.
-  //     </div>;
-  // } else if (tasks)
-  if (tasks) 
+  if (user && (!user.radius || !user.address)) {
+    content = <div>
+      Hello, we have noticed that your profile is missing a radius or address setting.<br /><br />
+      To ensure you are seeing all available tasks within your community, <br />
+  please visit your <Link to="/myprofile">user profile</Link> to update this information.
+      </div>;
+  } else if (tasks)
   {
     content = (
       <div className="homefeed">
