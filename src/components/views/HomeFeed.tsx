@@ -17,10 +17,10 @@ type Task = {
 };
 
 
-const formatDate = (dateString: string) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-}
+// const formatDate = (dateString: string) => {
+//   const options = { year: 'numeric', month: 'long', day: 'numeric' };
+//   return new Date(dateString).toLocaleDateString(undefined, options);
+// }
 
 // function that will help us filter tasks that are only within certain distance from us
 const calculateDistance = (location1: {longitude: number, latitude: number}, location2: {longitude: number, latitude: number}) => {
@@ -47,6 +47,8 @@ const deg2rad = (deg: number) => {
 const TaskItem = ({ task }: { task: Task }) => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("currentUserId");
+  const dateTime = new Date(task.date);
+  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
 
   const handleHelpClick = async () => {
     const userId = localStorage.getItem('currentUserId');
@@ -83,34 +85,37 @@ const TaskItem = ({ task }: { task: Task }) => {
   };
 
   return (
-    <div className="task container">
-      <div className="task field">
-        <span className="task label">Title</span>
-        <span className="task answer">{task.title}</span>
-      </div>
-      <div className="task field">
-        <span className="task label">Description</span>
-        <span className="task answer">{task.description}</span>
-      </div>
-      <div className="task field">
-        <span className="task label">Compensation</span>
-        <span className="task answer">{task.compensation} tokens</span>
-      </div>
-      <div className="task field">
-        <span className="task label">Duration</span>
-        <span className="task answer">{task.duration}</span>
-      </div>
-      <div className="task field">
-        <span className="task label">Date</span>
-        <span className="task answer">{formatDate(task.date)}</span>
-      </div>
-      {/*<div className="addtasks button-container">
-        <Button width="100%" onClick={handleHelpClick}>Help</Button>
-      </div>*/}
-      <div className="addtasks button-container">
-      {task.creatorId.toString() !== userId && (
-          <Button width="100%" onClick={handleHelpClick}>Help</Button>
+    <div className="myapplications form">
+      <title className="myapplications split-wrapper">
+        <label className="myapplications title">{task.title}</label>
+      </title>
+      {/* <div className="myapplications split-wrapper">
+        <label className="myapplications title">{task.title}</label>
+      </div> */}
+      <content className="myapplications split-wrapper">
+        <left className="myapplications left-wrapper">
+          <label className="myapplications label">{"Description"}</label>
+          <label className="myapplications content">{task.description}</label>
+        </left>
+        <right className="myapplications right-wrapper">
+          <label className="myapplications label">{"Date"}</label>
+          <label className="myapplications content">{formattedDateTime}</label>
+          <label className="myapplications label">{"Duration"}</label>
+          <label className="myapplications content">{`${(task.duration / 60).toFixed(2)} hrs`}</label>
+          <label className="myapplications label">{"Compensation"}</label>
+          <label className="myapplications content">{`${task.compensation} tokens`}</label>
+        </right>
+      </content>
+      <div className="myapplications button-container">
+        {/* {task.creatorId.toString() !== userId && (
+          <Button width="40%" onClick={handleHelpClick}>Help</Button>
+        )} */}
+        {task.creatorId.toString() === userId ? (
+          <em>You created this task!</em>
+        ) : (
+          <Button width="40%" onClick={handleHelpClick}>Help</Button>
         )}
+
       </div>
     </div>
   );
@@ -166,22 +171,6 @@ const HomeFeed = () => {
 
         let tasksData = response.data;
 
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // ///// REMOVE THE LINE BELOW ONCE BACKEND IS DONE /////
-
-        // setTasks(response.data);
-
-
-        ///// UNCOMMENT THIS OUT ONCE BACKEND IS DONE /////
-
-        // let tasksData = response.data;
-
-        // // If the user's radius is set, filter the tasks based on the user's radius
-        // if (user && user.radius) {
-        //   tasksData = tasksData.filter(task => calculateDistance({longitude: user.longitude, latitude: user.latitude}, {longitude: task.longitude, latitude: task.latitude}) <= user.radius);
-        // }
-
         if (user && user.radius) {
           tasksData = tasksData.filter(task => 
             calculateDistance(
@@ -211,7 +200,6 @@ const HomeFeed = () => {
 
   let content = <div>Loading...</div>;
 
-  ///// UNCOMMENT THIS OUT ONCE BACKEND IS DONE /////
 
   if (user && (!user.radius || !user.address)) {
     content = <div>
