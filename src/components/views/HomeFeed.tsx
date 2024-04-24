@@ -210,7 +210,7 @@ const HomeFeed = () => {
   } else if (tasks)
   {
     content = (
-      <div className="homefeed">
+      <div className="homefeed" style={{ height: '700px', overflow: 'auto', width: '1000px' }}>
         <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
           {tasks && tasks.map((task: Task) => (
             <li key={task.id}>
