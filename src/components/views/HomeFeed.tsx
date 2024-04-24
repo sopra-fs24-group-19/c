@@ -211,7 +211,7 @@ const HomeFeed = () => {
   {
     content = (
       <div className="homefeed">
-        <ul className="homefeed task-list">
+        <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
           {tasks && tasks.map((task: Task) => (
             <li key={task.id}>
               <TaskItem task={task} />
