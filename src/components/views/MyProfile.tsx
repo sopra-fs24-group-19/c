@@ -3,7 +3,7 @@ import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyProfile.scss";
 
@@ -319,10 +319,11 @@ const MyProfile = () => {
       const newRadius = radius ? radius: currentUser.radius;
       const newLatitude = latitude ? latitude: currentUser.latitude;
       const newLongitude = longitude ? longitude: currentUser.longitude;
-      const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhoneNumber,"radius":newRadius,"latitude":latitude,"longitude":longitude});
+      const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhoneNumber,"radius":newRadius,"latitude":newLatitude,"longitude":newLongitude});
       const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
+      console.log('Updated user:', updatedUser);
       // After successful update, reload the page
       window.location.href = "/myprofile";
     } catch (error) {

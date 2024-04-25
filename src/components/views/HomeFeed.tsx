@@ -169,15 +169,28 @@ const HomeFeed = () => {
           }
         });
 
+        console.log('Tasks before filtering:', response.data);
+
         let tasksData = response.data;
 
         if (user && user.radius) {
-          tasksData = tasksData.filter(task => 
-            calculateDistance(
+          console.log('User data:', user); 
+          console.log('Radius in fetch tasks:', user.radius);
+          // tasksData = tasksData.filter(task => 
+          //   calculateDistance(
+          //     {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)}, 
+          //     {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
+          //   ) <= user.radius
+          // );
+          tasksData = tasksData.filter(task => {
+            const distance = calculateDistance(
               {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)}, 
               {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
-            ) <= user.radius
-          );
+            );
+            console.log(`Distance for task ${task.id}:`, distance);
+            return distance <= user.radius;
+          });
+          console.log('Tasks after filtering:', tasksData);
         }
 
         setTasks(tasksData);
