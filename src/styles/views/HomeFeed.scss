@@ -8,27 +8,26 @@
   flex-direction: column;
 }
 
-.task {
+.myapplications {
+
+  //General container
   &.container {
     color: $our_brown;
     margin-top: 2em;
     min-height: 300px;
+    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    background-color: $our_green;
-    box-shadow: $dropShadow;
   }
+
+  //A green box that shows all details of one task
   &.form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    max-width: 30em;
-    height: 35em;
+    max-width: 70em;
+    height: 22em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -37,47 +36,60 @@
     background-color: $our_green;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
+    margin-bottom: 2em;
   }
+
+  //Component holds all infos of a task
   &.field {
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
     display: flex;
-    flex-direction: row; 
-    justify-content: flex-start; 
-    align-items: center; 
+    flex-direction: column;
+    justify-content: center;
   }
-  &.creatorId,
-  &.description,
-  &.price,
-  &.time,
-  &.date  {
+  //For a better view, we split the box in multiple areas
+  &.split-wrapper {
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &.left-wrapper {
+    justify-content: left;
+  }
+  &.right-wrapper {
+    justify-content: right;
+    text-align: right;
+  }
+
+  //Title, label and content define the type of text that is shown
+  &.title {
     height: 35px;
-    padding-left: 15px;
-    margin-left: -4px;
-    border: none;
-    border-radius: 0.75em;
+    margin-top: 22px;
     margin-bottom: 20px;
-    background: transparentize(white, 0.85);
     color: $our_brown;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 700;
+    display: block;
+    text-align: center; 
+    
   }
   &.label {
     color: $our_brown;
-    margin-bottom: 6px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    text-transform: lowercase;
+    font-weight: 350;
+    display: block;
+  }
+  &.content {
+    color: $our_brown;
     text-transform: uppercase;
     font-weight: 600;
+    display: block;
   }
-  &.answer {
-    padding-left: 15px;
-    margin-left: 0px;
-    border: none;
-    border-radius: 0.75em;
-    margin-bottom: 6px;
-    color: $our_brown;
-  }
+
+  //Regular button container
   &.button-container {
-    display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 2em;
     button {
       color: $our_beige;
@@ -85,3 +97,81 @@
     }
   }
 }
+
+// .task {
+//   &.container {
+//     color: $our_brown;
+//     margin-top: 2em;
+//     min-height: 300px;
+//     @include center;
+//     flex-direction: column;
+//     border: 1px solid #ddd;
+//     padding: 10px;
+//     margin-bottom: 10px;
+//     border-radius: 5px;
+//     background-color: $our_green;
+//     box-shadow: $dropShadow;
+//   }
+//   &.form {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     width: 100%;
+//     max-width: 30em;
+//     height: 35em;
+//     font-size: 16px;
+//     font-weight: 300;
+//     padding-left: 37px;
+//     padding-right: 37px;
+//     border-radius: 0.75em;
+//     background-color: $our_green;
+//     transition: opacity 0.5s ease, transform 0.5s ease;
+//     box-shadow: $dropShadow;
+//   }
+//   &.field {
+//     // display: flex;
+//     // flex-direction: column;
+//     // justify-content: center;
+//     display: flex;
+//     flex-direction: row; 
+//     justify-content: flex-start; 
+//     align-items: center; 
+//   }
+//   &.creatorId,
+//   &.description,
+//   &.price,
+//   &.time,
+//   &.date  {
+//     height: 35px;
+//     padding-left: 15px;
+//     margin-left: -4px;
+//     border: none;
+//     border-radius: 0.75em;
+//     margin-bottom: 20px;
+//     background: transparentize(white, 0.85);
+//     color: $our_brown;
+//   }
+//   &.label {
+//     color: $our_brown;
+//     margin-bottom: 6px;
+//     text-transform: uppercase;
+//     font-weight: 600;
+//   }
+//   &.answer {
+//     padding-left: 15px;
+//     margin-left: 0px;
+//     border: none;
+//     border-radius: 0.75em;
+//     margin-bottom: 6px;
+//     color: $our_brown;
+//   }
+//   &.button-container {
+//     display: flex;
+//     justify-content: center;
+//     margin-top: 2em;
+//     button {
+//       color: $our_beige;
+//       background-color: $our_brown;
+//     }
+//   }
+// }

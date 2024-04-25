@@ -16,13 +16,7 @@ const Candidates = () => {
   const [candidates, setCandidates] = useState<User[]>([]);
 
   useEffect(() => {
-    // Fetch tasks from an API, for now, we manually mock data
-    setCandidates([
-      { id: "1"},
-      { id: "2"},
-      { id: "3"}
-    ]);
-
+    // Fetch tasks from an API
     async function fetchData() {
     try {
         const response = await api.get(`/candidates/${taskId}`);
@@ -38,7 +32,7 @@ const Candidates = () => {
         );
       }
     }
-    //fetchData();
+    fetchData();
 
   const doAcceptHelper = async (helperId) => {
     try {
@@ -65,7 +59,7 @@ const Candidates = () => {
           {candidates.map((candidate: User) => (
           <div className="candidates form" key={candidate.id}>
             <label className="candidates title">
-                <name>{candidate.id}</name>
+                <name>{candidate.name}</name>
                 <img src="profilepic.png" alt="Profile picture" className="img" style={{height:80, borderRadius: '50%'}}/>
             </label>
             <rate className="candidates button-container">

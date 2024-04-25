@@ -54,7 +54,7 @@ const UserProfile = () => {
   
         setUsername(user.username);
         setName(user.name);
-        setPhonenumber(user.phonenumber);
+        setPhonenumber(user.phoneNumber);
         setNoOfReviews(user.totalComments); 
         setAverageReview(user.averageStars);
       } catch (error) {
@@ -65,11 +65,11 @@ const UserProfile = () => {
 
     const fetchRatings = async () => {
       try {
-        // Uncomment this once the backend is done
+        const token = localStorage.getItem("token");
         const response = await api.get(`/ratings/${id}`, {
           headers: {
             "Accept": "application/json",
-            "Authorization": "39be0ed6-a0b4-48f3-9517-03ca508dbc53"
+            "Authorization": token
 
           }
         });
@@ -102,8 +102,8 @@ const UserProfile = () => {
       <NavBar />
       <div className="userprofile container">
         <h1>{username ? username : "Loading username..."}</h1>
-        <p>Here, you can see details of {name ? name : "Loading name..."}</p>
-        <p className="rating">{averageReview ? averageReview.toFixed(2) : "Loading average review..."} &#9733; &nbsp; {noOfReviews} reviews</p>
+        {/* <p>Here, you can see details of {name ? name : "Loading name..."}</p> */}
+        <p className="rating">{averageReview ? averageReview.toFixed(2) : "No reviews yet"} &#9733; &nbsp; {noOfReviews} reviews</p>
         <div className="userprofile form">
           <div className="userprofile field">
             <p className="label">Username:</p>
@@ -115,7 +115,7 @@ const UserProfile = () => {
           </div>
           <div className="userprofile field">
             <p className="label">Phone Number:</p>
-            <p className="input">{phonenumber ? phonenumber : "Loading phone number..."}</p>
+            <p className="input">{phonenumber ? phonenumber : "No phone number yet"}</p>
           </div>
         </div>
       </div>
@@ -142,7 +142,7 @@ const UserProfile = () => {
                 </p>
               ))
             ) : (
-              <p>Loading reviews...</p>
+              <p>No reviews yet</p>
             )}
 
           </div>

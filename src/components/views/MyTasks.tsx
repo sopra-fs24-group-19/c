@@ -9,6 +9,8 @@ import Task from "models/Task"
 import "styles/views/MyTasks.scss";
 
 const FormField = (props) => {
+  const dateTime = new Date(props.date);
+  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
   return (
     <div className="mytasks field">
       {/* Task details */}
@@ -23,9 +25,9 @@ const FormField = (props) => {
       </left>
       <right className="mytasks right-wrapper">
       <label className="mytasks label">{"Date"}</label>
-      <label className="mytasks content">{props.date}</label>
+      <label className="mytasks content">{formattedDateTime}</label>
       <label className="mytasks label">{"Duration"}</label>
-      <label className="mytasks content">{`${props.dur/60} hrs`}</label>
+      <label className="mytasks content">{`${(props.dur / 60).toFixed(2)} hrs`}</label>
       <label className="mytasks label">{"Compensation"}</label>
       <label className="mytasks content">{`${props.comp} coins`}</label>
       </right>
@@ -77,8 +79,6 @@ const MyTasks = () => {
       }
     }
     fetchData();
-
-
   }, []); // Empty dependency array to run the effect only once
 
   return (
@@ -100,9 +100,8 @@ const MyTasks = () => {
                 desc={task.description}
                 date={task.date}
                 dur={task.duration}
-                comp={task.price}
+                comp={task.compensation}
                 status={task.status}
-
               />
             </div>
             <div className="mytasks button-container">
@@ -116,7 +115,8 @@ const MyTasks = () => {
               </Button>
               <Button
               width="30%"
-              disabled={task.status !== "Undone"}
+              // Maybe we have to think about the status and when to give this option
+              disabled={task.status === "Undone"}
               onClick={() => navigate(`/candidates`, {state: task.id} )}
               >
               Check out helpers

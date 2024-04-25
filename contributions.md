@@ -15,3 +15,7 @@
 * Week 2 - Github issues worked on:
   * FE US5: https://github.com/orgs/sopra-fs24-group-19/projects/1/views/3?filterQuery=repo%3A%22sopra-fs24-group-19%2Fclient-group19%22+type-of-issue%3ATask+week%3A%22Week+2%22&pane=issue&itemId=57051822
   * FE US10: https://github.com/orgs/sopra-fs24-group-19/projects/1/views/3?filterQuery=repo%3A%22sopra-fs24-group-19%2Fclient-group19%22+type-of-issue%3ATask+week%3A%22Week+2%22&pane=issue&itemId=57051826
+* Week 3 - Github issues worked on:
+  * FE US2 (further extension using an autocompletion API): https://github.com/orgs/sopra-fs24-group-19/projects/1/views/3?filterQuery=repo%3A%22sopra-fs24-group-19%2Fclient-group19%22+type-of-issue%3ATask+week%3A%22Week+3%22&pane=issue&itemId=60168398
+  * FE US3 (further extension using an autocompletion API): https://github.com/orgs/sopra-fs24-group-19/projects/1/views/3?filterQuery=repo%3A%22sopra-fs24-group-19%2Fclient-group19%22+type-of-issue%3ATask+week%3A%22Week+3%22&pane=issue&itemId=60167986
+  * Further work: removal of mock data, connection of front- and backend as well as the navigation between frontend pages
