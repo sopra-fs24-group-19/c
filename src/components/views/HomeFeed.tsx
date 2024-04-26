@@ -216,7 +216,7 @@ const HomeFeed = () => {
 
   if (user && (!user.radius || !user.address)) {
     content = <div>
-      Hello, we have noticed that your profile is missing a radius or address setting.<br /><br />
+      Hello! We have noticed that your profile is missing a radius or address setting.<br /><br />
       To ensure you are seeing all available tasks within your community, <br />
   please visit your <Link to="/myprofile">user profile</Link> to update this information.
       </div>;
