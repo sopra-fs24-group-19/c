@@ -4,6 +4,8 @@ import NavBar from "components/ui/NavBar";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import StarRatings from 'react-star-ratings';
 import "styles/views/LeaveReview.scss";
 
 const FormField = (props) => {
@@ -40,9 +42,11 @@ const FormField = (props) => {
 
   const LeaveReview = () => {
     const [review, setReview] = useState('');
-    const [stars, setStars] = useState('');
+    const [stars, setStars] = useState(0);
+    const navigate = useNavigate();
   
     const doSubmitReview = async () => {
+        
         const reviewerId = localStorage.getItem('currentUserId');
         const token = localStorage.getItem("token")
         if (!reviewerId) {
@@ -52,7 +56,7 @@ const FormField = (props) => {
       
         const requestBody = {
           stars: stars,
-          reviewedId: '#',  // Replace with the actual reviewedId
+          reviewedId: '1',  // Replace with the actual reviewedId
           reviewerId: reviewerId,
           comment: review
         };
@@ -67,6 +71,7 @@ const FormField = (props) => {
             },
           });
           console.log(response.data);
+          navigate(`/userprofile/${requestBody.reviewedId}`);
           
         } catch (error) {
           console.error(`Something went wrong: ${error}`);
@@ -80,13 +85,21 @@ const FormField = (props) => {
             <div className="review container">
               <h1>Leave a review!</h1>
               <div className="review form">
-                <FormField
+              <label className="review label">Stars</label>
+            <StarRatings
+              rating={stars}
+              starRatedColor="blue"
+              changeRating={(newRating: number) => setStars(newRating)}
+              numberOfStars={5}
+              name='rating'
+            />
+                {/* <FormField
                   label="Stars"
                   type="number"
                   placeholder="Enter number of stars (1-5)"
                   value={stars}
                   onChange={(s: string) => setStars(s)}
-                />
+                /> */}
                 <FormField
                   label="Your Review"
                   type="textarea"
