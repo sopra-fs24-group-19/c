@@ -75,6 +75,37 @@ const MyTasks = () => {
     }
   }
 
+  const [helperNames, setHelperNames] = useState<{ [key: number]: string }>({});
+
+  useEffect(() => {
+    // Function to fetch helper name
+    const fetchHelperName = async (id: number) => {
+      try {
+        const response = await api.get(`/users/${id}`);
+        return response.data.name;
+      } catch (error) {
+        console.error(`Failed to fetch user with ID ${id}: ${error}`);
+      }
+    };
+  
+    // Fetch helper names for all tasks
+    const fetchHelperNames = async () => {
+      const newHelperNames: { [key: number]: string } = {};
+      const fetchPromises = tasks.map(async (task) => {
+        if (task.helperId !== 0 && !(task.helperId in helperNames)) {
+          newHelperNames[task.helperId] = await fetchHelperName(task.helperId);
+        }
+      });
+  
+      await Promise.all(fetchPromises);
+  
+      // Update the helperNames state
+      setHelperNames((prevHelperNames) => ({ ...prevHelperNames, ...newHelperNames }));
+    };
+  
+    fetchHelperNames();
+  }, [tasks]);
+
   useEffect(() => {
 
     async function fetchData() {
@@ -140,7 +171,7 @@ const MyTasks = () => {
                 </Button>
               ) : (
                 <p style={{ width: '30%', textAlign: 'center', margin: 'auto' }}>
-                  You have chosen {task.helperId} for this task
+                  You have chosen {helperNames[task.helperId]} for this task
                 </p>
               )}
 
