@@ -1,11 +1,10 @@
-import NavBar from 'components/ui/NavBar';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
+import Task from "models/Task";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Task from "models/Task"
 import "styles/views/MyTasks.scss";
 
 const FormField = (props) => {
@@ -45,8 +44,10 @@ FormField.propTypes = {
 };
   const doDeleteTask = async (taskId) => {
     try {
-      const response = await api.delete(`/tasks/${taskId}`, {header: {"AuthorizationToken":localStorage.getItem("token")}});
-
+      const response = await api.delete(`/tasks/${taskId}`, 
+      {
+        headers: {"AuthorizationToken":localStorage.getItem("token")}
+      });
     } catch (error) {
             alert(
               `Something went wrong during the task deletion: \n${handleError(error)}`
