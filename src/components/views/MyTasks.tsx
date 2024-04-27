@@ -136,7 +136,8 @@ const MyTasks = () => {
             <p>Here is an overview of all tasks you posted</p>
 
           {/* Wrap the tasks in a scrollable element*/}
-          <tasks style={{height:600, overflow: "auto", width: 1000}}>
+          {/* <tasks style={{height:600, overflow: "auto", width: 1000}}> */}
+          <tasks style={{ height: '75vh', overflowY: 'auto', width: 1000 }}>
           {tasks.map((task: Task) => (
           <div className="mytasks form" key={task.id}>
 
@@ -170,8 +171,8 @@ const MyTasks = () => {
                   Check out helpers
                 </Button>
               ) : (
-                <p style={{ width: '30%', textAlign: 'center', margin: 'auto' }}>
-                  You have chosen {helperNames[task.helperId]} for this task
+                <p className="mytasks button-replacement">
+                  Your have chosen {helperNames[task.helperId]} for help!
                 </p>
               )}
 
