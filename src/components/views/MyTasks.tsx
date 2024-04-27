@@ -129,14 +129,29 @@ const MyTasks = () => {
               >
               Delete task
               </Button>
-              <Button
+              {task.helperId === 0 ? (
+                <Button
+                  width="30%"
+                  // Maybe we have to think about the status and when to give this option
+                  disabled={task.status === "Undone"}
+                  onClick={() => navigate(`/candidates`, {state: task.id} )}
+                >
+                  Check out helpers
+                </Button>
+              ) : (
+                <p style={{ width: '30%', textAlign: 'center', margin: 'auto' }}>
+                  You have chosen {task.helperId} for this task
+                </p>
+              )}
+
+              {/* <Button
               width="30%"
               // Maybe we have to think about the status and when to give this option
               disabled={task.status === "Undone"}
               onClick={() => navigate(`/candidates`, {state: task.id} )}
               >
               Check out helpers
-              </Button>
+              </Button> */}
             </div>
 
           </div>
