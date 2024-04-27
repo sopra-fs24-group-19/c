@@ -49,23 +49,6 @@ const Candidates = () => {
     }
     fetchData();
 
-  // const doAcceptHelper = async (helperId) => {
-  //   try {
-  //     const userId = localStorage.getItem("currentUserId");
-  //     const token = localStorage.getItem("token");
-  //     const requestBody = JSON.stringify({taskId, userId, helperId});
-      
-  //     const response = await api.put(`/tasks/${taskId}`, requestBody, {
-  //       headers: { Authorization: `Bearer ${token}` }
-  //     });
-  //     navigate("/mytasks");
-  //   } catch (error) {
-  //           alert(
-  //             `Something went wrong during the selection: \n${handleError(error)}`
-  //           );
-  //   }
-  // }
-
   }, []); // Empty dependency array to run the effect only once
 
   return (
