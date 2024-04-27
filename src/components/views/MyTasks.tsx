@@ -42,23 +42,38 @@ FormField.propTypes = {
   comp: PropTypes.int,
   status: PropTypes.string,
 };
+  // const doDeleteTask = async (taskId) => {
+  //   try {
+  //     const response = await api.delete(`/tasks/${taskId}`, 
+  //     {
+  //       headers: {"AuthorizationToken":localStorage.getItem("token")}
+  //     });
+  //     setTasks(tasks.filter(task => task.id !== taskId));
+  //   } catch (error) {
+  //           alert(
+  //             `Something went wrong during the task deletion: \n${handleError(error)}`
+  //           );
+  //   }
+  // }
+
+const MyTasks = () => {
+  const navigate = useNavigate();
+  const currentUserId = localStorage.getItem("currentUserId")
+  const [tasks, setTasks] = useState<Task[]>([]);
+
   const doDeleteTask = async (taskId) => {
     try {
       const response = await api.delete(`/tasks/${taskId}`, 
       {
         headers: {"AuthorizationToken":localStorage.getItem("token")}
       });
+      setTasks(tasks.filter(task => task.id !== taskId));
     } catch (error) {
             alert(
               `Something went wrong during the task deletion: \n${handleError(error)}`
             );
     }
   }
-
-const MyTasks = () => {
-  const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
-  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
 
