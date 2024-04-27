@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import "styles/views/LeaveReview.scss";
 
+// npm install react-star-ratings
+
 const FormField = (props) => {
     return (
       <div className="review field">

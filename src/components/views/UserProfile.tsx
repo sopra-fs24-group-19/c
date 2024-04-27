@@ -125,7 +125,7 @@ const UserProfile = () => {
         <p>Scroll down for more reviews</p>
         <div className="userprofile commentsform">
           <div className="userprofile review-list" style={{
-            maxHeight: `${reviewItemHeight * 3}px`, 
+            maxHeight: `${reviewItemHeight * 10}px`, 
             overflowY: 'auto' 
             }}>
             {/* {reviews.length > 0 ? (
