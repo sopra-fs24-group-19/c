@@ -161,6 +161,7 @@ const MyTasks = () => {
               >
               Delete task
               </Button>
+
               {task.helperId === 0 ? (
                 <Button
                   width="30%"
@@ -171,9 +172,22 @@ const MyTasks = () => {
                   Check out helpers
                 </Button>
               ) : (
-                <p className="mytasks button-replacement">
-                  Your have chosen {helperNames[task.helperId]} for help!
-                </p>
+                // <p className="mytasks button-replacement">
+                //   Your have chosen {helperNames[task.helperId]} for help!
+                // </p>
+                <>
+                  <p className="mytasks button-replacement">
+                    Your have chosen {helperNames[task.helperId]} for help!
+                  </p>
+                  {task.status === "IN_PROGRESS" && (
+                    <Button
+                      width="30%"
+                      onClick={() => navigate(`/todo/${task.id}`)}
+                    >
+                      Start your To-Do list
+                    </Button>
+                  )}
+                </>
               )}
 
               {/* <Button

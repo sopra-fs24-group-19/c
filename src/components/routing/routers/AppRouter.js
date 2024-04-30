@@ -78,7 +78,7 @@ const AppRouter = () => {
         </Route>
 
         <Route path="/todo" element={<ToDoGuard />}>
-          <Route path="/todo" element={<ToDo />} />
+          <Route path=":taskId" element={<ToDo />} />
         </Route>
 
         <Route path="/" element={
