@@ -58,7 +58,7 @@ const FormField = (props) => {
       
         const requestBody = {
           stars: stars,
-          reviewedId: '1',  // Replace with the actual reviewedId
+          reviewedId: '#',  // Replace with the actual reviewedId
           reviewerId: reviewerId,
           comment: review
         };
