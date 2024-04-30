@@ -9,6 +9,7 @@ import MyApplications from "../../views/MyApplications";
 import MyProfile from "../../views/MyProfile";
 import MyTasks from "../../views/MyTasks";
 import Register from "../../views/Register";
+import ToDo from "../../views/ToDo";
 import UserProfile from "../../views/UserProfile";
 import { AddTasksGuard } from "../routeProtectors/AddTasksGuard";
 import { HomeFeedGuard } from "../routeProtectors/HomeFeedGuard";
@@ -17,6 +18,7 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { MyProfileGuard } from "../routeProtectors/MyProfileGuard";
 import { MyTasksGuard } from "../routeProtectors/MyTasksGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
+import { ToDoGuard } from "../routeProtectors/ToDoGuard";
 import { UserProfileGuard } from "../routeProtectors/UserProfileGuard";
 
 /**
@@ -73,6 +75,10 @@ const AppRouter = () => {
 
         <Route path="/leavereview" element={<LeaveReviewGuard />}>
           <Route path="/leavereview" element={<LeaveReview />} />
+        </Route>
+
+        <Route path="/todo" element={<ToDoGuard />}>
+          <Route path="/todo" element={<ToDo />} />
         </Route>
 
         <Route path="/" element={
