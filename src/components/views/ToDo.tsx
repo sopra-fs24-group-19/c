@@ -3,9 +3,8 @@ import { Button } from "components/ui/Button";
 import NavBar from "components/ui/NavBar";
 import { api } from "helpers/api";
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import "styles/views/ToDo.scss";
-
 
 
 
@@ -21,6 +20,8 @@ const ToDo = () => {
     const userId = localStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
     const [task, setTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [allTodosDone, setAllTodosDone] = useState(false);
+    const navigate = useNavigate();
 
     
 
@@ -46,6 +47,15 @@ const ToDo = () => {
     
         fetchTask();
     }, []);
+
+    const fetchAllTodosDone = async () => {
+        try {
+            const response = await api.get(`/allTodosDone/${taskId}`);
+            setAllTodosDone(response.data);
+        } catch (error) {
+            console.error(`Something went wrong: ${error}`);
+        }
+    };
 
   
     useEffect(() => {
@@ -75,6 +85,7 @@ const ToDo = () => {
         };
     
         fetchTodos();
+        fetchAllTodosDone();
         const intervalId = setInterval(fetchTodos, 5000);
     
         return () => clearInterval(intervalId);
@@ -256,6 +267,19 @@ const ToDo = () => {
                         <div className="todo button-container">
                             <Button onClick={postTodo}>Post</Button>
                         </div>
+                        <div className="todo button-container">
+                        <Button 
+                            disabled={!allTodosDone} 
+                            onClick={() => {
+                                const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
+                                navigate(`/leavereview/${redirectUserId}`);
+                            }}
+                        >
+                            Task Done
+                        </Button>
+                            
+                        </div>
+
                     </div>
                 </div>
             </BaseContainer>

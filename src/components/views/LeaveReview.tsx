@@ -4,9 +4,10 @@ import NavBar from "components/ui/NavBar";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import "styles/views/LeaveReview.scss";
+
 
 // npm install react-star-ratings
 
@@ -43,6 +44,7 @@ const FormField = (props) => {
   };
 
   const LeaveReview = () => {
+    const { id: reviewedId } = useParams();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
     const navigate = useNavigate();
@@ -58,15 +60,15 @@ const FormField = (props) => {
       
         const requestBody = {
           stars: stars,
-          reviewedId: '#',  // Replace with the actual reviewedId
-          reviewerId: reviewerId,
+          reviewedId: reviewedId.toString(),  
+          reviewerId: reviewerId.toString(),
           comment: review
         };
       
         try {
           // Uncomment the following lines to make the API request
          
-          const response = await api.post('/ratings/1', requestBody, {
+          const response = await api.post(`/ratings/${reviewedId}`, requestBody, {
             headers: {
               'Content-Type': 'application/json',
               "Authorization": token

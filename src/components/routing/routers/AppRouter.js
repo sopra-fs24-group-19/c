@@ -73,8 +73,11 @@ const AppRouter = () => {
           <Route path="/homefeed" element={<HomeFeed />} />
         </Route>
 
-        <Route path="/leavereview" element={<LeaveReviewGuard />}>
+        {/* <Route path="/leavereview" element={<LeaveReviewGuard />}>
           <Route path="/leavereview" element={<LeaveReview />} />
+        </Route> */}
+        <Route path="/leavereview/:id" element={<LeaveReviewGuard />}>
+            <Route path="/leavereview/:id" element={<LeaveReview />} />
         </Route>
 
         <Route path="/todo" element={<ToDoGuard />}>
