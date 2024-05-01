@@ -91,21 +91,43 @@ const ToDo = () => {
         }
     };
 
-    const deleteTodo = async (todoId) => {
+    // const deleteTodo = async (todoId) => {
+    //     const token = localStorage.getItem('token');
+    //     try {
+    //         await api.delete(`/todo/${todoId}`, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 "Authorization": token
+    //             },
+    //         });
+    //         // setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
+    //         setTodos((prevTodos) => ({
+    //             myTodos: prevTodos.myTodos.filter((todo) => todo.id !== todoId),
+    //             otherTodos: prevTodos.otherTodos
+    //         }));
+
+    //     } catch (error) {
+    //         console.error(`Something went wrong: ${error}`);
+    //     }
+    // };
+    const deleteTodo = async (todoId, description) => {
         const token = localStorage.getItem('token');
+        const requestBody = {
+            description: description,
+            taskId: todoId
+        };
+    
         try {
-            await api.delete(`/todo/${todoId}`, {
+            await api.delete(`/todo`, requestBody, {
                 headers: {
                     'Content-Type': 'application/json',
                     "Authorization": token
                 },
             });
-            // setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
             setTodos((prevTodos) => ({
                 myTodos: prevTodos.myTodos.filter((todo) => todo.id !== todoId),
                 otherTodos: prevTodos.otherTodos
             }));
-
         } catch (error) {
             console.error(`Something went wrong: ${error}`);
         }
@@ -125,36 +147,20 @@ const ToDo = () => {
                 <div className="todo container">
                     <h1>Todo</h1>
                     <div className="todo form">
-                        {/* {todos.map((todo) =>
-                            todo.authorId === userId ? (
-                                <div key={todo.id} className="todo item">
-                                    <input
-                                        className="todo input"
-                                        value={descriptions[todo.id] || todo.description}
-                                        onChange={(e) => updateDescription(todo.id, e.target.value)}
-                                        onFocus={() => setEditingTodoId(todo.id)}
-                                        onBlur={() => setEditingTodoId(null)}
-                                    />
-                                    <div className="todo button-container">
-                                        <Button onClick={() => updateTodo(todo.id, descriptions[todo.id] || todo.description, !todo.done)}>
-                                            {todo.done ? 'Undo' : 'Done'}
-                                        </Button>
-                                        <Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div key={todo.id} className="todo item">
-                                    <input
-                                        type="checkbox"
-                                        checked={todo.done}
-                                        onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
-                                    />
-                                    <label className="todo label">{todo.description}</label>
-                                </div>
-                            )
-                        )} */}
-
-                {todos.myTodos.map((todo) =>
+                        
+                        
+                        {todos.otherTodos.map((todo) =>
+                            <div key={todo.id} className="todo item">
+                                <input
+                                    type="checkbox"
+                                    checked={todo.done}
+                                    onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
+                                />
+                                <label className="todo label">{todo.description}</label>
+                            </div>
+                        )}
+                        <br /> {/* Adds some space before the new-todo section */}
+                        {todos.myTodos.map((todo) =>
                             <div key={todo.id} className="todo item">
                                 <input
                                     className="todo input"
@@ -167,20 +173,13 @@ const ToDo = () => {
                                     <Button onClick={() => updateTodo(todo.id, descriptions[todo.id] || todo.description, !todo.done)}>
                                         {todo.done ? 'Undo' : 'Done'}
                                     </Button>
-                                    <Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
+                                    {/* <Button onClick={() => deleteTodo(todo.id)}>Delete</Button> */}
+                                    <Button onClick={() => deleteTodo(todo.id, todo.description)}>Delete</Button>
                                 </div>
                             </div>
                         )}
-                        {todos.otherTodos.map((todo) =>
-                            <div key={todo.id} className="todo item">
-                                <input
-                                    type="checkbox"
-                                    checked={todo.done}
-                                    onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
-                                />
-                                <label className="todo label">{todo.description}</label>
-                            </div>
-                        )}
+
+
                         <br /> {/* Adds some space before the new-todo section */}
                         <label className="todo label">Add New Todo</label>
                         <input
