@@ -10,7 +10,6 @@ import "styles/views/ToDo.scss";
 
 
 
-
 const ToDo = () => {
 
     // const [todos, setTodos] = useState([]);
@@ -72,13 +71,13 @@ const ToDo = () => {
         }
     };
   
-    const updateTodo = async (todoId, description, done) => {
+    const updateTodo = async (todoId, done, description) => {
         const token = localStorage.getItem('token');
         const requestBody = {
             description: description,
             done: done,
         };
-
+    
         try {
             await api.put(`/todo/${todoId}`, requestBody, {
                 headers: {
@@ -91,31 +90,15 @@ const ToDo = () => {
         }
     };
 
-    // const deleteTodo = async (todoId) => {
-    //     const token = localStorage.getItem('token');
-    //     try {
-    //         await api.delete(`/todo/${todoId}`, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 "Authorization": token
-    //             },
-    //         });
-    //         // setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
-    //         setTodos((prevTodos) => ({
-    //             myTodos: prevTodos.myTodos.filter((todo) => todo.id !== todoId),
-    //             otherTodos: prevTodos.otherTodos
-    //         }));
-
-    //     } catch (error) {
-    //         console.error(`Something went wrong: ${error}`);
-    //     }
-    // };
-    const deleteTodo = async (todoId, description) => {
+    const deleteTodo = async (todoId, description, taskId) => {
         const token = localStorage.getItem('token');
         const requestBody = {
+            id: todoId,
             description: description,
-            taskId: todoId
+            taskId: Number(taskId),
         };
+
+        console.log('Request body:', requestBody);
     
         try {
             await api.delete(`/todo`, requestBody, {
@@ -131,6 +114,7 @@ const ToDo = () => {
         } catch (error) {
             console.error(`Something went wrong: ${error}`);
         }
+        
     };
 
     const updateDescription = (todoId, description) => {
@@ -170,11 +154,11 @@ const ToDo = () => {
                                     onBlur={() => setEditingTodoId(null)}
                                 />
                                 <div className="todo button-container">
-                                    <Button onClick={() => updateTodo(todo.id, descriptions[todo.id] || todo.description, !todo.done)}>
-                                        {todo.done ? 'Undo' : 'Done'}
-                                    </Button>
+                                <Button onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
+                                    Save
+                                </Button>
                                     {/* <Button onClick={() => deleteTodo(todo.id)}>Delete</Button> */}
-                                    <Button onClick={() => deleteTodo(todo.id, todo.description)}>Delete</Button>
+                                    <Button onClick={() => deleteTodo(todo.id, todo.description, taskId)}>Delete</Button>
                                 </div>
                             </div>
                         )}
