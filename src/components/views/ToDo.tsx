@@ -114,7 +114,7 @@ const ToDo = () => {
                 <div className="todo container">
                     <h1>Todo</h1>
                     <div className="todo form">
-                        <label className="todo label">New Todo</label>
+                        {/* <label className="todo label">New Todo</label>
                         <input
                             className="todo input"
                             value={newTodo}
@@ -122,7 +122,7 @@ const ToDo = () => {
                         />
                         <div className="todo button-container">
                             <Button onClick={postTodo}>Post</Button>
-                        </div>
+                        </div> */}
                         {todos.map((todo) =>
                             todo.authorId === userId ? (
                                 <div key={todo.id} className="todo item">
@@ -151,6 +151,16 @@ const ToDo = () => {
                                 </div>
                             )
                         )}
+                        <br /> {/* Adds some space before the new-todo section */}
+                        <label className="todo label">Add New Todo</label>
+                        <input
+                            className="todo input"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                        />
+                        <div className="todo button-container">
+                            <Button onClick={postTodo}>Post</Button>
+                        </div>
                     </div>
                 </div>
             </BaseContainer>
