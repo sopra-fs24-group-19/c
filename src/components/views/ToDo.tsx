@@ -19,8 +19,32 @@ const ToDo = () => {
     const [descriptions, setDescriptions] = useState({});
     const { taskId } = useParams(); // Retrieve the task ID from the URL
     const userId = localStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
+    const [task, setTask] = useState(null);
+
+    // get info about who is creator and a helper
+    useEffect(() => {
+        const fetchTask = async () => {
+            try {
+                const response = await api.get(`/tasks`, {
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                });
+                const task = response.data.find(task => task.id === Number(taskId));
+                setTask(task);
+                console.log(`Creator ID: ${task.creatorId}, Helper ID: ${task.helperId}`);
+            } catch (error) {
+                console.error(`Something went wrong while fetching the tasks: \n${handleError(error)}`);
+                alert("Something went wrong while fetching the tasks! See the console for details.");
+            }
+        };
+    
+        fetchTask();
+    }, []);
+
   
     useEffect(() => {
+        
         const fetchTodos = async () => {
             console.log(taskId);
             try {
@@ -50,7 +74,8 @@ const ToDo = () => {
     
         return () => clearInterval(intervalId);
     }, [taskId]);
-  
+
+
       const postTodo = async () => {
         const token = localStorage.getItem('token');
         const requestBody = {
@@ -142,6 +167,16 @@ const ToDo = () => {
                                 />
                                 <label className="todo label">{todo.description}</label>
                             </div>
+                            // <div key={todo.id} className="todo item">
+                            //     <input
+                            //         type="checkbox"
+                            //         checked={todo.done}
+                            //         onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
+                            //         disabled={userId !== task.creatorId} // Disable the checkbox if the current user is not the creator
+                            //     />
+                            //     <label className="todo label">{todo.description}</label>
+                            //     {todo.done && <span>✔️</span>} // Show a checkmark if the todo is done
+                            // </div>
                         )}
                         <br /> {/* Adds some space before the new-todo section */}
                         {todos.myTodos.map((todo) =>
@@ -154,10 +189,10 @@ const ToDo = () => {
                                     onBlur={() => setEditingTodoId(null)}
                                 />
                                 <div className="todo button-container">
-                                <Button onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
-                                    Save
-                                </Button>
-                                    {/* <Button onClick={() => deleteTodo(todo.id)}>Delete</Button> */}
+                                    <Button onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
+                                        Save
+                                    </Button>
+                                        {/* <Button onClick={() => deleteTodo(todo.id)}>Delete</Button> */}
                                     <Button onClick={() => deleteTodo(todo.id, todo.description, taskId)}>Delete</Button>
                                 </div>
                             </div>
