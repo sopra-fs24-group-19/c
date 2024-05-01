@@ -20,6 +20,9 @@ const ToDo = () => {
     const { taskId } = useParams(); // Retrieve the task ID from the URL
     const userId = localStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
     const [task, setTask] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    
 
     // get info about who is creator and a helper
     useEffect(() => {
@@ -32,10 +35,12 @@ const ToDo = () => {
                 });
                 const task = response.data.find(task => task.id === Number(taskId));
                 setTask(task);
+                setIsLoading(false);
                 console.log(`Creator ID: ${task.creatorId}, Helper ID: ${task.helperId}`);
             } catch (error) {
                 console.error(`Something went wrong while fetching the tasks: \n${handleError(error)}`);
                 alert("Something went wrong while fetching the tasks! See the console for details.");
+                setIsLoading(false);
             }
         };
     
@@ -115,6 +120,37 @@ const ToDo = () => {
         }
     };
 
+    const doneTodo = async (todoId, description) => {
+        console.log('doneTodo function called');
+        if (Number(userId) !== Number(task.creatorId)) {
+            return; 
+        }
+    
+        const token = localStorage.getItem('token');
+        const requestBody = {
+            description: description,
+            done: true,
+        };
+    
+        try {
+            console.log(`Calling PUT /todo/${todoId}`);
+            await api.put(`/todo/${todoId}`, requestBody, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": token
+                },
+            });
+
+            // Update the local state
+            setTodos((prevTodos) => ({
+                myTodos: prevTodos.myTodos.map((todo) => todo.id === todoId ? { ...todo, done: true } : todo),
+                otherTodos: prevTodos.otherTodos.map((todo) => todo.id === todoId ? { ...todo, done: true } : todo)
+            }));
+        } catch (error) {
+            console.error(`Something went wrong: ${error}`);
+        }
+    };
+
     const deleteTodo = async (todoId, description, taskId) => {
         const token = localStorage.getItem('token');
         const requestBody = {
@@ -151,33 +187,39 @@ const ToDo = () => {
 
     return (
         <>
-            <NavBar />
+        {isLoading ? (
+            <div>Loading...</div>
+        ) : (
+            <>
+                      <NavBar />
             <BaseContainer>
                 <div className="todo container">
                     <h1>Todo</h1>
                     <div className="todo form">
                         
                         
-                        {todos.otherTodos.map((todo) =>
+                        {todos.otherTodos.map((todo) =>           
                             <div key={todo.id} className="todo item">
-                                <input
+                                {/* <input
                                     type="checkbox"
                                     checked={todo.done}
                                     onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
-                                />
+                                    disabled={userId !== task.creatorId} // Disable the checkbox if the current user is not the creator
+                                /> */}
                                 <label className="todo label">{todo.description}</label>
+                                {Number(userId) === Number(task.creatorId) && // Only show the "Done" button if the current user is the creator
+                                        <div className="todo button-container">
+                                            <Button onClick={() => doneTodo(todo.id, descriptions[todo.id] || todo.description)}>
+                                                Check
+                                            </Button>
+                                        </div>
+                                        
+                                }
+                                {todo.done && <span>✔️</span>} 
+                                
                             </div>
-                            // <div key={todo.id} className="todo item">
-                            //     <input
-                            //         type="checkbox"
-                            //         checked={todo.done}
-                            //         onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
-                            //         disabled={userId !== task.creatorId} // Disable the checkbox if the current user is not the creator
-                            //     />
-                            //     <label className="todo label">{todo.description}</label>
-                            //     {todo.done && <span>✔️</span>} // Show a checkmark if the todo is done
-                            // </div>
                         )}
+
                         <br /> {/* Adds some space before the new-todo section */}
                         {todos.myTodos.map((todo) =>
                             <div key={todo.id} className="todo item">
@@ -192,9 +234,14 @@ const ToDo = () => {
                                     <Button onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
                                         Save
                                     </Button>
-                                        {/* <Button onClick={() => deleteTodo(todo.id)}>Delete</Button> */}
                                     <Button onClick={() => deleteTodo(todo.id, todo.description, taskId)}>Delete</Button>
+                                    {Number(userId) === Number(task.creatorId) && // Only show the "Done" button if the current user is the creator
+                                        <Button onClick={() => doneTodo(todo.id, descriptions[todo.id] || todo.description)}>
+                                            Check
+                                        </Button>
+                                    }
                                 </div>
+                                {todo.done && <span>✔️</span>} 
                             </div>
                         )}
 
@@ -212,6 +259,9 @@ const ToDo = () => {
                     </div>
                 </div>
             </BaseContainer>
+            </>
+        )}
+  
         </>
     );
 };
