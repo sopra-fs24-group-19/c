@@ -1,20 +1,24 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
+import Candidates from "../../views/Candidates";
 import HomeFeed from "../../views/HomeFeed";
+import LeaveReview from "../../views/LeaveReview";
 import Login from "../../views/Login";
+import MyApplications from "../../views/MyApplications";
 import MyProfile from "../../views/MyProfile";
 import MyTasks from "../../views/MyTasks";
-import MyApplications from "../../views/MyApplications";
-import Candidates from "../../views/Candidates";
 import Register from "../../views/Register";
+import ToDo from "../../views/ToDo";
 import UserProfile from "../../views/UserProfile";
 import { AddTasksGuard } from "../routeProtectors/AddTasksGuard";
 import { HomeFeedGuard } from "../routeProtectors/HomeFeedGuard";
+import { LeaveReviewGuard } from "../routeProtectors/LeaveReviewGuard";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { MyProfileGuard } from "../routeProtectors/MyProfileGuard";
 import { MyTasksGuard } from "../routeProtectors/MyTasksGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
+import { ToDoGuard } from "../routeProtectors/ToDoGuard";
 import { UserProfileGuard } from "../routeProtectors/UserProfileGuard";
 
 /**
@@ -67,6 +71,17 @@ const AppRouter = () => {
 
         <Route path="/homefeed" element={<HomeFeedGuard />}>
           <Route path="/homefeed" element={<HomeFeed />} />
+        </Route>
+
+        {/* <Route path="/leavereview" element={<LeaveReviewGuard />}>
+          <Route path="/leavereview" element={<LeaveReview />} />
+        </Route> */}
+        <Route path="/leavereview/:id" element={<LeaveReviewGuard />}>
+            <Route path="/leavereview/:id" element={<LeaveReview />} />
+        </Route>
+
+        <Route path="/todo" element={<ToDoGuard />}>
+          <Route path=":taskId" element={<ToDo />} />
         </Route>
 
         <Route path="/" element={

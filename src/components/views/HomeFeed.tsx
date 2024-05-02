@@ -216,24 +216,41 @@ const HomeFeed = () => {
 
   if (user && (!user.radius || !user.address)) {
     content = <div>
-      Hello, we have noticed that your profile is missing a radius or address setting.<br /><br />
+      Hello! We have noticed that your profile is missing a radius or address setting.<br /><br />
       To ensure you are seeing all available tasks within your community, <br />
   please visit your <Link to="/myprofile">user profile</Link> to update this information.
       </div>;
   } else if (tasks)
   {
-    content = (
-      // <div className="homefeed" style={{ height: '700px', overflow: 'auto', width: '1000px' }}>
-      <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
-        <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
-          {tasks && tasks.map((task: Task) => (
-            <li key={task.id}>
-              <TaskItem task={task} />
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
+    if (tasks.length === 0) {
+      content = <div>Oops, it looks like there are no tasks in your neighborhood!</div>;
+    } else {
+      content = (
+        <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
+          <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
+            {tasks.map((task: Task) => (
+              <li key={task.id}>
+                <TaskItem task={task} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+
+    // content = (
+    //   // <div className="homefeed" style={{ height: '700px', overflow: 'auto', width: '1000px' }}>
+    //   <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
+    //     <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
+    //       {tasks && tasks.map((task: Task) => (
+    //         <li key={task.id}>
+    //           <TaskItem task={task} />
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
+    // );
   }
 
   return (

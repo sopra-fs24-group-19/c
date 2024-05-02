@@ -1,11 +1,10 @@
-import NavBar from 'components/ui/NavBar';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
+import Task from "models/Task";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Task from "models/Task"
 import "styles/views/MyTasks.scss";
 
 const FormField = (props) => {
@@ -43,10 +42,32 @@ FormField.propTypes = {
   comp: PropTypes.int,
   status: PropTypes.string,
 };
+  // const doDeleteTask = async (taskId) => {
+  //   try {
+  //     const response = await api.delete(`/tasks/${taskId}`, 
+  //     {
+  //       headers: {"AuthorizationToken":localStorage.getItem("token")}
+  //     });
+  //     setTasks(tasks.filter(task => task.id !== taskId));
+  //   } catch (error) {
+  //           alert(
+  //             `Something went wrong during the task deletion: \n${handleError(error)}`
+  //           );
+  //   }
+  // }
+
+const MyTasks = () => {
+  const navigate = useNavigate();
+  const currentUserId = localStorage.getItem("currentUserId")
+  const [tasks, setTasks] = useState<Task[]>([]);
+
   const doDeleteTask = async (taskId) => {
     try {
-      const response = await api.delete(`/tasks/${taskId}`, {header: {"AuthorizationToken":localStorage.getItem("token")}});
-
+      const response = await api.delete(`/tasks/${taskId}`, 
+      {
+        headers: {"AuthorizationToken":localStorage.getItem("token")}
+      });
+      setTasks(tasks.filter(task => task.id !== taskId));
     } catch (error) {
             alert(
               `Something went wrong during the task deletion: \n${handleError(error)}`
@@ -54,10 +75,36 @@ FormField.propTypes = {
     }
   }
 
-const MyTasks = () => {
-  const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [helperNames, setHelperNames] = useState<{ [key: number]: string }>({});
+
+  useEffect(() => {
+    // Function to fetch helper name
+    const fetchHelperName = async (id: number) => {
+      try {
+        const response = await api.get(`/users/${id}`);
+        return response.data.name;
+      } catch (error) {
+        console.error(`Failed to fetch user with ID ${id}: ${error}`);
+      }
+    };
+  
+    // Fetch helper names for all tasks
+    const fetchHelperNames = async () => {
+      const newHelperNames: { [key: number]: string } = {};
+      const fetchPromises = tasks.map(async (task) => {
+        if (task.helperId !== 0 && !(task.helperId in helperNames)) {
+          newHelperNames[task.helperId] = await fetchHelperName(task.helperId);
+        }
+      });
+  
+      await Promise.all(fetchPromises);
+  
+      // Update the helperNames state
+      setHelperNames((prevHelperNames) => ({ ...prevHelperNames, ...newHelperNames }));
+    };
+  
+    fetchHelperNames();
+  }, [tasks]);
 
   useEffect(() => {
 
@@ -89,7 +136,8 @@ const MyTasks = () => {
             <p>Here is an overview of all tasks you posted</p>
 
           {/* Wrap the tasks in a scrollable element*/}
-          <tasks style={{height:600, overflow: "auto", width: 1000}}>
+          {/* <tasks style={{height:600, overflow: "auto", width: 1000}}> */}
+          <tasks style={{ height: '75vh', overflowY: 'auto', width: 1000 }}>
           {tasks.map((task: Task) => (
           <div className="mytasks form" key={task.id}>
 
@@ -113,14 +161,43 @@ const MyTasks = () => {
               >
               Delete task
               </Button>
-              <Button
+
+              {task.helperId === 0 ? (
+                <Button
+                  width="30%"
+                  // Maybe we have to think about the status and when to give this option
+                  disabled={task.status === "Undone"}
+                  onClick={() => navigate(`/candidates`, {state: task.id} )}
+                >
+                  Check out helpers
+                </Button>
+              ) : (
+                // <p className="mytasks button-replacement">
+                //   Your have chosen {helperNames[task.helperId]} for help!
+                // </p>
+                <>
+                  <p className="mytasks button-replacement">
+                    Your have chosen {helperNames[task.helperId]} for help!
+                  </p>
+                  {task.status === "IN_PROGRESS" && (
+                    <Button
+                      width="30%"
+                      onClick={() => navigate(`/todo/${task.id}`)}
+                    >
+                      Start your To-Do list
+                    </Button>
+                  )}
+                </>
+              )}
+
+              {/* <Button
               width="30%"
               // Maybe we have to think about the status and when to give this option
               disabled={task.status === "Undone"}
               onClick={() => navigate(`/candidates`, {state: task.id} )}
               >
               Check out helpers
-              </Button>
+              </Button> */}
             </div>
 
           </div>

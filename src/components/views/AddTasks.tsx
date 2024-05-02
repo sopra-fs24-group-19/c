@@ -1,16 +1,14 @@
-import NavBar from 'components/ui/NavBar';
-import Header from 'components/ui/Header';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Task from "models/Task"
 import "styles/views/AddTasks.scss";
 //In order to work with the DatePicker, type in the terminal: "npm install react-datepicker --save"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 
 const FormField = (props) => {
   return (
@@ -332,6 +330,21 @@ const AddTasks = () => {
   const [longitude, setLongitude] = useState<float>(null);
   const [date, setDate] = useState<Date>(null);
   const [duration, setDuration] = useState<float>(null);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await api.get(`/users/${currentUserId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error(`Failed to fetch user: ${error}`);
+      }
+    };
+
+    fetchUser();
+  }, [currentUserId]);
+
 
   const clearAddress = () => {
     setAddress(null);
@@ -357,6 +370,7 @@ const AddTasks = () => {
   }
 
   useEffect(() => {
+
     if (!addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
@@ -397,7 +411,16 @@ const AddTasks = () => {
                 onChange={(desc: string) => setDescription(desc)}
               />
               <PriceDropdown
-                label="Compensation"
+                // label={`Compensation (you have ${user ? user.coinBalance : 'loading'} coins left)`}
+                label={
+                  <>
+                    Compensation{' '}
+                    <br />
+                    <span style={{ fontStyle: 'italic', fontWeight: 'lighter',  textTransform: 'lowercase'}}>
+                      (you have {user ? user.coinBalance : 'loading'} coins left)
+                    </span>
+                  </>
+                }
                 placeholder={"How many coins will you offer to your helper?"}
                 value={compensation}
                 onChange={(p: int) => setCompensation(p)}

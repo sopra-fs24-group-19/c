@@ -1,11 +1,8 @@
-import NavBar from 'components/ui/NavBar';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import Task from "models/Task"
+import { useLocation, useNavigate } from "react-router-dom";
 import "styles/views/Candidates.scss";
 
 const Candidates = () => {
@@ -14,6 +11,24 @@ const Candidates = () => {
   const location = useLocation();
   const taskId = location.state;
   const [candidates, setCandidates] = useState<User[]>([]);
+
+  const doAcceptHelper = async (helperId) => {
+    try {
+      const userId = localStorage.getItem("currentUserId");
+      const token = localStorage.getItem("token");
+      const requestBody = JSON.stringify({taskId, userId, helperId});
+      
+      const response = await api.put(`/tasks/${taskId}`, requestBody, {
+        headers: { Authorization: token}
+      });
+      navigate("/mytasks");
+    } catch (error) {
+            alert(
+              `Something went wrong during the selection: \n${handleError(error)}`
+            );
+    }
+  }
+
 
   useEffect(() => {
     // Fetch tasks from an API
@@ -33,17 +48,6 @@ const Candidates = () => {
       }
     }
     fetchData();
-
-  const doAcceptHelper = async (helperId) => {
-    try {
-      const requestBody = JSON.stringify({taskId, helperId});
-      const response = await api.put(`/tasks/${taskId}`, requestBody, {});
-    } catch (error) {
-            alert(
-              `Something went wrong during the selection: \n${handleError(error)}`
-            );
-    }
-  }
 
   }, []); // Empty dependency array to run the effect only once
 

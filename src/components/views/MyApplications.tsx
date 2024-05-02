@@ -1,11 +1,10 @@
-import NavBar from 'components/ui/NavBar';
-import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
+import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
+import Task from "models/Task";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Task from "models/Task"
 import "styles/views/MyApplications.scss";
 
 const FormField = (props) => {
@@ -118,6 +117,17 @@ const MyApplications = () => {
               >
               Withdraw my application
               </Button>
+              <>
+              {task.status === "IN_PROGRESS" && (
+                <Button
+                  width="30%"
+                  onClick={() => navigate(`/todo/${task.id}`)}
+                >
+                  Start your To-Do list
+                </Button>
+              )}
+              </>
+              
             </div>
 
           </div>
