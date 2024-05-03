@@ -7,6 +7,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyProfile.scss";
 
+const getRadius = (radius) => {
+  switch (radius) {
+    case 21:
+      return "see all tasks";
+    default:
+      return radius;
+  }
+};
+
 const FormField = (props) => {
   return (
     <div className="myprofile field">
@@ -104,10 +113,14 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
   });
   inputContainerElement.appendChild(clearButton);
 
+  // Add a flag if the user changed the suggestion after clicking on it
+  let chosenItem = "";
+
   /* Process a user input: */
   inputElement.addEventListener("input", function(e) {
       const currentValue = this.value;
       if (!currentValue) {
+        closeDropDownList();
         clearButton.classList.remove("visible");
       }
 
@@ -179,6 +192,8 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
           itemElement.addEventListener("click", function(e) {
             inputElement.value = currentItems[index].formatted;
             callback(currentItems[index]);
+            // Store the chosen item to make sure the user doesn't change it before submission
+            chosenItem = inputElement.value;
             /* Close the list of autocompleted values: */
             closeDropDownList();
           });
@@ -191,6 +206,15 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
         });
       }, DEBOUNCE_DELAY);
     });
+
+  // Every time the user adjusts the selected item, we need to set the flag to false as it is not in the desired format anymore
+  inputElement.addEventListener("input", function(e) {
+    const currentValue = this.value;
+    if (currentValue !== chosenItem || chosenItem==="") {
+        clearAddress();
+    }
+  });
+
   function closeDropDownList() {
     var autocompleteItemsElement = inputContainerElement.querySelector(".autocomplete-items");
     if (autocompleteItemsElement) {
@@ -305,12 +329,7 @@ const MyProfile = () => {
     }
   }, [currentUser, addressFieldAdded]);
 
-  if (!currentUser) {
-    return <div>Loading...</div>;
-  }
-
   const doSaveUpdates = async () => {
-    console.log(latitude);
     try {
       // Specify if we send the current values or if the user has updated these values:
       const newName = name ? name: currentUser.name;
@@ -337,20 +356,31 @@ const MyProfile = () => {
         <>
           <NavBar />
           <div className="myprofile container">
-            <h1 >{currentUser.username}{"'"}s profile</h1>
+            <h1 >{currentUser ? `${currentUser.username}'s profile` : 'Loading...'}</h1>
             <p>Here, you can edit your profile</p>
+
+              <div
+                className="myprofile button-container"
+                style={{marginBottom:"20px"}}>
+                <Button
+                  width="100%"
+                  onClick={() => navigate(`/userprofile/${currentUserId}`, {state: { taskId: 'none', purpose: "my-reviews" }} )}
+                >
+                  Check out my reviews
+                </Button>
+              </div>
             <div className="myprofile form">
 
               {/*Define all needed attributes that can be changed by a user*/}
               <FormField
                 label="Name"
-                placeholder={currentUser.name}
+                placeholder={currentUser ? currentUser.name : 'Loading...'}
                 value={name}
                 onChange={(n: string) => setName(n)}
               />
               <FormField
                 label="Phone Number"
-                placeholder={currentUser.phoneNumber ? currentUser.phoneNumber: "Add your phone number"}
+                placeholder={currentUser ? (currentUser.phoneNumber ? currentUser.phoneNumber : "Add your phone number") : 'Loading...'}
                 value={phoneNumber}
                 onChange={(pn: string) => setPhoneNumber(pn)}
               />
@@ -362,18 +392,11 @@ const MyProfile = () => {
               </div>
               <RadiusDropdown
                 label="Radius in which to look for tasks"
-                placeholder={currentUser.radius ? currentUser.radius : "Choose radius"}
+                placeholder={currentUser ? (currentUser.radius ? getRadius(currentUser.radius) : "Choose radius") : 'Loading...'}
                 value={radius}
                 onChange={(r: int) => setRadius(r)}
               />
               <div className="myprofile button-container">
-                <Button
-                  style={{ marginRight: '10px' }}
-                  width="100%"
-                  onClick={() => navigate("/homefeed")}
-                >
-                  Back to homefeed
-                </Button>
                 <Button
                   width="100%"
                   disabled={!name && !phoneNumber && !address && !radius}
@@ -382,8 +405,16 @@ const MyProfile = () => {
                   Save changes
                 </Button>
               </div>
-
             </div>
+              <div className="myprofile button-container">
+                <Button
+                  style={{ marginTop: '20px' }}
+                  width="200px"
+                  onClick={() => navigate("/homefeed")}
+                >
+                  Back to homefeed
+                </Button>
+              </div>
           </div>
          </>
   );

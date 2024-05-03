@@ -14,7 +14,7 @@ const ToDo = () => {
     // const [todos, setTodos] = useState([]);
     const [todos, setTodos] = useState({ myTodos: [], otherTodos: [] });
     const [newTodo, setNewTodo] = useState('');
-    const [editingTodoId, setEditingTodoId] = useState(null);
+    const [editingTodoId, setEditingTodoId] = useState({});
     const [descriptions, setDescriptions] = useState({});
     const { taskId } = useParams(); // Retrieve the task ID from the URL
     const userId = localStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
@@ -65,16 +65,17 @@ const ToDo = () => {
             try {
                 if (taskId) {
                     const token = localStorage.getItem('token');
-                    const response = await api.get(`/todo/${taskId}`, {
+                    const todosResponse = await api.get(`/todo/${taskId}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             "Authorization": token
                         },
                     });
-                    // const sortedTodos = response.data.sort((a, b) => a.authorId - b.authorId);
-                    // setTodos(sortedTodos);
-                    const myTodos = response.data.filter(todo => Number(todo.authorId) === Number(userId));
-                    const otherTodos = response.data.filter(todo => Number(todo.authorId) !== Number(userId));
+                    const allTodosDoneResponse = await api.get(`/allTodosDone/${taskId}`);
+                    setAllTodosDone(allTodosDoneResponse.data);
+
+                    const myTodos = todosResponse.data.filter(todo => Number(todo.authorId) === Number(userId));
+                    const otherTodos = todosResponse.data.filter(todo => Number(todo.authorId) !== Number(userId));
                     console.log('My todos:', myTodos);
                     console.log('Other todos:', otherTodos);
                     setTodos({ myTodos, otherTodos });
@@ -85,9 +86,8 @@ const ToDo = () => {
         };
     
         fetchTodos();
-        fetchAllTodosDone();
-        const intervalId = setInterval(fetchTodos, 5000);
-    
+        const intervalId = setInterval(fetchTodos, 100);
+
         return () => clearInterval(intervalId);
     }, [taskId]);
 
@@ -205,35 +205,46 @@ const ToDo = () => {
                       <NavBar />
             <BaseContainer>
                 <div className="todo container">
-                    <h1>Todo</h1>
+                    <h1>To-Do list for: {task.title}</h1>
                     <div className="todo form">
-                        
-                        
-                        {todos.otherTodos.map((todo) =>           
+
+
+                        <br/>
+                        {/*Obtain tasks that the counter-part has submitted*/}
+                        {todos.otherTodos.map((todo) =>
                             <div key={todo.id} className="todo item">
-                                {/* <input
-                                    type="checkbox"
-                                    checked={todo.done}
-                                    onChange={() => updateTodo(todo.id, todo.description, !todo.done)}
-                                    disabled={userId !== task.creatorId} // Disable the checkbox if the current user is not the creator
-                                /> */}
-                                <label className="todo label">{todo.description}</label>
-                                {Number(userId) === Number(task.creatorId) && // Only show the "Done" button if the current user is the creator
-                                        <div className="todo button-container">
-                                            <Button onClick={() => doneTodo(todo.id, descriptions[todo.id] || todo.description)}>
-                                                Check
-                                            </Button>
-                                        </div>
-                                        
-                                }
-                                {todo.done && <span>✔️</span>} 
-                                
+                            <div className="todo task-container">
+                                <input
+                                    className="todo input"
+                                    value={todo.description}
+                                    style={{background:'none'}}
+                                />
+                                <label className="todo description">Not changeable</label>
+                                    {Number(userId) === Number(task.creatorId) ?
+                                    (
+                                        <span
+                                          className={`todo tick ${todo.done ? 'clicked' : ''}`}
+                                          onClick={() => {doneTodo(todo.id, descriptions[todo.id] || todo.description)}}
+                                        >
+                                          ✔
+                                        </span>
+                                    )
+                                    :
+                                    (
+                                    <span className={`todo tick ${todo.done ? 'clicked' : ''}`} style={{cursor: 'initial'}}>
+                                      ✔
+                                    </span>
+                                    )
+                                    }
+                            </div>
                             </div>
                         )}
 
-                        <br /> {/* Adds some space before the new-todo section */}
+
+                        {/*Obtain tasks that the logged-in user has submitted*/}
                         {todos.myTodos.map((todo) =>
                             <div key={todo.id} className="todo item">
+                            <div className="todo task-container">
                                 <input
                                     className="todo input"
                                     value={descriptions[todo.id] || todo.description}
@@ -242,43 +253,76 @@ const ToDo = () => {
                                     onBlur={() => setEditingTodoId(null)}
                                 />
                                 <div className="todo button-container">
-                                    <Button onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
-                                        Save
+                                    {todo.done ?
+                                    (<label className="todo description">Task completed</label>)
+                                    :
+                                    (<>
+                                    <Button
+                                        disabled={!descriptions[todo.id] || descriptions[todo.id] === todo.description}
+                                        onClick={() => updateTodo(todo.id, todo.done, descriptions[todo.id] || todo.description)}>
+                                        Update
                                     </Button>
-                                    <Button onClick={() => deleteTodo(todo.id, todo.description, taskId)}>Delete</Button>
-                                    {Number(userId) === Number(task.creatorId) && // Only show the "Done" button if the current user is the creator
-                                        <Button onClick={() => doneTodo(todo.id, descriptions[todo.id] || todo.description)}>
-                                            Check
-                                        </Button>
+                                    <Button
+                                        onClick={() => deleteTodo(todo.id, todo.description, taskId)}>
+                                        Delete
+                                    </Button>
+                                    </>
+                                    )}
+                                    {Number(userId) === Number(task.creatorId) ?
+                                    (
+                                        <span
+                                          className={`todo tick ${todo.done ? 'clicked' : ''}`}
+                                          onClick={() => {doneTodo(todo.id, descriptions[todo.id] || todo.description)}}
+                                        >
+                                          ✔
+                                        </span>
+                                    )
+                                    :
+                                    (
+                                    <span className={`todo tick ${todo.done ? 'clicked' : ''}`} style={{cursor: 'initial'}}>
+                                      ✔
+                                    </span>
+                                    )
                                     }
                                 </div>
-                                {todo.done && <span>✔️</span>} 
                             </div>
-                        )}
+                            </div>
+                       )}
 
 
-                        <br /> {/* Adds some space before the new-todo section */}
-                        <label className="todo label">Add New Todo</label>
-                        <input
-                            className="todo input"
-                            value={newTodo}
-                            onChange={(e) => setNewTodo(e.target.value)}
-                        />
-                        <div className="todo button-container">
-                            <Button onClick={postTodo}>Post</Button>
+                        <br/>
+                        {/*Here new ToDo's can be added*/}
+                        <div className="todo task-container">
+                            <input
+                                className="todo input"
+                                placeholder="Add a new subtask"
+                                value={newTodo}
+                                onChange={(e) => setNewTodo(e.target.value)}
+                            />
+                            <div className="todo button-container">
+                                <Button
+                                    onClick={postTodo}
+                                    disabled={!newTodo}>
+                                    Submit
+                                </Button>
+                            </div>
                         </div>
+
+
+                        <br/>
+                       {/*This button terminates the task and marks it as done*/}
                         <div className="todo button-container">
-                        <Button 
-                            disabled={!allTodosDone} 
-                            onClick={() => {
-                                const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
-                                navigate(`/leavereview/${redirectUserId}`);
-                            }}
-                        >
-                            Task Done
-                        </Button>
-                            
+                            <Button
+                                disabled={!allTodosDone}
+                                onClick={() => {
+                                    const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
+                                    navigate(`/leavereview/${redirectUserId}`);
+                                }}
+                            >
+                            Mark task as DONE
+                            </Button>
                         </div>
+
 
                     </div>
                 </div>

@@ -7,6 +7,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyApplications.scss";
 
+const getStatusSymbol = (status) => {
+  switch (status) {
+    case "CREATED":
+      return "APPLIED";
+    case "DONE":
+      return "DONE";
+    default:
+      return "IN PROGRESS";
+  }
+};
+
 const FormField = (props) => {
   const dateTime = new Date(props.date);
   const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
@@ -15,12 +26,14 @@ const FormField = (props) => {
       {/* Task details */}
       <title className="myapplications split-wrapper">
       <label className="myapplications title">{props.task}</label>
-      <div className="myapplications status-box">{props.status}</div>
+      <div className="myapplications status-box">{getStatusSymbol(props.status)}</div>
       </title>
       <content className="myapplications split-wrapper">
       <left className="myapplications left-wrapper">
       <label className="myapplications label">{"Description"}</label>
       <label className="myapplications content">{props.desc}</label>
+      <label className="myapplications label">{"Location"}</label>
+      <label className="myapplications content">{props.address}</label>
       </left>
       <right className="myapplications right-wrapper">
       <label className="myapplications label">{"Date"}</label>
@@ -37,6 +50,7 @@ const FormField = (props) => {
 FormField.propTypes = {
   task: PropTypes.string,
   desc: PropTypes.string,
+  address: PropTypes.string,
   date: PropTypes.string,
   dur: PropTypes.int,
   comp: PropTypes.int,
@@ -102,6 +116,7 @@ const MyApplications = () => {
               <FormField
                 task={task.title}
                 desc={task.description}
+                address={task.address}
                 date={task.date}
                 dur={task.duration}
                 comp={task.compensation}
@@ -109,34 +124,31 @@ const MyApplications = () => {
 
               />
             </div>
+
             <div className="myapplications button-container">
-              <Button
-              width="40%"
-              disabled={task.status !== "Undone"}
-              //onClick={() => doWithdraw(task)}
-              >
-              Withdraw my application
-              </Button>
-              <>
-              {task.status === "IN_PROGRESS" && (
                 <Button
-                  width="30%"
-                  onClick={() => navigate(`/todo/${task.id}`)}
-                >
-                  Start your To-Do list
+                    width="40%"
+                    disabled={getStatusSymbol(task.status) !== "APPLIED"}
+                    //onClick={() => doWithdraw(task)}
+                    >
+                    Withdraw my application
                 </Button>
-              )}
-              </>
-              
-            </div>
+                <Button
+                    width="40%"
+                    disabled={getStatusSymbol(task.status) !== "IN PROGRESS"}
+                    onClick={() => navigate(`/todo/${task.id}`)}
+                    >
+                    Look at your To-Do list
+                </Button>
+               </div>
 
           </div>
           ))}
           </tasks>
              <div className="myapplications button-container">
                 <Button
-                  style={{ marginRight: '10px' }}
-                  width="100%"
+                  style={{ marginTop: '20px' }}
+                  width="200px"
                   onClick={() => navigate("/homefeed")}
                 >
                   Back to homefeed

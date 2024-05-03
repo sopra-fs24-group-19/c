@@ -75,7 +75,7 @@ const FormField = (props) => {
             },
           });
           console.log(response.data);
-          navigate(`/userprofile/${requestBody.reviewedId}`);
+          navigate(`/userprofile/${requestBody.reviewedId}`, {state: { taskId: 'none', purpose: "leave-review" }});
           
         } catch (error) {
           console.error(`Something went wrong: ${error}`);

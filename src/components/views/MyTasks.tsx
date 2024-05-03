@@ -7,6 +7,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyTasks.scss";
 
+const getStatusSymbol = (status) => {
+  switch (status) {
+    case "CREATED":
+      return "OPEN FOR APPLICATION";
+    case "DONE":
+      return "DONE";
+    default:
+      return "IN PROGRESS";
+  }
+};
+
 const FormField = (props) => {
   const dateTime = new Date(props.date);
   const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
@@ -15,12 +26,14 @@ const FormField = (props) => {
       {/* Task details */}
       <title className="mytasks split-wrapper">
       <label className="mytasks title">{props.task}</label>
-      <div className="mytasks status-box">{props.status}</div>
+      <div className="mytasks status-box">{getStatusSymbol(props.status)}</div>
       </title>
       <content className="mytasks split-wrapper">
       <left className="mytasks left-wrapper">
       <label className="mytasks label">{"Description"}</label>
       <label className="mytasks content">{props.desc}</label>
+      <label className="mytasks label">{"Location"}</label>
+      <label className="mytasks content">{props.address}</label>
       </left>
       <right className="mytasks right-wrapper">
       <label className="mytasks label">{"Date"}</label>
@@ -37,6 +50,7 @@ const FormField = (props) => {
 FormField.propTypes = {
   task: PropTypes.string,
   desc: PropTypes.string,
+  address: PropTypes.string,
   date: PropTypes.string,
   dur: PropTypes.int,
   comp: PropTypes.int,
@@ -136,8 +150,7 @@ const MyTasks = () => {
             <p>Here is an overview of all tasks you posted</p>
 
           {/* Wrap the tasks in a scrollable element*/}
-          {/* <tasks style={{height:600, overflow: "auto", width: 1000}}> */}
-          <tasks style={{ height: '75vh', overflowY: 'auto', width: 1000 }}>
+          <tasks style={{ height: 600, overflowY: 'auto', width: 1000 }}>
           {tasks.map((task: Task) => (
           <div className="mytasks form" key={task.id}>
 
@@ -146,48 +159,54 @@ const MyTasks = () => {
               <FormField
                 task={task.title}
                 desc={task.description}
+                address={task.address}
                 date={task.date}
                 dur={task.duration}
                 comp={task.compensation}
                 status={task.status}
               />
             </div>
-            <div className="mytasks button-container">
-              <Button
-              style={{ marginRight: '300px' }}
-              width="30%"
-              disabled={task.status === "Done"}
-              onClick={() => doDeleteTask(task.id)}
-              >
-              Delete task
-              </Button>
 
               {task.helperId === 0 ? (
-                <Button
+
+                <div className="mytasks button-container">
+                  <Button
+                  style={{ marginRight: '300px' }}
                   width="30%"
-                  // Maybe we have to think about the status and when to give this option
-                  disabled={task.status === "Undone"}
-                  onClick={() => navigate(`/candidates`, {state: task.id} )}
-                >
-                  Check out helpers
-                </Button>
+                  disabled={task.status === "DONE"}
+                  onClick={() => doDeleteTask(task.id)}
+                  >
+                  Delete task
+                  </Button>
+
+                  <Button
+                    width="30%"
+                    // Maybe we have to think about the status and when to give this option
+                    disabled={task.status === "Undone"}
+                    onClick={() => navigate(`/candidates`, {state: task.id} )}
+                  >
+                    Check out helpers
+                  </Button>
+                </div>
+
               ) : (
-                // <p className="mytasks button-replacement">
-                //   Your have chosen {helperNames[task.helperId]} for help!
-                // </p>
-                <>
-                  <p className="mytasks button-replacement">
-                    Your have chosen {helperNames[task.helperId]} for help!
-                  </p>
-                  {task.status === "IN_PROGRESS" && (
-                    <Button
-                      width="30%"
-                      onClick={() => navigate(`/todo/${task.id}`)}
-                    >
-                      Start your To-Do list
-                    </Button>
-                  )}
-                </>
+                <div className="mytasks button-container">
+
+                    {task.status === "IN_PROGRESS" && (
+                      <Button
+                        width="30%"
+                        onClick={() => navigate(`/todo/${task.id}`)}
+                      >
+                        Check out the To-Do list
+                      </Button>
+                    )}
+
+                    <p className="mytasks button-replacement">
+                      You have chosen {helperNames[task.helperId]} as a helper!
+                    </p>
+
+                </div>
+
               )}
 
               {/* <Button
@@ -198,15 +217,14 @@ const MyTasks = () => {
               >
               Check out helpers
               </Button> */}
-            </div>
 
           </div>
           ))}
           </tasks>
              <div className="mytasks button-container">
                 <Button
-                  style={{ marginRight: '10px' }}
-                  width="100%"
+                  style={{ marginTop: '20px' }}
+                  width="200px"
                   onClick={() => navigate("/homefeed")}
                 >
                   Back to homefeed

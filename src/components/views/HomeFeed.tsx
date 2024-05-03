@@ -44,11 +44,20 @@ const deg2rad = (deg: number) => {
 
 
 
-const TaskItem = ({ task }: { task: Task }) => {
+const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number[] }) => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("currentUserId");
   const dateTime = new Date(task.date);
+  const [hasApplied, setHasApplied] = useState<boolean>(false);
   const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+
+  useEffect(() => {
+    console.log("HHHHHH")
+    console.log(myApplications)
+    console.log(task.id)
+    console.log(myApplications.includes(task.id))
+    setHasApplied(myApplications.includes(task.id));
+  }, [myApplications, task.id]);
 
   const handleHelpClick = async () => {
     const userId = localStorage.getItem('currentUserId');
@@ -71,10 +80,7 @@ const TaskItem = ({ task }: { task: Task }) => {
         },
       });
       navigate('/myapplications');
-    } 
-    // catch (error) {
-    //   console.error(`Something went wrong: ${error}`);
-    // }
+    }
     catch (error) {
       if (error.response && error.response.status === 409) {
         alert('You have already applied for this task.');
@@ -89,13 +95,12 @@ const TaskItem = ({ task }: { task: Task }) => {
       <title className="myapplications split-wrapper">
         <label className="myapplications title">{task.title}</label>
       </title>
-      {/* <div className="myapplications split-wrapper">
-        <label className="myapplications title">{task.title}</label>
-      </div> */}
       <content className="myapplications split-wrapper">
         <left className="myapplications left-wrapper">
           <label className="myapplications label">{"Description"}</label>
           <label className="myapplications content">{task.description}</label>
+          <label className="myapplications label">{"Location"}</label>
+          <label className="myapplications content">{task.address}</label>
         </left>
         <right className="myapplications right-wrapper">
           <label className="myapplications label">{"Date"}</label>
@@ -107,24 +112,22 @@ const TaskItem = ({ task }: { task: Task }) => {
         </right>
       </content>
       <div className="myapplications button-container">
-        {/* {task.creatorId.toString() !== userId && (
-          <Button width="40%" onClick={handleHelpClick}>Help</Button>
-        )} */}
-        {task.creatorId.toString() === userId ? (
-          <em>You created this task!</em>
-        ) : (
-          <Button width="40%" onClick={handleHelpClick}>Help</Button>
-        )}
-
+          {(task.creatorId.toString() === userId)?
+          (<em>You created this task!</em>)
+          :
+          (!hasApplied?
+                       (<Button width="40%" onClick={handleHelpClick}>Help</Button>)
+                       :
+                       (<Button width="40%" disabled={true}>You have already applied to this task!</Button>)
+          )
+          }
       </div>
     </div>
   );
 };
-
-
-
 TaskItem.propTypes = {
   task: PropTypes.object,
+  myApplications: PropTypes.object,
 };
 
 
@@ -133,6 +136,7 @@ const HomeFeed = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>(null);
   const [user, setUser] = useState<User>(null);
+  const [myApplications, setMyApplications] = useState<Task[]>(null);
 
   // get info of the current user
   useEffect(() => {
@@ -158,6 +162,25 @@ const HomeFeed = () => {
     fetchUser();
   }, []);
 
+    // Get all tasks the current user has applied for to avoid double-applications
+  useEffect(() => {
+    async function fetchMyApplications() {
+    try {
+        const currentUserId = localStorage.getItem('currentUserId');
+        console.log(currentUserId)
+        const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
+        const taskIds = response.data.map(task => task.id);
+        setMyApplications(taskIds);
+      } catch (error) {
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching your applications! See the console for details."
+        );
+      }
+    }
+    fetchMyApplications();
+  }, []);
+
 
  // get all tasks
   useEffect(() => {
@@ -168,7 +191,6 @@ const HomeFeed = () => {
             "Accept": "application/json"
           }
         });
-
         console.log('Tasks before filtering:', response.data);
 
         let tasksData = response.data;
@@ -176,20 +198,18 @@ const HomeFeed = () => {
         if (user && user.radius) {
           console.log('User data:', user); 
           console.log('Radius in fetch tasks:', user.radius);
-          // tasksData = tasksData.filter(task => 
-          //   calculateDistance(
-          //     {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)}, 
-          //     {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
-          //   ) <= user.radius
-          // );
           tasksData = tasksData.filter(task => {
-            const distance = calculateDistance(
-              {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)}, 
-              {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
-            );
-            console.log(`Distance for task ${task.id}:`, distance);
-            return distance <= user.radius;
-          });
+            if (user.radius <= 20) {
+                const distance = calculateDistance(
+                  {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)},
+                  {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
+                );
+                console.log(`Distance for task ${task.id}:`, distance);
+                return distance <= user.radius;
+            } else {return true}
+          }).filter(task => {
+              return task.status === "CREATED";
+            });
           console.log('Tasks after filtering:', tasksData);
         }
 
@@ -228,11 +248,14 @@ const HomeFeed = () => {
       content = (
         <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
           <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
-            {tasks.map((task: Task) => (
-              <li key={task.id}>
-                <TaskItem task={task} />
-              </li>
-            ))}
+
+
+              {myApplications && tasks.map((task: Task) => (
+                <li key={task.id}>
+                  <TaskItem task={task} myApplications={myApplications} />
+                </li>
+              ))}
+
           </ul>
         </div>
       );

@@ -13,15 +13,15 @@ html, body {
   &.container {
     @include center;
     width: 100%;
-    max-width: 100%; 
+    max-width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-grow: 1;
   }
 
   &.logo {
     margin: 10px;
-    flex: 1;
     display: flex;
   }
 
@@ -29,22 +29,58 @@ html, body {
     font-weight: bold;
     color: $our_brown;
     text-align: center;
-    flex: 1;
   }
 
- &.button-container {
-    display: flex;
-    margin-top: 2em;
-    flex: 1; /* Let the button container take 1/3 of the space */
+ &.user-container {
     display: flex;
     justify-content: flex-end;
+
+
     button {
       color: $our_beige;
       background-color: $our_brown;
-      margin-right: 1em;
-      display: inline-block;
-      width: auto;
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+      width: 180px;
     }
   }
 
+  &.button-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: auto;
+  }
+  &.icon-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    max-width: 100%;
+    width: auto;
+  }
+  &.text-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-right:5px;
+    margin-left:5px;
+    max-width: 100%;
+    width: auto;
+  }
+
+  &.text {
+    color: $our_brown;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: left;
+    margin-top:7px;
+    margin-bottom:7px;
+  }
+
+  &.icons {
+    color: $our_brown;
+    margin-top: 1px;
+    width: auto;
+  }
 }

@@ -130,13 +130,13 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
   // Create a box where all elements will be put together
   const inputContainerElement = document.createElement("div");
-  inputContainerElement.setAttribute("class", "myprofile input-container");
+  inputContainerElement.setAttribute("class", "addtasks input-container");
   containerElement.appendChild(inputContainerElement);
 
   // create input element (actual box in which users type)
   const inputElement = document.createElement("input");
   inputElement.setAttribute("type", "text");
-  inputElement.setAttribute("class", "myprofile input")
+  inputElement.setAttribute("class", "addtasks input")
   inputElement.setAttribute("placeholder", options.placeholder);
   inputContainerElement.appendChild(inputElement);
 
@@ -151,7 +151,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
   // add input field clear button to the container
   const clearButton = document.createElement("div");
-  clearButton.setAttribute("class", "myprofile clear-button");
+  clearButton.setAttribute("class", "addtasks clear-button");
   console.log(clearButton.classList)
   clearButton.classList.add("clear-button");
   addIcon(clearButton);
@@ -230,7 +230,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
         /*create a DIV element that will contain the proposed items*/
         const autocompleteItemsElement = document.createElement("div");
-        autocompleteItemsElement.setAttribute("class", "myprofile autocomplete-items");
+        autocompleteItemsElement.setAttribute("class", "addtasks autocomplete-items");
         inputContainerElement.appendChild(autocompleteItemsElement);
 
         /* For each item in the results */
@@ -370,7 +370,6 @@ const AddTasks = () => {
   }
 
   useEffect(() => {
-
     if (!addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
@@ -425,8 +424,8 @@ const AddTasks = () => {
                 value={compensation}
                 onChange={(p: int) => setCompensation(p)}
                 />
-              <div className="myprofile field">
-                <label className="myprofile label">Address</label>
+              <div className="addtasks field">
+                <label className="addtasks label">Address</label>
                 <div
                   id="autocomplete-container"
                 />

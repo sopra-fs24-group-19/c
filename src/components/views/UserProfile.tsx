@@ -1,15 +1,16 @@
 import NavBar from 'components/ui/NavBar';
+import { Button } from "components/ui/Button";
 import { api, handleError } from "helpers/api";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "styles/views/UserProfile.scss";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  
-  // for scrollable element
-  const reviewItemHeight = 30;
+  const location = useLocation();
+  const {taskId, purpose} = location.state;
+
   
   // // Mock user's review data
   // const mockReview = new Review({
@@ -122,32 +123,44 @@ const UserProfile = () => {
 
       <div className="userprofile container">
         <h1>Reviews</h1>
-        <p>Scroll down for more reviews</p>
-        <div className="userprofile commentsform">
-          <div className="userprofile review-list" style={{
-            maxHeight: `${reviewItemHeight * 10}px`, 
-            overflowY: 'auto' 
-            }}>
-            {/* {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
-            ))
-          ) : (
-            <p>Loading reviews...</p>
-          )} */}
+          <div className="userprofile reviewform">
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
-                <p key={index} style={{ height: `${reviewItemHeight}px` }}>
-                  {review.reviewer}: {review.comment}
+                <p key={index} style={{ height: "20px"}}>
+                  <span style={{ fontWeight: "600" }}>{review.reviewer}:</span> {review.comment}
                 </p>
               ))
             ) : (
               <p>No reviews yet</p>
             )}
-
           </div>
-          
-        </div>
+
+         <div className="mytasks button-container">
+              {purpose === "candidate-check" && (
+                <Button
+                  width="100%"
+                  onClick={() => navigate(`/candidates`, { state: taskId })}
+                >
+                  Back to all helpers
+                </Button>
+              )}
+              {purpose === "leave-review" && (
+                <Button
+                  width="100%"
+                  onClick={() => navigate(`/mytasks`)}
+                >
+                  Back to all my tasks
+                </Button>
+              )}
+              {purpose === "my-reviews" && (
+                <Button
+                  width="100%"
+                  onClick={() => navigate(`/myprofile`)}
+                >
+                  Back to my profile
+                </Button>
+              )}
+          </div>
       </div>
     </>
   );

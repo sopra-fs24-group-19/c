@@ -15,7 +15,7 @@
     justify-content: center;
     width: 100%;
     max-width: 30em;
-    height: 30em;
+    height: 28em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -50,7 +50,7 @@
   &.button-container {
     display: flex;
     justify-content: center;
-    margin-top: 2em;
+    //margin-top: 2em;
     button {
       color: $our_beige;
       background-color: $our_brown;

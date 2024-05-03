@@ -69,7 +69,7 @@ const Candidates = () => {
             <rate className="candidates button-container">
               <Button
               className="candidates button"
-              onClick={() => navigate(`/userprofile/${candidate.id}`)}
+              onClick={() => navigate(`/userprofile/${candidate.id}`, {state: { taskId: taskId, purpose: "candidate-check" }} )}
               >
               Look at Ratings
               </Button>
