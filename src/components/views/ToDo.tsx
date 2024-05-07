@@ -91,6 +91,26 @@ const ToDo = () => {
         return () => clearInterval(intervalId);
     }, [taskId]);
 
+    const confirmTaskAndNavigate = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            // Confirm the task
+            await api.put(`/tasks/${taskId}/confirm`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": token
+                },
+            });
+    
+            // Navigate to the review page
+            const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
+            navigate(`/leavereview/${redirectUserId}`);
+        } catch (error) {
+            console.error(`Something went wrong: ${error}`);
+        }
+    };
+
+
 
       const postTodo = async () => {
         const token = localStorage.getItem('token');
@@ -314,10 +334,11 @@ const ToDo = () => {
                         <div className="todo button-container">
                             <Button
                                 disabled={!allTodosDone}
-                                onClick={() => {
-                                    const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
-                                    navigate(`/leavereview/${redirectUserId}`);
-                                }}
+                                // onClick={() => {
+                                //     const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
+                                //     navigate(`/leavereview/${redirectUserId}`);
+                                // }}
+                                onClick={confirmTaskAndNavigate}
                             >
                             Mark task as DONE
                             </Button>
