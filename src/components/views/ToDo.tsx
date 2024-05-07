@@ -104,7 +104,8 @@ const ToDo = () => {
     
             // Navigate to the review page
             const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
-            navigate(`/leavereview/${redirectUserId}`);
+            // navigate(`/leavereview/${redirectUserId}`);
+            navigate(`/leavereview/${redirectUserId}/${taskId}`);
         } catch (error) {
             console.error(`Something went wrong: ${error}`);
         }
