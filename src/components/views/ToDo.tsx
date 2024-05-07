@@ -162,18 +162,18 @@ const ToDo = () => {
         }
     };
 
-    const deleteTodo = async (todoId, description, taskId) => {
+    const deleteTodo = async (todoId) => {
         const token = localStorage.getItem('token');
-        const requestBody = {
-            id: todoId,
-            description: description,
-            taskId: Number(taskId),
-        };
+        // const requestBody = {
+        //     id: todoId,
+        //     description: description,
+        //     taskId: Number(taskId),
+        // };
 
-        console.log('Request body:', requestBody);
+        // console.log('Request body:', requestBody);
     
         try {
-            await api.delete(`/todo`, requestBody, {
+            await api.delete(`/todo/${todoId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     "Authorization": token
@@ -263,7 +263,7 @@ const ToDo = () => {
                                         Update
                                     </Button>
                                     <Button
-                                        onClick={() => deleteTodo(todo.id, todo.description, taskId)}>
+                                        onClick={() => deleteTodo(todo.id)}>
                                         Delete
                                     </Button>
                                     </>
