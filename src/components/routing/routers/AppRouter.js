@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
 import Candidates from "../../views/Candidates";
+import Leaderboard from "../../views/Leaderboard";
 import HomeFeed from "../../views/HomeFeed";
 import LeaveReview from "../../views/LeaveReview";
 import Login from "../../views/Login";
@@ -71,6 +72,10 @@ const AppRouter = () => {
 
         <Route path="/homefeed" element={<HomeFeedGuard />}>
           <Route path="/homefeed" element={<HomeFeed />} />
+        </Route>
+
+        <Route path="/leaderboard" element={<MyProfileGuard />}>
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Route>
 
         {/* <Route path="/leavereview" element={<LeaveReviewGuard />}>
