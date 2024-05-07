@@ -44,7 +44,8 @@ const FormField = (props) => {
   };
 
   const LeaveReview = () => {
-    const { id: reviewedId } = useParams();
+    // const { id: reviewedId } = useParams();
+    const { id: reviewedId, taskId } = useParams();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
     const navigate = useNavigate();
@@ -62,8 +63,12 @@ const FormField = (props) => {
           stars: stars,
           reviewedId: reviewedId.toString(),  
           reviewerId: reviewerId.toString(),
-          comment: review
+          comment: review,
+          taskId: taskId
         };
+
+        console.log('Request body:', requestBody); // Log the request body
+        console.log('Headers:', { 'Content-Type': 'application/json', "Authorization": token });
       
         try {
           // Uncomment the following lines to make the API request
