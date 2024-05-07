@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
 import Candidates from "../../views/Candidates";
 import Leaderboard from "../../views/Leaderboard";
+import Header from "../../views/Header";
 import HomeFeed from "../../views/HomeFeed";
 import LeaveReview from "../../views/LeaveReview";
 import Login from "../../views/Login";
@@ -34,7 +35,7 @@ import { UserProfileGuard } from "../routeProtectors/UserProfileGuard";
 const AppRouter = () => {
   return (
     <BrowserRouter>
-      
+    <Header height="100" />
       <Routes>
         
 

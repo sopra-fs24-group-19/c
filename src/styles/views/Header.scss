@@ -83,4 +83,27 @@ html, body {
     margin-top: 1px;
     width: auto;
   }
+
+  .header-trophy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $our_brown; 
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  
+    &:hover {
+      background-color: #3f2011; 
+      transform: translateY(-2px);
+    }
+
+  }
+  
+  .header-trophy-icon {
+    color: white; // Icon color
+    font-size: 25px; // Adjust size as needed
+  }
 }
