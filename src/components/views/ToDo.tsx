@@ -227,6 +227,13 @@ const ToDo = () => {
             <BaseContainer>
                 <div className="todo container">
                     <h1>To-Do list for: {task.title}</h1>
+                    <br/>
+                    <p> Break your main task into manageable steps! <br/>
+                    
+                        <br/>This will make it easier to track your progress and ensure nothing gets missed. 
+                        <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task effectively!</p>
+                        <br/>
+                    
                     <div className="todo form">
 
 
