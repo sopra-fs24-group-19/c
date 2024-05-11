@@ -354,6 +354,15 @@ const ToDo = () => {
                     </div>
                 </div>
             </BaseContainer>
+              <div className="myprofile button-container">
+                <Button
+                  style={{ marginTop: '20px' }}
+                  width="200px"
+                  onClick={() => navigate("/homefeed")}
+                >
+                  Back to homefeed
+                </Button>
+              </div>
             </>
         )}
   

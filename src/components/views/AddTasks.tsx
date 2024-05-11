@@ -360,7 +360,7 @@ const AddTasks = () => {
 
       // After successful task creation --> navigate to the homefeed
       alert("You have successfully created your task!")
-      navigate("/homefeed");
+      navigate("/mytasks");
 
     } catch (error) {
             alert(

@@ -24,6 +24,8 @@ const Header = (props) => {
       }
     };
     fetchUserData();
+    const intervalId = setInterval(fetchUserData, 1);
+    return () => clearInterval(intervalId);
   }, []);
 
   const doLogout = async () => {

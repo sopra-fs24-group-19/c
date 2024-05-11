@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyProfile.scss";
+import PhoneInput from 'react-phone-number-input/input';
+import 'react-phone-number-input/style.css';
 
 const getRadius = (radius) => {
   switch (radius) {
@@ -379,12 +381,19 @@ const MyProfile = () => {
                 value={name}
                 onChange={(n: string) => setName(n)}
               />
-              <FormField
-                label="Phone Number"
-                placeholder={currentUser ? (currentUser.phoneNumber ? currentUser.phoneNumber : "Add your phone number") : 'Loading...'}
-                value={phoneNumber}
-                onChange={(pn: string) => setPhoneNumber(pn)}
-              />
+              <div className="myprofile field">
+                <label className="myprofile label">Phone Number</label>
+                <PhoneInput
+                  className="myprofile input"
+                  placeholder={currentUser ? (currentUser.phoneNumber ? currentUser.phoneNumber : "Add your phone number") : 'Loading...'}
+                  value={phoneNumber}
+                  onChange={(pn: string) => {
+                    if (pn && pn.replace(/\D/g, '').length >= 7) {
+                      setPhoneNumber(pn);
+                    }
+                  }}
+                />
+              </div>
               <div className="myprofile field">
                 <label className="myprofile label">Address</label>
                 <div

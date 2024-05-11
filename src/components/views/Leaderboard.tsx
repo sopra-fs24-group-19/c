@@ -35,9 +35,17 @@ const Leaderboard = () => {
       <NavBar />
       <div className="leaderboard container">
         <h1 className="leaderboard title">Leaderboard</h1>
+        {currentUserData.taskCount === 0 ? (
+        <p className="leaderboard summary">
+          {"It looks like you haven't completed any tasks yet..."}
+          <br />
+          {"Get in touch with your community to help your neighbours and earn a rank"}
+        </p>
+        ):(
         <p className="leaderboard summary">
           You have completed {currentUserData.taskCount} tasks and your current rank is {currentUserData.rank}.
         </p>
+        )}
         <div className="leaderboard header">
           <div className="leaderboard rank-header">Rank</div>
           <div className="leaderboard name-header">Name</div>
