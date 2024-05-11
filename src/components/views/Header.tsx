@@ -44,7 +44,7 @@ const Header = (props) => {
   return (
     <div className="header container">
       <div className="header logo">
-        <img src="HHlogo.png" alt="Company Logo" style={{width: "50px"}}/>
+        <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
         <Link to="/leaderboard" className="header-trophy-button"> 
           <SlTrophy size={35} className="header-trophy-icon"/> 
         </Link>

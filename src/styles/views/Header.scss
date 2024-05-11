@@ -36,7 +36,7 @@ html, body {
     font-size: 0.8em;
     width: 80px;
     height: 50px;
-    border-radius: 5px;
+    border-radius: 0.75em;
     margin-left: 10px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
@@ -54,7 +54,7 @@ html, body {
       width: 80%;
       height: 60%;
      &:hover {
-       background-color: #3f2011;
+       background-color: $our_brown;
        transform: translateY(-2px);
      }
     }
@@ -102,7 +102,7 @@ html, body {
     align-items: center;
     justify-content: center;
     background-color: $our_brown; 
-    border-radius: 5px;
+    border-radius: 0.75em;
     padding: 5px;
     margin-left: 10px;
     cursor: pointer;
