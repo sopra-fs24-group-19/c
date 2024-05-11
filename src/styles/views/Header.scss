@@ -30,26 +30,39 @@ html, body {
     color: $our_brown;
     text-align: center;
   }
-
+  &.button {
+    color: $our_beige;
+    background-color: $our_brown;
+    font-size: 0.8em;
+    width: 80px;
+    height: 50px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
  &.user-container {
     display: flex;
     justify-content: flex-end;
-
+    width: 100%;
 
     button {
       color: $our_beige;
       background-color: $our_brown;
-      margin-top: 0.2em;
+      margin-top: 1.1em;
       margin-bottom: 0.2em;
-      width: 180px;
+      width: 80%;
+      height: 60%;
+     &:hover {
+       background-color: #3f2011;
+       transform: translateY(-2px);
+     }
     }
   }
 
   &.button-column {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     width: auto;
+    max-width: 100%;
   }
   &.icon-column {
     display: flex;
@@ -94,9 +107,10 @@ html, body {
     margin-left: 10px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    height: 50px;
   
     &:hover {
-      background-color: #3f2011; 
+      background-color: $our_brown;
       transform: translateY(-2px);
     }
 

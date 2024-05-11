@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { TiUser } from "react-icons/ti";
 import { TbCoins } from "react-icons/tb";
+import { FiLogOut } from "react-icons/fi";
 
 const Header = (props) => {
   const currentUserId = localStorage.getItem("currentUserId");
@@ -47,6 +48,13 @@ const Header = (props) => {
         <Link to="/leaderboard" className="header-trophy-button"> 
           <SlTrophy size={35} className="header-trophy-icon"/> 
         </Link>
+
+        <Button className="header button" onClick={doCreateTask}>
+          Create new task
+        </Button>
+
+
+
       </div>
       <h1 className="header title">Helping Hands</h1>
 
@@ -61,11 +69,8 @@ const Header = (props) => {
             <p className="header text">{currentUser.coinBalance}</p>
           </div>
           <div className="header button-column">
-            <Button className="header button" onClick={doLogout}>
-              Log out
-            </Button>
-            <Button className="header button" onClick={doCreateTask}>
-              Create a new task
+            <Button to="/leaderboard" className="header-trophy-button" onClick={doLogout}>
+              <FiLogOut className="header-trophy-icon"/>
             </Button>
           </div>
         </div>
