@@ -11,22 +11,6 @@ const UserProfile = () => {
   const location = useLocation();
   const {taskId, purpose} = location.state;
 
-  
-  // // Mock user's review data
-  // const mockReview = new Review({
-  //   no_of_stars: 27,
-  //   no_of_votes: 6,
-  //   reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
-  // });
-
-  // // Mock user data
-  // const mockUser = new User({
-  //   id: 1,
-  //   name: "testname",
-  //   username: "testusername",
-  //   phonenumber: "1234567890"
-  // });
-
 
   // State variables for the user's reviews
   const [noOfReviews, setNoOfReviews] = useState<number>(null);
@@ -40,62 +24,50 @@ const UserProfile = () => {
   const [phonenumber, setPhonenumber] = useState<string>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
-        // Uncomment this once the backend is done
-        const response = await api.get(`/users/${id}`, {
+        // Fetch user data
+        const userResponse = await api.get(`/users/${id}`, {
           headers: {
             "Accept": "application/json"
           }
         });
-        const user = response.data;
-  
-        // Mock user data - remove this line after backend is done
-        // const user = mockUser;
+        const user = userResponse.data;
   
         setUsername(user.username);
         setName(user.name);
         setPhonenumber(user.phoneNumber);
         setNoOfReviews(user.totalComments); 
         setAverageReview(user.averageStars);
-      } catch (error) {
-        console.error("Something went wrong while fetching the user: \n" + handleError(error));
-        alert("Something went wrong while fetching the user! See the console for details.");
-      }
-    };
 
-    const fetchRatings = async () => {
-      try {
+        // Fetch ratings data
         const token = localStorage.getItem("token");
-        const response = await api.get(`/ratings/${id}`, {
+        const ratingsResponse = await api.get(`/ratings/${id}`, {
           headers: {
             "Accept": "application/json",
             "Authorization": token
 
           }
         });
-        const ratings = response.data;
+        const ratings = ratingsResponse.data;
 
         const reviews = ratings.map(rating => ({
           comment: rating.comment,
           reviewer: rating.reviewer ? rating.reviewer.username : "Anonymous"
         }));
-        
         setReviews(reviews);
-        // Mock ratings data - remove this line after backend is done
-        //const ratings = mockReview;
-  
-        // setNoOfReviews(ratings.no_of_votes);
-        // setAverageReview(ratings.no_of_stars / ratings.no_of_votes);
-        // setReviews(ratings.reviews);
+
+
       } catch (error) {
-        console.error("Something went wrong while fetching the ratings: \n" + handleError(error));
-        alert("Something went wrong while fetching the ratings! See the console for details.");
+        console.error("Something went wrong while fetching the user: \n" + handleError(error));
+        alert("Something went wrong while fetching the user! See the console for details.");
       }
     };
+
   
-    fetchUser();
-    fetchRatings();
+    fetchData();
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
   }, [id]);
 
   return (

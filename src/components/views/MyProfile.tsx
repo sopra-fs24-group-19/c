@@ -343,6 +343,7 @@ const MyProfile = () => {
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
       console.log('Updated user:', updatedUser);
+      alert("Your profile has been updated")
       // After successful update, reload the page
       window.location.href = "/myprofile";
     } catch (error) {

@@ -79,6 +79,7 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
           "Authorization": token
         },
       });
+      alert(`Thanks for your application! We will notify this tasks creator`);
       navigate('/myapplications');
     }
     catch (error) {
@@ -160,6 +161,8 @@ const HomeFeed = () => {
     }
   
     fetchUser();
+    const intervalId = setInterval(fetchUser, 1);
+    return () => clearInterval(intervalId);
   }, []);
 
     // Get all tasks the current user has applied for to avoid double-applications
@@ -179,6 +182,8 @@ const HomeFeed = () => {
       }
     }
     fetchMyApplications();
+    const intervalId = setInterval(fetchMyApplications, 1);
+    return () => clearInterval(intervalId);
   }, []);
 
 
@@ -231,6 +236,8 @@ const HomeFeed = () => {
     }
 
     fetchData();
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
   }, [user]);
 
   let content = <div>Loading...</div>;

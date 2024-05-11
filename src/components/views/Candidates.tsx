@@ -21,6 +21,7 @@ const Candidates = () => {
       const response = await api.put(`/tasks/${taskId}`, requestBody, {
         headers: { Authorization: token}
       });
+      alert(`You have successfully selected your helper! Check out the To-Do list to give your helper detailed instructions`);
       navigate("/mytasks");
     } catch (error) {
             alert(
@@ -48,7 +49,8 @@ const Candidates = () => {
       }
     }
     fetchData();
-
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
   }, []); // Empty dependency array to run the effect only once
 
   return (

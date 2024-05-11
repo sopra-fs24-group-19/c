@@ -23,7 +23,6 @@ const ToDo = () => {
     const [allTodosDone, setAllTodosDone] = useState(false);
     const navigate = useNavigate();
 
-    
 
     // get info about who is creator and a helper
     useEffect(() => {
@@ -86,8 +85,7 @@ const ToDo = () => {
         };
     
         fetchTodos();
-        const intervalId = setInterval(fetchTodos, 100);
-
+        const intervalId = setInterval(fetchTodos, 1);
         return () => clearInterval(intervalId);
     }, [taskId]);
 
@@ -230,8 +228,8 @@ const ToDo = () => {
                     <br/>
                     <p> Break your main task into manageable steps! <br/>
                     
-                        <br/>This will make it easier to track your progress and ensure nothing gets missed. 
-                        <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task effectively!</p>
+                        <br/>This will make it easier to track your progress and ensure nothing will be forgotten.
+                        <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task efficiently!</p>
                         <br/>
                     
                     <div className="todo form">

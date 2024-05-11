@@ -82,6 +82,7 @@ const MyTasks = () => {
         headers: {"AuthorizationToken":localStorage.getItem("token")}
       });
       setTasks(tasks.filter(task => task.id !== taskId));
+      alert("You have successfully deleted your task!")
     } catch (error) {
             alert(
               `Something went wrong during the task deletion: \n${handleError(error)}`
@@ -118,6 +119,8 @@ const MyTasks = () => {
     };
   
     fetchHelperNames();
+    const intervalId = setInterval(fetchHelperNames, 1);
+    return () => clearInterval(intervalId);
   }, [tasks]);
 
   useEffect(() => {
@@ -140,6 +143,8 @@ const MyTasks = () => {
       }
     }
     fetchData();
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
   }, []); // Empty dependency array to run the effect only once
 
   return (

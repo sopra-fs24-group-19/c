@@ -26,6 +26,8 @@ const Leaderboard = () => {
       }
     }
     fetchData();
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

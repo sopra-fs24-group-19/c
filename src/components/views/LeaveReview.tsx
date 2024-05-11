@@ -71,14 +71,13 @@ const FormField = (props) => {
         console.log('Headers:', { 'Content-Type': 'application/json', "Authorization": token });
       
         try {
-          // Uncomment the following lines to make the API request
-         
           const response = await api.post(`/ratings/${reviewedId}`, requestBody, {
             headers: {
               'Content-Type': 'application/json',
               "Authorization": token
             },
           });
+          alert("Thanks for your feedback!")
           console.log(response.data);
           navigate(`/userprofile/${requestBody.reviewedId}`, {state: { taskId: 'none', purpose: "leave-review" }});
           

@@ -64,7 +64,7 @@ const MyApplications = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async() => {
     try {
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -82,22 +82,22 @@ const MyApplications = () => {
       }
     }
     fetchData();
+    const intervalId = setInterval(fetchData, 1);
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array to run the effect only once
 
   const doWithdraw = async (task) => {
-    taskId = task.id;
+    const taskId = task.id;
     try {
-      const requestBody = JSON.stringify({taskId, currentUserId});
-      const response = await api.delete(`/tasks/${taskId}/candidates/${currentUserId}`, requestBody);
-
+      const token = localStorage.getItem("token")
+      const response = await api.delete(`/tasks/candidate/${taskId}`, {headers:{"AuthorizationToken": token}});
+      alert(`You have just deleted your application, take a look at your Homefeed to find other interesting tasks`);
     } catch (error) {
             alert(
               `Something went wrong during the withdrawal: \n${handleError(error)}`
             );
     }
   }
-
-
-  }, []); // Empty dependency array to run the effect only once
 
   return (
         <>
@@ -129,7 +129,7 @@ const MyApplications = () => {
                 <Button
                     width="40%"
                     disabled={getStatusSymbol(task.status) !== "APPLIED"}
-                    //onClick={() => doWithdraw(task)}
+                    onClick={() => doWithdraw(task)}
                     >
                     Withdraw my application
                 </Button>

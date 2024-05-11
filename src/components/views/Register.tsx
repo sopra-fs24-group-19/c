@@ -70,7 +70,8 @@ const Register = () => {
       window.location.href = "/homefeed";
     } catch (error) {
       alert(
-        `Something went wrong during the register: \n${handleError(error)}`
+        "Oops, this username is already taken, please choose another one"
+        //`Something went wrong during the register: \n${handleError(error)}`
       );
     }
   };

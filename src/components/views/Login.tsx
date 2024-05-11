@@ -80,7 +80,8 @@ const Login = () => {
       window.location.href = "/homefeed";
     } catch (error) {
       alert(
-        `Something went wrong during the login: \n${handleError(error)}`
+        "Oops, your password does not seem to match your username...Please try again!"
+        //`Something went wrong during the login: \n${handleError(error)}`
       );
     }
   };

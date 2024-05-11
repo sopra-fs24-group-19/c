@@ -358,13 +358,14 @@ const AddTasks = () => {
       const requestBody = JSON.stringify({description, title, compensation, date, address, duration, "latitude":latitude, "longitude":longitude, "creatorId":currentUserId });
       const response = await api.post("/tasks", requestBody);
 
-    // After successful task creation --> navigate to the homefeed
-          navigate("/homefeed");
+      // After successful task creation --> navigate to the homefeed
+      alert("You have successfully created your task!")
+      navigate("/homefeed");
 
     } catch (error) {
             alert(
-              //"We're sorry, you don't have enough coins at the moment, please reduce the compensation or help your neighbors to receive more coins."
-              `Something went wrong during the task creation: \n${handleError(error)}`
+              "We're sorry, you don't have enough coins at the moment, please reduce the compensation or help your neighbors to receive more coins!"
+              //`Something went wrong during the task creation: \n${handleError(error)}`
             );
     }
   }
