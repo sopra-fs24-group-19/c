@@ -209,6 +209,8 @@ const HomeFeed = () => {
             } else {return true}
           }).filter(task => {
               return task.status === "CREATED";
+            }).filter(task => {
+              return task.creatorId.toString() !== localStorage.getItem('currentUserId');
             });
           console.log('Tasks after filtering:', tasksData);
         }

@@ -45,16 +45,16 @@ const Header = (props) => {
     <div className="header container">
       <div className="header logo">
         <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
-        <Link to="/leaderboard" className="header-trophy-button"> 
+        {localStorage.getItem("token") !== null && currentUser !== null ? (
+        <>
+        <Link to="/leaderboard" className="header-trophy-button">
           <SlTrophy size={35} className="header-trophy-icon"/> 
         </Link>
-
         <Button className="header button" onClick={doCreateTask}>
           Create new task
         </Button>
-
-
-
+        </>
+        ) : null}
       </div>
       <h1 className="header title">Helping Hands</h1>
 
