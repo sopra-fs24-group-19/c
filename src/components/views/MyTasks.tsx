@@ -74,6 +74,7 @@ const MyTasks = () => {
   const navigate = useNavigate();
   const currentUserId = localStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
   const doDeleteTask = async (taskId) => {
     try {
@@ -149,6 +150,11 @@ const MyTasks = () => {
     return () => clearInterval(intervalId);}
   }, []); // Empty dependency array to run the effect only once
 
+  const filteredTasks = tasks.filter(task => {
+    if (filterStatus === "ALL") return true;
+    return task.status === filterStatus;
+  });
+
   return (
         <>
           <NavBar />
@@ -156,9 +162,20 @@ const MyTasks = () => {
             <h1 >My tasks</h1>
             <p>Here is an overview of all tasks you posted</p>
 
+            <div className="mytasks filter-container">
+              <label style={{ marginRight: '10px' }}>Filter by status:</label>
+              <select className="mytasks filter" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                <option value="ALL">All</option>
+                <option value="CREATED">Open for Application</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+              </select>
+            </div>
+            <br/>
+
           {/* Wrap the tasks in a scrollable element*/}
           <tasks style={{ height: 600, overflowY: 'auto', width: 1000 }}>
-          {tasks.map((task: Task) => (
+          {filteredTasks.map((task: Task) => (
           <div className="mytasks form" key={task.id}>
 
             {/*Show all needed attributes for a task*/}
