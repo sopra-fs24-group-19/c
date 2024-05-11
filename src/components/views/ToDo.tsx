@@ -36,7 +36,7 @@ const ToDo = () => {
                 const task = response.data.find(task => task.id === Number(taskId));
                 setTask(task);
                 setIsLoading(false);
-                console.log(`Creator ID: ${task.creatorId}, Helper ID: ${task.helperId}`);
+                //console.log(`Creator ID: ${task.creatorId}, Helper ID: ${task.helperId}`);
             } catch (error) {
                 console.error(`Something went wrong while fetching the tasks: \n${handleError(error)}`);
                 alert("Something went wrong while fetching the tasks! See the console for details.");
@@ -60,7 +60,7 @@ const ToDo = () => {
     useEffect(() => {
         
         const fetchTodos = async () => {
-            console.log(taskId);
+            //console.log(taskId);
             try {
                 if (taskId) {
                     const token = localStorage.getItem('token');
@@ -75,8 +75,8 @@ const ToDo = () => {
 
                     const myTodos = todosResponse.data.filter(todo => Number(todo.authorId) === Number(userId));
                     const otherTodos = todosResponse.data.filter(todo => Number(todo.authorId) !== Number(userId));
-                    console.log('My todos:', myTodos);
-                    console.log('Other todos:', otherTodos);
+                    //console.log('My todos:', myTodos);
+                    //console.log('Other todos:', otherTodos);
                     setTodos({ myTodos, otherTodos });
                 }
             } catch (error) {
@@ -85,8 +85,9 @@ const ToDo = () => {
         };
     
         fetchTodos();
-        const intervalId = setInterval(fetchTodos, 1);
-        return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+        const intervalId = setInterval(fetchTodos, 1000);
+        return () => clearInterval(intervalId);}
     }, [taskId]);
 
     const confirmTaskAndNavigate = async () => {
@@ -102,8 +103,8 @@ const ToDo = () => {
     
             // Navigate to the review page
             const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
-            // navigate(`/leavereview/${redirectUserId}`);
-            navigate(`/leavereview/${redirectUserId}/${taskId}`);
+            const userStatus = (redirectUserId === task.creatorId) ? "Helper" : "Creator";
+            navigate(`/leavereview/${redirectUserId}/${taskId}`, {state: {userStatus}});
         } catch (error) {
             console.error(`Something went wrong: ${error}`);
         }
@@ -151,7 +152,6 @@ const ToDo = () => {
     };
 
     const doneTodo = async (todoId, description) => {
-        console.log('doneTodo function called');
         if (Number(userId) !== Number(task.creatorId)) {
             return; 
         }
@@ -163,7 +163,6 @@ const ToDo = () => {
         };
     
         try {
-            console.log(`Calling PUT /todo/${todoId}`);
             await api.put(`/todo/${todoId}`, requestBody, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -183,14 +182,6 @@ const ToDo = () => {
 
     const deleteTodo = async (todoId) => {
         const token = localStorage.getItem('token');
-        // const requestBody = {
-        //     id: todoId,
-        //     description: description,
-        //     taskId: Number(taskId),
-        // };
-
-        // console.log('Request body:', requestBody);
-    
         try {
             await api.delete(`/todo/${todoId}`, {
                 headers: {
@@ -226,8 +217,7 @@ const ToDo = () => {
                 <div className="todo container">
                     <h1>To-Do list for: {task.title}</h1>
                     <br/>
-                    <p> Break your main task into manageable steps! <br/>
-                    
+                    <p> Break your main task into manageable steps!
                         <br/>This will make it easier to track your progress and ensure nothing will be forgotten.
                         <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task efficiently!</p>
                         <br/>

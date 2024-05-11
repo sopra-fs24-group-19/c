@@ -4,12 +4,10 @@ import NavBar from "components/ui/NavBar";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import "styles/views/LeaveReview.scss";
-
-
-// npm install react-star-ratings
+import Popup from './CompletionPopUp.tsx';
 
 const FormField = (props) => {
     return (
@@ -44,12 +42,19 @@ const FormField = (props) => {
   };
 
   const LeaveReview = () => {
-    // const { id: reviewedId } = useParams();
     const { id: reviewedId, taskId } = useParams();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
     const navigate = useNavigate();
-  
+    const location = useLocation();
+
+    const {userStatus} = location.state;
+
+    const [showPopup, setShowPopup] = useState(false);
+    const togglePopup = () => {
+      setShowPopup(!showPopup);
+    };
+
     const doSubmitReview = async () => {
         
         const reviewerId = localStorage.getItem('currentUserId');
@@ -67,9 +72,6 @@ const FormField = (props) => {
           taskId: taskId
         };
 
-        console.log('Request body:', requestBody); // Log the request body
-        console.log('Headers:', { 'Content-Type': 'application/json', "Authorization": token });
-      
         try {
           const response = await api.post(`/ratings/${reviewedId}`, requestBody, {
             headers: {
@@ -77,14 +79,16 @@ const FormField = (props) => {
               "Authorization": token
             },
           });
-          alert("Thanks for your feedback!")
-          console.log(response.data);
-          navigate(`/userprofile/${requestBody.reviewedId}`, {state: { taskId: 'none', purpose: "leave-review" }});
-          
+          togglePopup();
+
         } catch (error) {
           console.error(`Something went wrong: ${error}`);
           alert("Something went wrong while giving feedback! See the console for details.");
         }
+      };
+
+      const handlePopupClose = () => {
+        navigate(`/userprofile/${reviewedId}`, { state: { taskId: 'none', purpose: "leave-review" }});
       };
 
       return (
@@ -104,13 +108,6 @@ const FormField = (props) => {
                     numberOfStars={5}
                     name='rating'
                     />
-                {/* <FormField
-                  label="Stars"
-                  type="number"
-                  placeholder="Enter number of stars (1-5)"
-                  value={stars}
-                  onChange={(s: string) => setStars(s)}
-                /> */}
                 <FormField
                   label="Your Review"
                   type="textarea"
@@ -118,15 +115,21 @@ const FormField = (props) => {
                   value={review}
                   onChange={(r: string) => setReview(r)}
                 />
+
                 <div className="review button-container">
                   <Button
                     disabled={!review || !stars}
                     width="100%"
-                    onClick={() => doSubmitReview()}
+                    onClick={() => {doSubmitReview(); // Call your function here
+                                   }}
                   >
                     Submit Review
                   </Button>
+                  {showPopup && <Popup onClose={handlePopupClose} userStatus={userStatus} />}
                 </div>
+
+
+
               </div>
             </div>
           </BaseContainer>

@@ -52,10 +52,6 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
   const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
 
   useEffect(() => {
-    console.log("HHHHHH")
-    console.log(myApplications)
-    console.log(task.id)
-    console.log(myApplications.includes(task.id))
     setHasApplied(myApplications.includes(task.id));
   }, [myApplications, task.id]);
 
@@ -161,8 +157,9 @@ const HomeFeed = () => {
     }
   
     fetchUser();
-    const intervalId = setInterval(fetchUser, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchUser, 1000);
+    return () => clearInterval(intervalId);}
   }, []);
 
     // Get all tasks the current user has applied for to avoid double-applications
@@ -170,7 +167,7 @@ const HomeFeed = () => {
     async function fetchMyApplications() {
     try {
         const currentUserId = localStorage.getItem('currentUserId');
-        console.log(currentUserId)
+        //console.log(currentUserId)
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
         const taskIds = response.data.map(task => task.id);
         setMyApplications(taskIds);
@@ -182,8 +179,9 @@ const HomeFeed = () => {
       }
     }
     fetchMyApplications();
-    const intervalId = setInterval(fetchMyApplications, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchMyApplications, 1000);
+    return () => clearInterval(intervalId);}
   }, []);
 
 
@@ -196,20 +194,20 @@ const HomeFeed = () => {
             "Accept": "application/json"
           }
         });
-        console.log('Tasks before filtering:', response.data);
+        //console.log('Tasks before filtering:', response.data);
 
         let tasksData = response.data;
 
         if (user && user.radius) {
-          console.log('User data:', user); 
-          console.log('Radius in fetch tasks:', user.radius);
+          //console.log('User data:', user);
+          //console.log('Radius in fetch tasks:', user.radius);
           tasksData = tasksData.filter(task => {
             if (user.radius <= 20) {
                 const distance = calculateDistance(
                   {longitude: parseFloat(user.longitude), latitude: parseFloat(user.latitude)},
                   {longitude: parseFloat(task.longitude), latitude: parseFloat(task.latitude)}
                 );
-                console.log(`Distance for task ${task.id}:`, distance);
+                //console.log(`Distance for task ${task.id}:`, distance);
                 return distance <= user.radius;
             } else {return true}
           }).filter(task => {
@@ -217,7 +215,7 @@ const HomeFeed = () => {
             }).filter(task => {
               return task.creatorId.toString() !== localStorage.getItem('currentUserId');
             });
-          console.log('Tasks after filtering:', tasksData);
+          //console.log('Tasks after filtering:', tasksData);
         }
 
         setTasks(tasksData);
@@ -236,8 +234,9 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    const intervalId = setInterval(fetchData, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);}
   }, [user]);
 
   let content = <div>Loading...</div>;

@@ -56,7 +56,7 @@ const Login = () => {
       // Debugging: Log the received token
       // console.log("Received token:", response.data.token);
       // console.log("Received token:", user.token);
-      console.log("Name of logged in user:", user.name);
+      //console.log("Name of logged in user:", user.name);
 
 
       // Store the token into the local storage.
@@ -67,7 +67,7 @@ const Login = () => {
       const token = response.headers["authorization"];
 
       // Debugging: Log before saving the token
-      console.log("Token from header:", token);
+      //console.log("Token from header:", token);
 
       localStorage.setItem("token", token);
       localStorage.setItem("currentUser", user);

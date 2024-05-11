@@ -58,9 +58,6 @@ const Register = () => {
       // const token = user.token;
       const token = response.headers["authorization"];
 
-      // Debugging: Log before saving the token
-      console.log("Saving token in local storage:", token);
-
       localStorage.setItem("token", token);
       localStorage.setItem("currentUser", user);
       localStorage.setItem("currentUserId", user.id);

@@ -16,16 +16,17 @@ const Header = (props) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await api.get(`/users/${currentUserId}`);
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
-        setCurrentUser(response.data);
+            const response = await api.get(`/users/${currentUserId}`);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            setCurrentUser(response.data)
       } catch (error) {
         console.error("Details:", error);
       }
     };
     fetchUserData();
-    const intervalId = setInterval(fetchUserData, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchUserData, 1000);
+    return () => clearInterval(intervalId);}
   }, []);
 
   const doLogout = async () => {

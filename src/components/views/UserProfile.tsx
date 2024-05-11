@@ -66,8 +66,9 @@ const UserProfile = () => {
 
   
     fetchData();
-    const intervalId = setInterval(fetchData, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);}
   }, [id]);
 
   return (

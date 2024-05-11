@@ -152,7 +152,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
   // add input field clear button to the container
   const clearButton = document.createElement("div");
   clearButton.setAttribute("class", "addtasks clear-button");
-  console.log(clearButton.classList)
+  //console.log(clearButton.classList)
   clearButton.classList.add("clear-button");
   addIcon(clearButton);
   clearButton.addEventListener("click", (e) => {
@@ -374,11 +374,11 @@ const AddTasks = () => {
     if (!addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
-        console.log("Selected option: ");
+        //console.log("Selected option: ");
                 // Access to input by using "data"
-                console.log(data.formatted);
-                console.log(data.lat);
-                console.log(data.lon);
+                //console.log(data.formatted);
+                //console.log(data.lat);
+                //console.log(data.lon);
                 // Set the three values
                 setAddress(data.formatted);
                 setLatitude(data.lat);

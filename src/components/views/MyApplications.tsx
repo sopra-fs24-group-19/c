@@ -82,8 +82,9 @@ const MyApplications = () => {
       }
     }
     fetchData();
-    const intervalId = setInterval(fetchData, 1);
-    return () => clearInterval(intervalId);
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);}
   }, []); // Empty dependency array to run the effect only once
 
   const doWithdraw = async (task) => {

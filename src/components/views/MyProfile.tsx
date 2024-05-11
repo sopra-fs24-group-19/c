@@ -102,7 +102,6 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
   // add input field clear button to the container
   const clearButton = document.createElement("div");
   clearButton.setAttribute("class", "myprofile clear-button");
-  console.log(clearButton.classList)
   clearButton.classList.add("clear-button");
   addIcon(clearButton);
   clearButton.addEventListener("click", (e) => {
@@ -294,8 +293,6 @@ const MyProfile = () => {
         const response = await api.get(`/users/${currentUserId}`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setCurrentUser(response.data);
-        console.log(response.data);
-        console.log(currentUser);
       } catch (error) {
         console.error(
           `Something went wrong while fetching the tasks: \n${handleError(
@@ -313,14 +310,13 @@ const MyProfile = () => {
 
   useEffect(() => {
     if (currentUser && !addressFieldAdded) {
-      console.log(currentUser);
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
-        console.log("Selected option: ");
+        //console.log("Selected option: ");
                 // Access to input by using "data"
-                console.log(data.formatted);
-                console.log(data.lat);
-                console.log(data.lon);
+                //console.log(data.formatted);
+                //console.log(data.lat);
+                //console.log(data.lon);
                 // Set the three values
                 setAddress(data.formatted);
                 setLatitude(data.lat);
@@ -344,7 +340,7 @@ const MyProfile = () => {
       const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
-      console.log('Updated user:', updatedUser);
+      //console.log('Updated user:', updatedUser);
       alert("Your profile has been updated")
       // After successful update, reload the page
       window.location.href = "/myprofile";
