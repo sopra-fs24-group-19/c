@@ -1,7 +1,7 @@
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/AddTasks.scss";
@@ -130,13 +130,13 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
   // Create a box where all elements will be put together
   const inputContainerElement = document.createElement("div");
-  inputContainerElement.setAttribute("class", "myprofile input-container");
+  inputContainerElement.setAttribute("class", "addtasks input-container");
   containerElement.appendChild(inputContainerElement);
 
   // create input element (actual box in which users type)
   const inputElement = document.createElement("input");
   inputElement.setAttribute("type", "text");
-  inputElement.setAttribute("class", "myprofile input")
+  inputElement.setAttribute("class", "addtasks input")
   inputElement.setAttribute("placeholder", options.placeholder);
   inputContainerElement.appendChild(inputElement);
 
@@ -151,8 +151,8 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
   // add input field clear button to the container
   const clearButton = document.createElement("div");
-  clearButton.setAttribute("class", "myprofile clear-button");
-  console.log(clearButton.classList)
+  clearButton.setAttribute("class", "addtasks clear-button");
+  //console.log(clearButton.classList)
   clearButton.classList.add("clear-button");
   addIcon(clearButton);
   clearButton.addEventListener("click", (e) => {
@@ -224,13 +224,13 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
             });
         });
 
-        promise.then((data) => {
+        promise.then((data: any) => {
           // here we get address suggestions
           currentItems = data.results;
 
         /*create a DIV element that will contain the proposed items*/
         const autocompleteItemsElement = document.createElement("div");
-        autocompleteItemsElement.setAttribute("class", "myprofile autocomplete-items");
+        autocompleteItemsElement.setAttribute("class", "addtasks autocomplete-items");
         inputContainerElement.appendChild(autocompleteItemsElement);
 
         /* For each item in the results */
@@ -324,12 +324,12 @@ const AddTasks = () => {
   const [addressFieldAdded, setAddressFieldAdded] = useState(false);
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);
-  const [compensation, setCompensation] = useState<int>(null);
+  const [compensation, setCompensation] = useState<number>(null);
   const [address, setAddress] = useState<string>(null);
-  const [latitude, setLatitude] = useState<float>(null);
-  const [longitude, setLongitude] = useState<float>(null);
+  const [latitude, setLatitude] = useState<number>(null);
+  const [longitude, setLongitude] = useState<number>(null);
   const [date, setDate] = useState<Date>(null);
-  const [duration, setDuration] = useState<float>(null);
+  const [duration, setDuration] = useState<number>(null);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -358,27 +358,27 @@ const AddTasks = () => {
       const requestBody = JSON.stringify({description, title, compensation, date, address, duration, "latitude":latitude, "longitude":longitude, "creatorId":currentUserId });
       const response = await api.post("/tasks", requestBody);
 
-    // After successful task creation --> navigate to the homefeed
-          navigate("/homefeed");
+      // After successful task creation --> navigate to the homefeed
+      alert("You have successfully created your task!")
+      navigate("/mytasks");
 
     } catch (error) {
             alert(
-              //"We're sorry, you don't have enough coins at the moment, please reduce the compensation or help your neighbors to receive more coins."
-              `Something went wrong during the task creation: \n${handleError(error)}`
+              "We're sorry, you don't have enough coins at the moment, please reduce the compensation or help your neighbors to receive more coins!"
+              //`Something went wrong during the task creation: \n${handleError(error)}`
             );
     }
   }
 
   useEffect(() => {
-
     if (!addressFieldAdded) {
       addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
         if (data) {
-        console.log("Selected option: ");
+        //console.log("Selected option: ");
                 // Access to input by using "data"
-                console.log(data.formatted);
-                console.log(data.lat);
-                console.log(data.lon);
+                //console.log(data.formatted);
+                //console.log(data.lat);
+                //console.log(data.lon);
                 // Set the three values
                 setAddress(data.formatted);
                 setLatitude(data.lat);
@@ -425,8 +425,8 @@ const AddTasks = () => {
                 value={compensation}
                 onChange={(p: int) => setCompensation(p)}
                 />
-              <div className="myprofile field">
-                <label className="myprofile label">Address</label>
+              <div className="addtasks field">
+                <label className="addtasks label">Address</label>
                 <div
                   id="autocomplete-container"
                 />

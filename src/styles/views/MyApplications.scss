@@ -45,6 +45,7 @@
   }
   &.left-wrapper {
     justify-content: left;
+    text-align: left;
   }
   &.right-wrapper {
     justify-content: right;
@@ -97,11 +98,16 @@
 
   //Regular button container
   &.button-container {
+    display: flex;
     justify-content: space-between;
     margin-top: 2em;
     button {
       color: $our_beige;
       background-color: $our_brown;
     }
+  }
+  & .filter {
+    color: $our_brown;
+    background-color: $our_beige;
   }
 }

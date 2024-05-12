@@ -28,42 +28,47 @@
   .reviewform {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
     max-width: 30em;
-    height: 10em;
+    height: auto;
     font-size: 16px;
     font-weight: 300;
-    padding-left: 37px;
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 10px;
     padding-right: 37px;
+    padding-left: 37px;
     border-radius: 0.75em;
     background-color: $our_green;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
+    overflow-y: auto;
+
+
+    .reviewContainer {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      .reviewTitle {
+        font-weight: 600;
+        .reviewLinkToUser {
+          color: $our_brown;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+
   }
-  .commentsform {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    max-width: 30em;
-    height: 25em;
-    font-size: 16px;
-    font-weight: 300;
-    padding-left: 37px;
-    padding-right: 37px;
-    border-radius: 0.75em;
-    background-color: $our_green;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    box-shadow: $dropShadow;
-  }
+
   &.field {
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
     display: flex;
     flex-direction: row; 
-    // justify-content: space-between; 
     justify-content: flex-start;
     align-items: center; 
   }
@@ -93,7 +98,6 @@
   }
   .label {
     color: $our_brown;
-    // margin-bottom: 6px;
     text-transform: uppercase;
     font-weight: 600;
     margin-right: 0.5em;

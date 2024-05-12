@@ -1,0 +1,105 @@
+@import "../theme";
+
+.leaderboard {
+
+  
+  &.container {
+    color: $our_brown;
+    margin-top: 2em;
+    min-height: 300px;
+    @include center;
+    flex-direction: column;
+  }
+
+  
+  &.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    max-width: 70em;
+    font-size: 18px; 
+    font-weight: 300;
+    padding: 20px;
+    border-radius: 0.75em;
+    background-color: $our_green;
+    box-shadow: $dropShadow;
+    margin: 0 auto;
+    margin-bottom: 1em;
+  }
+
+  
+  &.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: $our_brown;
+    color: white; 
+    width: 60%;
+    padding: 7px;
+    max-width: 70em;
+    margin: 0 auto;
+    border-radius: 0.5em;
+    font-size: 18px; 
+    font-weight: bold; 
+    margin-bottom: 1em;
+    margin-top: 1em;
+  }
+
+  &.rank-header, &.name-header, &.count-header {
+    flex: 1;
+    text-align: center;
+  }
+
+  
+  &.field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  &.rank, &.username, &.task-count {
+    flex: 1;
+    text-align: center;
+  }
+
+  &.rank {
+    font-size: 20px; 
+    font-weight: bold; 
+  }
+
+  &.task-count {
+    font-size: 20px; 
+    font-weight: normal; 
+  }
+
+  &.username {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 2;
+    font-size: 20px; 
+  }
+
+  &.button {
+    width: 60%;
+    color: $our_beige;
+    background-color: $our_brown;
+    padding: 10px 0;
+    border-radius: 0.75em;
+    margin-top: 20px;
+    margin-bottom: 2em;
+    transition: background-color 0.3s ease;
+   
+  }
+
+  &.summary {
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    color: $our_brown;
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 20px;
+  }
+}

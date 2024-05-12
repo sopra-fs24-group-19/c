@@ -1,36 +1,21 @@
 import NavBar from 'components/ui/NavBar';
+import { Button } from "components/ui/Button";
 import { api, handleError } from "helpers/api";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import "styles/views/UserProfile.scss";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  
-  // for scrollable element
-  const reviewItemHeight = 30;
-  
-  // // Mock user's review data
-  // const mockReview = new Review({
-  //   no_of_stars: 27,
-  //   no_of_votes: 6,
-  //   reviews: ["Great gardener!", "Friendly :)","Very helpful!", "Would recommend!", "Very friendly!", "Very reliable!"]
-  // });
-
-  // // Mock user data
-  // const mockUser = new User({
-  //   id: 1,
-  //   name: "testname",
-  //   username: "testusername",
-  //   phonenumber: "1234567890"
-  // });
+  const location = useLocation();
+  const { taskId, purpose } = location.state;
 
 
   // State variables for the user's reviews
   const [noOfReviews, setNoOfReviews] = useState<number>(null);
   const [averageReview, setAverageReview] = useState<number>(null);
-  const [reviews, setReviews] = useState<string[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
 
 
   // State variables for the user's attributes
@@ -39,62 +24,58 @@ const UserProfile = () => {
   const [phonenumber, setPhonenumber] = useState<string>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
-        // Uncomment this once the backend is done
-        const response = await api.get(`/users/${id}`, {
+        // Fetch user data
+        const userResponse = await api.get(`/users/${id}`, {
           headers: {
             "Accept": "application/json"
           }
         });
-        const user = response.data;
-  
-        // Mock user data - remove this line after backend is done
-        // const user = mockUser;
-  
+        const user = userResponse.data;
+
         setUsername(user.username);
         setName(user.name);
         setPhonenumber(user.phoneNumber);
-        setNoOfReviews(user.totalComments); 
+        setNoOfReviews(user.totalComments);
         setAverageReview(user.averageStars);
-      } catch (error) {
-        console.error("Something went wrong while fetching the user: \n" + handleError(error));
-        alert("Something went wrong while fetching the user! See the console for details.");
-      }
-    };
 
-    const fetchRatings = async () => {
-      try {
+        // Fetch ratings data
         const token = localStorage.getItem("token");
-        const response = await api.get(`/ratings/${id}`, {
+        const ratingsResponse = await api.get(`/ratings/${id}`, {
           headers: {
             "Accept": "application/json",
             "Authorization": token
 
           }
         });
-        const ratings = response.data;
+        const ratings = ratingsResponse.data;
 
-        const reviews = ratings.map(rating => ({
-          comment: rating.comment,
-          reviewer: rating.reviewer ? rating.reviewer.username : "Anonymous"
-        }));
-        
+        const reviews = ratings.map(rating => {
+          const dateTime = new Date(rating.creationDate);
+          const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+          return {
+            comment: rating.comment,
+            reviewer: rating.reviewer ? rating.reviewer.username : "Anonymous",
+            reviewerId: rating.reviewer ? rating.reviewer.id : null,
+            creationDate: formattedDateTime,
+            stars: rating.stars
+          }
+        });
         setReviews(reviews);
-        // Mock ratings data - remove this line after backend is done
-        //const ratings = mockReview;
-  
-        // setNoOfReviews(ratings.no_of_votes);
-        // setAverageReview(ratings.no_of_stars / ratings.no_of_votes);
-        // setReviews(ratings.reviews);
+
+
       } catch (error) {
-        console.error("Something went wrong while fetching the ratings: \n" + handleError(error));
-        alert("Something went wrong while fetching the ratings! See the console for details.");
+        console.error("Something went wrong while fetching the user: \n" + handleError(error));
+        alert("Something went wrong while fetching the user! See the console for details.");
       }
     };
-  
-    fetchUser();
-    fetchRatings();
+
+
+    fetchData();
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchData, 2000);
+    return () => clearInterval(intervalId);}
   }, [id]);
 
   return (
@@ -122,33 +103,47 @@ const UserProfile = () => {
 
       <div className="userprofile container">
         <h1>Reviews</h1>
-        <p>Scroll down for more reviews</p>
-        <div className="userprofile commentsform">
-          <div className="userprofile review-list" style={{
-            maxHeight: `${reviewItemHeight * 10}px`, 
-            overflowY: 'auto' 
-            }}>
-            {/* {reviews.length > 0 ? (
+        <div className="userprofile reviewform">
+          {reviews.length > 0 ? (
             reviews.map((review, index) => (
-              <p key={index} style={{ height: `${reviewItemHeight}px` }}>{review}</p>
+              <div key={index} className='reviewContainer'>
+                <span className='reviewTitle'>
+                  <Link to={`/userprofile/${review.reviewerId}`} state={{ taskId: 'none', purpose: "leave-review" }} className='reviewLinkToUser'>{review.reviewer}</Link> ({review.creationDate}) - {"★".repeat(review.stars)}</span>
+                <span>{review.comment}</span>
+              </div>
             ))
           ) : (
-            <p>Loading reviews...</p>
-          )} */}
-            {reviews.length > 0 ? (
-              reviews.map((review, index) => (
-                <p key={index} style={{ height: `${reviewItemHeight}px` }}>
-                  {review.reviewer}: {review.comment}
-                </p>
-              ))
-            ) : (
-              <p>No reviews yet</p>
-            )}
-
-          </div>
-          
+            <p>No reviews yet</p>
+          )}
         </div>
-      </div>
+
+        <div className="mytasks button-container">
+          {purpose === "candidate-check" && (
+            <Button
+              width="100%"
+              onClick={() => navigate(`/candidates`, { state: taskId })}
+            >
+              Back to all helpers
+            </Button>
+          )}
+          {purpose === "leave-review" && (
+            <Button
+              width="100%"
+              onClick={() => navigate(`/mytasks`)}
+            >
+              Back to all my tasks
+            </Button>
+          )}
+          {purpose === "my-reviews" && (
+            <Button
+              width="100%"
+              onClick={() => navigate(`/myprofile`)}
+            >
+              Back to my profile
+            </Button>
+          )}
+        </div>
+      </div >
     </>
   );
 };

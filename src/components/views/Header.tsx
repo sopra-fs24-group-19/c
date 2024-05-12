@@ -1,21 +1,35 @@
-
+import { SlTrophy } from "react-icons/sl";
 import * as PropTypes from "prop-types";
 import { Button } from "components/ui/Button";
-import "../../styles/views/Header.scss";
 import { Link } from "react-router-dom";
+import "../../styles/views/Header.scss";
+import { useEffect, useState } from "react";
+import { api, handleError } from "helpers/api";
+import { TiUser } from "react-icons/ti";
+import { TbCoins } from "react-icons/tb";
+import { FiLogOut } from "react-icons/fi";
 
-/**
- * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
- * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
- * They are reusable pieces, and think about each piece in isolation.
- * Functional components have to return always something. However, they don't need a "render()" method.
- * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
- * @FunctionalComponent
- */
 const Header = (props) => {
+  const currentUserId = localStorage.getItem("currentUserId");
+  const [currentUser, setCurrentUser] = useState(null);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+            const response = await api.get(`/users/${currentUserId}`);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            setCurrentUser(response.data)
+      } catch (error) {
+        console.error("Details:", error);
+      }
+    };
+    fetchUserData();
+    if (localStorage.getItem("token")) {
+    const intervalId = setInterval(fetchUserData, 1000);
+    return () => clearInterval(intervalId);}
+  }, []);
 
-  const doLogout = async (): void => {
+  const doLogout = async () => {
     try {
       localStorage.removeItem("token");
       localStorage.removeItem("currentUser");
@@ -24,34 +38,50 @@ const Header = (props) => {
     } catch (error) {
       console.error("Error logging out:", error);
     }
-    };
-  const doCreateTask = async (): void => {
+  };
+
+  const doCreateTask = async () => {
     window.location.href = "/addtasks";
-    };
+  };
 
+  return (
+    <div className="header container">
+      <div className="header logo">
+        <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
+        {localStorage.getItem("token") !== null && currentUser !== null ? (
+        <>
+        <Link to="/leaderboard" className="header-trophy-button">
+          <SlTrophy size={35} className="header-trophy-icon"/> 
+        </Link>
+        <Button className="header button" onClick={doCreateTask}>
+          Create new task
+        </Button>
+        </>
+        ) : null}
+      </div>
+      <h1 className="header title">Helping Hands</h1>
 
-    return(
-      <div className="header container">
-        <div className="header logo">
-        <img src="HHlogo.png" alt="Company Logo" style={{width: "80px"}}/>
-        </div>
-        <h1 className="header title">Helping Hands</h1>
-        {localStorage.getItem("token") !== null ? (
-          <div className="header button-container">
-            <Button className="header button" onClick={doCreateTask}>
-              Create a new task
-            </Button>
-            <Button
-              className="header button"
-              onClick={doLogout}>
-              Log out
+      {localStorage.getItem("token") !== null && currentUser !== null ? (
+        <div className="header user-container">
+          <div className="header icon-column">
+            <TiUser className="header icons" size={35}/>
+            <TbCoins className="header icons" size={35}/>
+          </div>
+          <div className="header text-column">
+            <p className="header text">{currentUser.username}</p>
+            <p className="header text">{currentUser.coinBalance}</p>
+          </div>
+          <div className="header button-column">
+            <Button to="/leaderboard" className="header-trophy-button" onClick={doLogout}>
+              <FiLogOut className="header-trophy-icon"/>
             </Button>
           </div>
-        ) : (
-          <div className="header button-container"></div> // Render an empty div when condition is false
-        )}
-      </div>
-    )
+        </div>
+      ) : (
+        <div className="header button-container"></div>
+      )}
+    </div>
+  )
 };
 
 Header.propTypes = {

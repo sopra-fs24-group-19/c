@@ -12,4 +12,24 @@
     color: $our_brown;
     text-decoration: none;
     font-family: $fontDefault;
+    &:hover {
+      color: $our_brown;
+      font-weight: bold;
+      transform: translateY(-2px);
+    }
+  }
+
+  .active {
+      background-color: $our_brown; // Define your active color here
+      color: $our_beige;
+      font-weight: bold;
+      border-radius: 0.5em;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-right: 20px;
+      padding-left: 20px;
+      &:hover {
+        color: $our_beige;
+        font-weight: bold;
+      }
   }

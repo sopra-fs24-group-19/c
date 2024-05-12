@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AddTasks from "../../views/AddTasks";
 import Candidates from "../../views/Candidates";
+import Leaderboard from "../../views/Leaderboard";
+import Header from "../../views/Header";
 import HomeFeed from "../../views/HomeFeed";
 import LeaveReview from "../../views/LeaveReview";
 import Login from "../../views/Login";
@@ -33,7 +35,7 @@ import { UserProfileGuard } from "../routeProtectors/UserProfileGuard";
 const AppRouter = () => {
   return (
     <BrowserRouter>
-      
+    <Header height="100" />
       <Routes>
         
 
@@ -72,12 +74,16 @@ const AppRouter = () => {
         <Route path="/homefeed" element={<HomeFeedGuard />}>
           <Route path="/homefeed" element={<HomeFeed />} />
         </Route>
+        <Route path="/leaderboard" element={<MyProfileGuard />}>
+          <Route path="/leaderboard" element={<Leaderboard />} />
+        </Route>
 
         {/* <Route path="/leavereview" element={<LeaveReviewGuard />}>
           <Route path="/leavereview" element={<LeaveReview />} />
         </Route> */}
-        <Route path="/leavereview/:id" element={<LeaveReviewGuard />}>
-            <Route path="/leavereview/:id" element={<LeaveReview />} />
+
+        <Route path="/leavereview/:id/:taskId" element={<LeaveReviewGuard />}>
+            <Route path="/leavereview/:id/:taskId" element={<LeaveReview />} />
         </Route>
 
         <Route path="/todo" element={<ToDoGuard />}>
