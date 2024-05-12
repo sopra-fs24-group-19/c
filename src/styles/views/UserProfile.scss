@@ -43,6 +43,27 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
     overflow-y: auto;
+
+
+    .reviewContainer {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      .reviewTitle {
+        font-weight: 600;
+        .reviewLinkToUser {
+          color: $our_brown;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+
   }
 
   &.field {

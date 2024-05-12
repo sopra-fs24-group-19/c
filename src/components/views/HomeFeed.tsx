@@ -2,10 +2,11 @@ import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "styles/views/HomeFeed.scss";
+import { User } from "types";
 
 type Task = {
   id: number;
@@ -14,6 +15,13 @@ type Task = {
   price: number;
   time: string;
   date: string;
+  title: string;
+  address: string;
+  longitude: string;
+  latitude: string;
+  duration: number;
+  compensation: number;
+  status: string;
 };
 
 
@@ -92,22 +100,22 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
       <title className="myapplications split-wrapper">
         <label className="myapplications title">{task.title}</label>
       </title>
-      <content className="myapplications split-wrapper">
-        <left className="myapplications left-wrapper">
+      <section id="applicationContent" className="myapplications split-wrapper">
+        <aside id="leftApplicationWrapper" className="myapplications left-wrapper">
           <label className="myapplications label">{"Description"}</label>
           <label className="myapplications content">{task.description}</label>
           <label className="myapplications label">{"Location"}</label>
           <label className="myapplications content">{task.address}</label>
-        </left>
-        <right className="myapplications right-wrapper">
+        </aside>
+        <aside id="rightApplicationWrapper" className="myapplications right-wrapper">
           <label className="myapplications label">{"Date"}</label>
           <label className="myapplications content">{formattedDateTime}</label>
           <label className="myapplications label">{"Duration"}</label>
           <label className="myapplications content">{`${(task.duration / 60).toFixed(2)} hrs`}</label>
           <label className="myapplications label">{"Compensation"}</label>
           <label className="myapplications content">{`${task.compensation} tokens`}</label>
-        </right>
-      </content>
+        </aside>
+      </section>
       <div className="myapplications button-container">
           {(task.creatorId.toString() === userId)?
           (<em>You created this task!</em>)
@@ -133,7 +141,7 @@ const HomeFeed = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>(null);
   const [user, setUser] = useState<User>(null);
-  const [myApplications, setMyApplications] = useState<Task[]>(null);
+  const [myApplications, setMyApplications] = useState<number[]>(null);
 
   // get info of the current user
   useEffect(() => {
@@ -158,7 +166,7 @@ const HomeFeed = () => {
   
     fetchUser();
     if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchUser, 1000);
+    const intervalId = setInterval(fetchUser, 2000);
     return () => clearInterval(intervalId);}
   }, []);
 
@@ -180,7 +188,7 @@ const HomeFeed = () => {
     }
     fetchMyApplications();
     if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchMyApplications, 1000);
+    const intervalId = setInterval(fetchMyApplications, 2000);
     return () => clearInterval(intervalId);}
   }, []);
 
@@ -235,7 +243,7 @@ const HomeFeed = () => {
 
     fetchData();
     if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, [user]);
 

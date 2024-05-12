@@ -4,6 +4,7 @@ import { api, handleError } from "helpers/api";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "styles/views/Candidates.scss";
+import { User } from "types";
 
 const Candidates = () => {
   const navigate = useNavigate();
@@ -16,17 +17,17 @@ const Candidates = () => {
     try {
       const userId = localStorage.getItem("currentUserId");
       const token = localStorage.getItem("token");
-      const requestBody = JSON.stringify({taskId, userId, helperId});
-      
+      const requestBody = JSON.stringify({ taskId, userId, helperId });
+
       const response = await api.put(`/tasks/${taskId}`, requestBody, {
-        headers: { Authorization: token}
+        headers: { Authorization: token }
       });
       alert(`You have successfully selected your helper! Check out the To-Do list to give your helper detailed instructions`);
       navigate("/mytasks");
     } catch (error) {
-            alert(
-              `Something went wrong during the selection: \n${handleError(error)}`
-            );
+      alert(
+        `Something went wrong during the selection: \n${handleError(error)}`
+      );
     }
   }
 
@@ -34,9 +35,8 @@ const Candidates = () => {
   useEffect(() => {
     // Fetch tasks from an API
     async function fetchData() {
-    try {
+      try {
         const response = await api.get(`/candidates/${taskId}`);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         setCandidates(response.data);
       } catch (error) {
         console.error(
@@ -50,54 +50,54 @@ const Candidates = () => {
     }
     fetchData();
     if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, []); // Empty dependency array to run the effect only once
 
   return (
-        <>
-          <NavBar />
-          <div className="candidates container">
-            <h1 >Candidates</h1>
-            <p>These are your neighbors that would like to help you with this task</p>
+    <>
+      <NavBar />
+      <div className="candidates container">
+        <h1 >Candidates</h1>
+        <p>These are your neighbors that would like to help you with this task</p>
 
-          {/* Wrap the candidates in a scrollable element*/}
-          <candidates style={{height:600, overflow: "auto", width: 1000}}>
+        {/* Wrap the candidates in a scrollable element*/}
+        <section id="candidatesSection" style={{ height: 600, overflow: "auto", width: 1000 }}>
           {candidates.map((candidate: User) => (
-          <div className="candidates form" key={candidate.id}>
-            <label className="candidates title">
-                <name>{candidate.name}</name>
-                <img src="profilepic.png" alt="Profile picture" className="img" style={{height:80, borderRadius: '50%'}}/>
-            </label>
-            <rate className="candidates button-container">
-              <Button
-              className="candidates button"
-              onClick={() => navigate(`/userprofile/${candidate.id}`, {state: { taskId: taskId, purpose: "candidate-check" }} )}
-              >
-              Look at Ratings
-              </Button>
-              <Button
-              className="candidates button"
-              onClick={() => doAcceptHelper(candidate.id)}
-              >
-              Accept as helper
-              </Button>
-            </rate>
-          </div>
-          ))}
-          </candidates>
-
-             <div className="candidates button-container">
+            <div className="candidates form" key={candidate.id}>
+              <label className="candidates title">
+                <span id="candidateName">{candidate.name}</span>
+                <img src={process.env.PUBLIC_URL + "/profilepic.png"} alt="Profile picture" className="img" style={{ height: 80, borderRadius: '50%' }} />
+              </label>
+              <section id="candidateRating" className="candidates button-container">
                 <Button
-                  style={{ marginRight: '15px' }}
-                  width="100%"
-                  onClick={() => navigate("/mytasks")}
+                  className="candidates button"
+                  onClick={() => navigate(`/userprofile/${candidate.id}`, { state: { taskId: taskId, purpose: "candidate-check" } })}
                 >
-                  Back to all my tasks
+                  Look at Ratings
                 </Button>
-              </div>
-          </div>
-         </>
+                <Button
+                  className="candidates button"
+                  onClick={() => doAcceptHelper(candidate.id)}
+                >
+                  Accept as helper
+                </Button>
+              </section>
+            </div>
+          ))}
+        </section>
+
+        <div className="candidates button-container">
+          <Button
+            style={{ marginRight: '15px' }}
+            width="100%"
+            onClick={() => navigate("/mytasks")}
+          >
+            Back to all my tasks
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 

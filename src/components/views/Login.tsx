@@ -77,7 +77,7 @@ const Login = () => {
       
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      window.location.href = "/homefeed";
+      navigate("/homefeed");
     } catch (error) {
       alert(
         "Oops, your password does not seem to match your username...Please try again!"
@@ -89,7 +89,7 @@ const Login = () => {
   return (
     <BaseContainer>
       <div className="login container">
-        <img src="HHlogo.png" alt="Company Logo" className="logo" />
+        <img src={process.env.PUBLIC_URL + "/HHlogo.png"} alt="Company Logo" className="logo" />
         <h1>Hi there!</h1>
         <h5>Please enter your credentials</h5>
         <div className="login form">
@@ -116,9 +116,9 @@ const Login = () => {
         <div className="login button-container">
               <p>
                 <span style={{ color: 'black' }}>Not a member yet? Click&nbsp;</span>
-                <a href="/register" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
+                <Link to="/register" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
                   here
-                </a>
+                </Link>
                 <span style={{ color: 'black' }}>&nbsp;to register.</span>
               </p>
             </div>

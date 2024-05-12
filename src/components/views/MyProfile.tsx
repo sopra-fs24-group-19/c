@@ -2,11 +2,11 @@ import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/MyProfile.scss";
-import PhoneInput from 'react-phone-number-input/input';
+import PhoneInput, {type Value} from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
 
 const getRadius = (radius) => {
@@ -88,6 +88,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
   inputElement.setAttribute("type", "text");
   inputElement.setAttribute("class", "myprofile input")
   inputElement.setAttribute("placeholder", options.placeholder);
+  inputElement.setAttribute("value", options.value);
   inputContainerElement.appendChild(inputElement);
 
   let currentTimeout;
@@ -173,7 +174,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
             });
         });
 
-        promise.then((data) => {
+        promise.then((data: any) => {
           // here we get address suggestions
           currentItems = data.results;
 
@@ -275,11 +276,11 @@ const MyProfile = () => {
   // Define variables for the attributes that can be changed
   const [username, setUsername] = useState<string>(null);
   const [name, setName] = useState<string>(null);
-  const [phoneNumber, setPhoneNumber] = useState<string>(null);
+  const [phoneNumber, setPhoneNumber] = useState<Value>(null);
   const [address, setAddress] = useState<string>(null);
-  const [latitude, setLatitude] = useState<float>(null);
-  const [longitude, setLongitude] = useState<float>(null);
-  const [radius, setRadius] = useState<int>(null);
+  const [latitude, setLatitude] = useState<number>(null);
+  const [longitude, setLongitude] = useState<number>(null);
+  const [radius, setRadius] = useState<number>(null);
 
   const clearAddress = () => {
     setAddress(null);
@@ -291,8 +292,13 @@ const MyProfile = () => {
     const fetchUserData = async () => {
     try {
         const response = await api.get(`/users/${currentUserId}`);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         setCurrentUser(response.data);
+        setName(response.data.name);
+        setPhoneNumber(response.data.phoneNumber);
+        setAddress(response.data.address);
+        setLatitude(response.data.latitude);
+        setLongitude(response.data.longitude);
+        setRadius(response.data.radius);
       } catch (error) {
         console.error(
           `Something went wrong while fetching the tasks: \n${handleError(
@@ -322,7 +328,7 @@ const MyProfile = () => {
                 setLatitude(data.lat);
                 setLongitude(data.lon);
         }
-      }, {placeholder: currentUser.address ? currentUser.address: "Add your location"}, clearAddress);
+      }, {placeholder: "Add your location", value: currentUser.address ? currentUser.address: ""}, clearAddress);
       setAddressFieldAdded(true);
     }
   }, [currentUser, addressFieldAdded]);
@@ -343,7 +349,7 @@ const MyProfile = () => {
       //console.log('Updated user:', updatedUser);
       alert("Your profile has been updated")
       // After successful update, reload the page
-      window.location.href = "/myprofile";
+      navigate("/myprofile");
     } catch (error) {
       alert(
         `Your updates could not be saved: \n${handleError(error)}`
@@ -373,7 +379,7 @@ const MyProfile = () => {
               {/*Define all needed attributes that can be changed by a user*/}
               <FormField
                 label="Name"
-                placeholder={currentUser ? currentUser.name : 'Loading...'}
+                placeholder={currentUser ? "Add your name" : 'Loading...'}
                 value={name}
                 onChange={(n: string) => setName(n)}
               />
@@ -381,11 +387,11 @@ const MyProfile = () => {
                 <label className="myprofile label">Phone Number</label>
                 <PhoneInput
                   className="myprofile input"
-                  placeholder={currentUser ? (currentUser.phoneNumber ? currentUser.phoneNumber : "Add your phone number") : 'Loading...'}
+                  placeholder={currentUser ? "Add your phone number" : 'Loading...'}
                   value={phoneNumber}
                   onChange={(pn: string) => {
                     if (pn && pn.replace(/\D/g, '').length >= 7) {
-                      setPhoneNumber(pn);
+                      setPhoneNumber(pn as Value);
                     }
                   }}
                 />
@@ -398,9 +404,9 @@ const MyProfile = () => {
               </div>
               <RadiusDropdown
                 label="Radius in which to look for tasks"
-                placeholder={currentUser ? (currentUser.radius ? getRadius(currentUser.radius) : "Choose radius") : 'Loading...'}
-                value={radius}
-                onChange={(r: int) => setRadius(r)}
+                placeholder={currentUser ? "Choose radius" : 'Loading...'}
+                value={radius?.toString()}
+                onChange={(r: number) => setRadius(r)}
               />
               <div className="myprofile button-container">
                 <Button

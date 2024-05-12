@@ -1,7 +1,7 @@
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
 import { api, handleError } from "helpers/api";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "styles/views/AddTasks.scss";
@@ -224,7 +224,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
             });
         });
 
-        promise.then((data) => {
+        promise.then((data: any) => {
           // here we get address suggestions
           currentItems = data.results;
 
@@ -324,12 +324,12 @@ const AddTasks = () => {
   const [addressFieldAdded, setAddressFieldAdded] = useState(false);
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);
-  const [compensation, setCompensation] = useState<int>(null);
+  const [compensation, setCompensation] = useState<number>(null);
   const [address, setAddress] = useState<string>(null);
-  const [latitude, setLatitude] = useState<float>(null);
-  const [longitude, setLongitude] = useState<float>(null);
+  const [latitude, setLatitude] = useState<number>(null);
+  const [longitude, setLongitude] = useState<number>(null);
   const [date, setDate] = useState<Date>(null);
-  const [duration, setDuration] = useState<float>(null);
+  const [duration, setDuration] = useState<number>(null);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {

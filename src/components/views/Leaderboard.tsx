@@ -27,7 +27,7 @@ const Leaderboard = () => {
     }
     fetchData();
     if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, []);
 
@@ -57,7 +57,7 @@ const Leaderboard = () => {
             <div className="leaderboard field">
               <div className="leaderboard rank">{user.rank}.</div>
               <div className="leaderboard username">
-                <img src="profilepic.png" alt="Profile" className="img" style={{ height: 30, borderRadius: '50%', marginRight: '10px' }}/>
+                <img src={process.env.PUBLIC_URL + "/profilepic.png"} alt="Profile" className="img" style={{ height: 30, borderRadius: '50%', marginRight: '10px' }}/>
                 {user.id.toString() === userId ? `${user.username} (you)` : user.username}
               </div>
               <div className="leaderboard task-count">{user.taskCount}</div>

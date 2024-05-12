@@ -2,7 +2,7 @@ import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "styles/views/Register.scss";
@@ -76,7 +76,7 @@ const Register = () => {
   return (
     <BaseContainer>
       <div className="register container">
-        <img src="HHlogo.png" alt="Company Logo" className="logo" />
+        <img src={process.env.PUBLIC_URL + "/HHlogo.png"} alt="Company Logo" className="logo" />
         <h1>Create your account</h1>
         <p>Please make sure your username is unique</p>
         <div className="register form">
@@ -109,9 +109,9 @@ const Register = () => {
           <div className="login button-container">
                 <p>
                   <span style={{ color: 'black' }}>Already have an account? Click&nbsp;</span>
-                  <a href="/login" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
+                  <Link to="/login" style={{ textDecoration: 'underline', color: '#007bff', cursor: 'pointer' }}>
                     here
-                  </a>
+                  </Link>
                   <span style={{ color: 'black' }}>&nbsp;to login.</span>
                 </p>
               </div>

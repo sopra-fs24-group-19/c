@@ -1,7 +1,7 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from "components/ui/Button";
 import NavBar from "components/ui/NavBar";
-import { api } from "helpers/api";
+import { api, handleError } from "helpers/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import "styles/views/ToDo.scss";
@@ -86,7 +86,7 @@ const ToDo = () => {
     
         fetchTodos();
     if (localStorage.getItem("token")) {
-        const intervalId = setInterval(fetchTodos, 1000);
+        const intervalId = setInterval(fetchTodos, 2000);
         return () => clearInterval(intervalId);}
     }, [taskId]);
 
