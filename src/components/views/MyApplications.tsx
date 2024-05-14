@@ -60,7 +60,7 @@ FormField.propTypes = {
 
 const MyApplications = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
@@ -82,7 +82,7 @@ const MyApplications = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchData, 2000);
       return () => clearInterval(intervalId);
     }
@@ -96,7 +96,7 @@ const MyApplications = () => {
   const doWithdraw = async (task) => {
     const taskId = task.id;
     try {
-      const token = localStorage.getItem("token")
+      const token = sessionStorage.getItem("token")
       const response = await api.delete(`/tasks/candidate/${taskId}`, { headers: { "AuthorizationToken": token } });
       alert(`You have just deleted your application, take a look at your Homefeed to find other interesting tasks`);
     } catch (error) {

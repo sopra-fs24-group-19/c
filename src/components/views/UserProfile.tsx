@@ -41,7 +41,7 @@ const UserProfile = () => {
         setAverageReview(user.averageStars);
 
         // Fetch ratings data
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const ratingsResponse = await api.get(`/ratings/${id}`, {
           headers: {
             "Accept": "application/json",
@@ -73,7 +73,7 @@ const UserProfile = () => {
 
 
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, [id]);

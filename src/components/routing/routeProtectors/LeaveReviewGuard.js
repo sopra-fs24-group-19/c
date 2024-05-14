@@ -3,7 +3,7 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 export const LeaveReviewGuard = () => {
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       return <Outlet />;
     }
     

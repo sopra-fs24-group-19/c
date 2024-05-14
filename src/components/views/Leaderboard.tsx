@@ -8,7 +8,7 @@ const Leaderboard = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [currentUserData, setCurrentUserData] = useState({ rank: "", taskCount: 0 });
-  const userId = localStorage.getItem("currentUserId"); 
+  const userId = sessionStorage.getItem("currentUserId"); 
 
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +26,7 @@ const Leaderboard = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, []);

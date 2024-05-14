@@ -57,8 +57,8 @@ const FormField = (props) => {
 
     const doSubmitReview = async () => {
         
-        const reviewerId = localStorage.getItem('currentUserId');
-        const token = localStorage.getItem("token")
+        const reviewerId = sessionStorage.getItem('currentUserId');
+        const token = sessionStorage.getItem("token")
         if (!reviewerId) {
           console.error('User is not logged in');
           return;

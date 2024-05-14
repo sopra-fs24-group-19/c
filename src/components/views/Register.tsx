@@ -58,9 +58,9 @@ const Register = () => {
       // const token = user.token;
       const token = response.headers["authorization"];
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("currentUser", user);
-      localStorage.setItem("currentUserId", user.id);
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("currentUser", user);
+      sessionStorage.setItem("currentUserId", user.id);
 
 
       // Register successfully worked --> navigate to the route /game in the GameRouter

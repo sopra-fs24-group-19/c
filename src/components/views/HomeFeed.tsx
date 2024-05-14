@@ -54,7 +54,7 @@ const deg2rad = (deg: number) => {
 
 const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number[] }) => {
   const navigate = useNavigate();
-  const userId = localStorage.getItem("currentUserId");
+  const userId = sessionStorage.getItem("currentUserId");
   const dateTime = new Date(task.date);
   const [hasApplied, setHasApplied] = useState<boolean>(false);
   const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
@@ -64,8 +64,8 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
   }, [myApplications, task.id]);
 
   const handleHelpClick = async () => {
-    const userId = localStorage.getItem('currentUserId');
-    const token = localStorage.getItem("token")
+    const userId = sessionStorage.getItem('currentUserId');
+    const token = sessionStorage.getItem("token")
     if (!userId) {
       console.error('User is not logged in');
       return;
@@ -146,7 +146,7 @@ const HomeFeed = () => {
   // get info of the current user
   useEffect(() => {
     async function fetchUser() {
-      const userId = localStorage.getItem('currentUserId');
+      const userId = sessionStorage.getItem('currentUserId');
       if (!userId) {
         console.error('User is not logged in');
         return;
@@ -165,7 +165,7 @@ const HomeFeed = () => {
     }
   
     fetchUser();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchUser, 2000);
     return () => clearInterval(intervalId);}
   }, []);
@@ -174,7 +174,7 @@ const HomeFeed = () => {
   useEffect(() => {
     async function fetchMyApplications() {
     try {
-        const currentUserId = localStorage.getItem('currentUserId');
+        const currentUserId = sessionStorage.getItem('currentUserId');
         //console.log(currentUserId)
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
         const taskIds = response.data.map(task => task.id);
@@ -187,7 +187,7 @@ const HomeFeed = () => {
       }
     }
     fetchMyApplications();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchMyApplications, 2000);
     return () => clearInterval(intervalId);}
   }, []);
@@ -221,7 +221,7 @@ const HomeFeed = () => {
           }).filter(task => {
               return task.status === "CREATED";
             }).filter(task => {
-              return task.creatorId.toString() !== localStorage.getItem('currentUserId');
+              return task.creatorId.toString() !== sessionStorage.getItem('currentUserId');
             });
           //console.log('Tasks after filtering:', tasksData);
         }
@@ -242,7 +242,7 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, [user]);

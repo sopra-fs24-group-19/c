@@ -269,7 +269,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId");
   const [currentUser, setCurrentUser] = useState<User>(null);
   const [addressFieldAdded, setAddressFieldAdded] = useState(false);
 
@@ -343,7 +343,7 @@ const MyProfile = () => {
       const newLatitude = latitude ? latitude: currentUser.latitude;
       const newLongitude = longitude ? longitude: currentUser.longitude;
       const requestBody = JSON.stringify({"name":newName,"username":currentUser.username,"address":newAddress,"phoneNumber":newPhoneNumber,"radius":newRadius,"latitude":newLatitude,"longitude":newLongitude});
-      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": localStorage.getItem("token")}});
+      const response = await api.put(`/users/${currentUser.id}`, requestBody, {headers: {"Authorization": sessionStorage.getItem("token")}});
       // Get the returned user and update a new object.
       const updatedUser = new User(response.data);
       //console.log('Updated user:', updatedUser);

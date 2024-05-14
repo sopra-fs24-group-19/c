@@ -320,7 +320,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
 const AddTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
+  const currentUserId = sessionStorage.getItem("currentUserId")
   const [addressFieldAdded, setAddressFieldAdded] = useState(false);
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);

@@ -60,7 +60,7 @@ FormField.propTypes = {
 //   try {
 //     const response = await api.delete(`/tasks/${taskId}`, 
 //     {
-//       headers: {"AuthorizationToken":localStorage.getItem("token")}
+//       headers: {"AuthorizationToken":sessionStorage.getItem("token")}
 //     });
 //     setTasks(tasks.filter(task => task.id !== taskId));
 //   } catch (error) {
@@ -72,7 +72,7 @@ FormField.propTypes = {
 
 const MyTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
+  const currentUserId = sessionStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
@@ -80,7 +80,7 @@ const MyTasks = () => {
     try {
       const response = await api.delete(`/tasks/${taskId}`,
         {
-          headers: { "AuthorizationToken": localStorage.getItem("token") }
+          headers: { "AuthorizationToken": sessionStorage.getItem("token") }
         });
       setTasks(tasks.filter(task => task.id !== taskId));
       alert("You have successfully deleted your task!")
@@ -120,7 +120,7 @@ const MyTasks = () => {
     };
 
     fetchHelperNames();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchHelperNames, 2000);
       return () => clearInterval(intervalId);
     }
@@ -145,7 +145,7 @@ const MyTasks = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchData, 2000);
       return () => clearInterval(intervalId);
     }

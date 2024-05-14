@@ -10,7 +10,7 @@ import { TbCoins } from "react-icons/tb";
 import { FiLogOut } from "react-icons/fi";
 
 const Header = (props) => {
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId");
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -24,16 +24,16 @@ const Header = (props) => {
       }
     };
     fetchUserData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchUserData, 1000);
     return () => clearInterval(intervalId);}
   }, []);
 
   const doLogout = async () => {
     try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("currentUserId");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("currentUser");
+      sessionStorage.removeItem("currentUserId");
       window.location.href = "/login";
     } catch (error) {
       console.error("Error logging out:", error);
@@ -48,7 +48,7 @@ const Header = (props) => {
     <div className="header container">
       <div className="header logo">
         <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
-        {localStorage.getItem("token") !== null && currentUser !== null ? (
+        {sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <>
         <Link to="/leaderboard" className="header-trophy-button">
           <SlTrophy size={35} className="header-trophy-icon"/> 
@@ -61,7 +61,7 @@ const Header = (props) => {
       </div>
       <h1 className="header title">Helping Hands</h1>
 
-      {localStorage.getItem("token") !== null && currentUser !== null ? (
+      {sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <div className="header user-container">
           <div className="header icon-column">
             <TiUser className="header icons" size={35}/>
