@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
   },
   "include": [
     "src"
-  ]
+  ],
+
 }

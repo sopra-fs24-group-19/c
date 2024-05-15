@@ -113,7 +113,7 @@ const OurDatePicker = (props) => {
             placeholderText={props.placeholder}
             minDate={new Date()}
             showTimeSelect // Add this prop to enable time selection
-            dateFormat="yyyy-MM-dd HH:mm"
+            dateFormat="dd MMMM yyyy, HH:mm"
             style={{width: "410px !important"}}
           />
     </div>

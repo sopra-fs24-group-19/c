@@ -1,5 +1,6 @@
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
+import dayjs from "dayjs";
 import { api, handleError } from "helpers/api";
 import Task from "models/Task";
 import * as PropTypes from "prop-types";
@@ -19,8 +20,8 @@ const getStatusSymbol = (status) => {
 };
 
 const FormField = (props) => {
-  const dateTime = new Date(props.date);
-  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+  const dateTime = dayjs(props.date);
+  const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm')
   return (
     <div className="myapplications field">
       {/* Task details */}

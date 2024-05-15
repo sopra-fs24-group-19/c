@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "styles/views/HomeFeed.scss";
 import { User } from "types";
+import dayjs from 'dayjs';
 
 type Task = {
   id: number;
@@ -55,9 +56,9 @@ const deg2rad = (deg: number) => {
 const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number[] }) => {
   const navigate = useNavigate();
   const userId = sessionStorage.getItem("currentUserId");
-  const dateTime = new Date(task.date);
   const [hasApplied, setHasApplied] = useState<boolean>(false);
-  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+  const formattedDateTime = dayjs(task.date).format('DD MMMM YYYY, HH:mm');
+
 
   useEffect(() => {
     setHasApplied(myApplications.includes(task.id));
