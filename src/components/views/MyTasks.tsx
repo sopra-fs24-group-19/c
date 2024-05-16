@@ -76,6 +76,9 @@ const MyTasks = () => {
   const currentUserId = sessionStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [reviewStatuses, setReviewStatuses] = useState({});
+
+  
 
   const doDeleteTask = async (taskId) => {
     try {
@@ -121,10 +124,36 @@ const MyTasks = () => {
     };
 
     fetchHelperNames();
+
+    const fetchIsReviewed = async (taskId) => {
+      try {
+        const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
+          headers: { "Authorization": sessionStorage.getItem("token") }
+        });
+        const isReviewed = response.data;  
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: isReviewed
+        }));
+      } catch (error) {
+        console.error(`Failed to fetch review status for task with ID ${taskId}: ${error}`);
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: false 
+        }));
+      }
+    };
+    
+    
+    tasks.forEach(task => {
+      fetchIsReviewed(task.id);
+    });
+
     if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchHelperNames, 2000);
       return () => clearInterval(intervalId);
     }
+    
   }, [tasks]);
 
   useEffect(() => {
@@ -218,12 +247,21 @@ const MyTasks = () => {
               ) : (
                 <div className="mytasks button-container">
 
-                  {task.status === "IN_PROGRESS" && (
+                  {(task.status === "IN_PROGRESS" || task.status === "CONFIRMED_BY_HELPER") && (
                     <Button
                       width="30%"
                       onClick={() => navigate(`/todo/${task.id}`)}
                     >
                       Check out the To-Do list
+                    </Button>
+                  )}
+                  {(task.status === "CONFIRMED_BY_CREATOR" || task.status === "DONE") && (
+                    <Button
+                      width="40%"
+                      disabled={reviewStatuses[task.id] === true} 
+                      onClick={() => navigate(`/leavereview/${task.helperId}/${task.id}`, { state: { userStatus: "Creator" } })}
+                    >
+                      Leave Review
                     </Button>
                   )}
 
