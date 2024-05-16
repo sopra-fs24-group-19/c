@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "styles/views/HomeFeed.scss";
 import { User } from "types";
+import dayjs from 'dayjs';
 
 type Task = {
   id: number;
@@ -54,18 +55,18 @@ const deg2rad = (deg: number) => {
 
 const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number[] }) => {
   const navigate = useNavigate();
-  const userId = localStorage.getItem("currentUserId");
-  const dateTime = new Date(task.date);
+  const userId = sessionStorage.getItem("currentUserId");
   const [hasApplied, setHasApplied] = useState<boolean>(false);
-  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+  const formattedDateTime = dayjs(task.date).format('DD MMMM YYYY, HH:mm');
+
 
   useEffect(() => {
     setHasApplied(myApplications.includes(task.id));
   }, [myApplications, task.id]);
 
   const handleHelpClick = async () => {
-    const userId = localStorage.getItem('currentUserId');
-    const token = localStorage.getItem("token")
+    const userId = sessionStorage.getItem('currentUserId');
+    const token = sessionStorage.getItem("token")
     if (!userId) {
       console.error('User is not logged in');
       return;
@@ -94,6 +95,7 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
       }
     }
   };
+
 
   return (
     <div className="myapplications form">
@@ -142,11 +144,35 @@ const HomeFeed = () => {
   const [tasks, setTasks] = useState<Task[]>(null);
   const [user, setUser] = useState<User>(null);
   const [myApplications, setMyApplications] = useState<number[]>(null);
+  const [filterDuration, setFilterDuration] = useState<string>("ALL");
+  const [minCompensation, setMinCompensation] = useState(0); 
+
+
+
+  const filterTasksByDuration = (tasks) => {
+    return tasks.filter(task => {
+      switch (filterDuration) {
+        case "LESS_THAN_30":
+          return task.duration < 30;
+        case "BETWEEN_30_AND_60":
+          return task.duration >= 30 && task.duration <= 60;
+        case "MORE_THAN_60":
+          return task.duration > 60;
+        default:
+          return true; // No filter or "ALL"
+      }
+    });
+  };
+
+  const filterTasksByCompensation = (tasks) => {
+    return tasks.filter(task => task.compensation >= minCompensation);
+  };
+
 
   // get info of the current user
   useEffect(() => {
     async function fetchUser() {
-      const userId = localStorage.getItem('currentUserId');
+      const userId = sessionStorage.getItem('currentUserId');
       if (!userId) {
         console.error('User is not logged in');
         return;
@@ -165,7 +191,7 @@ const HomeFeed = () => {
     }
   
     fetchUser();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchUser, 2000);
     return () => clearInterval(intervalId);}
   }, []);
@@ -174,7 +200,7 @@ const HomeFeed = () => {
   useEffect(() => {
     async function fetchMyApplications() {
     try {
-        const currentUserId = localStorage.getItem('currentUserId');
+        const currentUserId = sessionStorage.getItem('currentUserId');
         //console.log(currentUserId)
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
         const taskIds = response.data.map(task => task.id);
@@ -187,7 +213,7 @@ const HomeFeed = () => {
       }
     }
     fetchMyApplications();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchMyApplications, 2000);
     return () => clearInterval(intervalId);}
   }, []);
@@ -221,11 +247,12 @@ const HomeFeed = () => {
           }).filter(task => {
               return task.status === "CREATED";
             }).filter(task => {
-              return task.creatorId.toString() !== localStorage.getItem('currentUserId');
+              return task.creatorId.toString() !== sessionStorage.getItem('currentUserId');
             });
           //console.log('Tasks after filtering:', tasksData);
         }
-
+        tasksData = filterTasksByDuration(tasksData);
+        tasksData = filterTasksByCompensation(tasksData);
         setTasks(tasksData);
 
 
@@ -242,10 +269,10 @@ const HomeFeed = () => {
     }
 
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
-  }, [user]);
+  }, [user, filterDuration]);
 
   let content = <div>Loading...</div>;
 
@@ -259,7 +286,7 @@ const HomeFeed = () => {
   } else if (tasks)
   {
     if (tasks.length === 0) {
-      content = <div>Oops, it looks like there are no tasks in your neighborhood!</div>;
+      content = <div>Oops! Looks like there are no tasks available in your neighborhood with the current filters. Try adjusting your filter settings for more options!</div>;
     } else {
       content = (
         <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
@@ -297,6 +324,25 @@ const HomeFeed = () => {
       <NavBar />
         <BaseContainer className="homefeed container">
           <h2 className="homefeed-title">Discover all tasks in your local community!</h2>
+          <div className="homefeed filter-container">
+            <label style={{ marginRight: '10px' }}>Filter by duration:</label>
+            <select className="homefeed filter" value={filterDuration} onChange={(e) => setFilterDuration(e.target.value)}>
+            <option value="ALL">All Durations</option>
+            <option value="LESS_THAN_30">Less than 30 min</option>
+            <option value="BETWEEN_30_AND_60">Between 30 and 60 minutes</option>
+            <option value="MORE_THAN_60">More than 60 minutes</option>
+            </select>
+            <label style={{ marginLeft: '20px', marginRight: '10px' }}>Set minimum compensation:</label>
+          <input
+            type="range"
+            className="homefeed slider"
+            min="0"                
+            max="100"              
+            value={minCompensation}
+            onChange={(e) => setMinCompensation(parseInt(e.target.value))}
+          />
+          <span>{minCompensation} tokens</span>
+            </div>
           {content}
       </BaseContainer>
     </>

@@ -1,10 +1,11 @@
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
+import dayjs from "dayjs";
 import { api, handleError } from "helpers/api";
 import Task from "models/Task";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "styles/views/MyApplications.scss";
 
 const getStatusSymbol = (status) => {
@@ -13,14 +14,15 @@ const getStatusSymbol = (status) => {
       return "APPLIED";
     case "DONE":
       return "DONE";
-    default:
+   default:
       return "IN PROGRESS";
   }
 };
 
+
 const FormField = (props) => {
-  const dateTime = new Date(props.date);
-  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+  const dateTime = dayjs(props.date);
+  const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm')
   return (
     <div className="myapplications field">
       {/* Task details */}
@@ -60,9 +62,12 @@ FormField.propTypes = {
 
 const MyApplications = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const userStatus = "Helper;"
+  const [reviewStatuses, setReviewStatuses] = useState({});
+            
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,11 +87,33 @@ const MyApplications = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    const fetchIsReviewed = async (taskId) => {
+      try {
+        const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
+          headers: { "Authorization": sessionStorage.getItem("token") }
+        });
+        const isReviewed = response.data;  
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: isReviewed
+        }));
+      } catch (error) {
+        console.error(`Failed to fetch review status for task with ID ${taskId}: ${error}`);
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: false 
+        }));
+      }
+    };
+    
+    tasks.forEach(task => {
+      fetchIsReviewed(task.id);
+    });
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchData, 2000);
       return () => clearInterval(intervalId);
     }
-  }, []); // Empty dependency array to run the effect only once
+  }, [tasks]); 
 
   const filteredTasks = tasks.filter(task => {
     if (filterStatus === "ALL") return true;
@@ -96,7 +123,7 @@ const MyApplications = () => {
   const doWithdraw = async (task) => {
     const taskId = task.id;
     try {
-      const token = localStorage.getItem("token")
+      const token = sessionStorage.getItem("token")
       const response = await api.delete(`/tasks/candidate/${taskId}`, { headers: { "AuthorizationToken": token } });
       alert(`You have just deleted your application, take a look at your Homefeed to find other interesting tasks`);
     } catch (error) {
@@ -148,6 +175,15 @@ const MyApplications = () => {
                 >
                   Withdraw my application
                 </Button>
+                {(task.status === "CONFIRMED_BY_HELPER" || task.status === "DONE") ? (
+                <Button
+                  width="40%"
+                  disabled={reviewStatuses[task.id] === true}
+                  onClick={() => navigate(`/leavereview/${task.creatorId}/${task.id}`, {state: {userStatus}})}
+                >
+                  Leave Review
+                </Button>
+              ) : (
                 <Button
                   width="40%"
                   disabled={getStatusSymbol(task.status) !== "IN PROGRESS"}
@@ -155,6 +191,7 @@ const MyApplications = () => {
                 >
                   Look at your To-Do list
                 </Button>
+        )}
               </div>
             </div>
           ))}

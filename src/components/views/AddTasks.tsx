@@ -113,7 +113,7 @@ const OurDatePicker = (props) => {
             placeholderText={props.placeholder}
             minDate={new Date()}
             showTimeSelect // Add this prop to enable time selection
-            dateFormat="yyyy-MM-dd HH:mm"
+            dateFormat="dd MMMM yyyy, HH:mm"
             style={{width: "410px !important"}}
           />
     </div>
@@ -320,7 +320,7 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
 
 const AddTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
+  const currentUserId = sessionStorage.getItem("currentUserId")
   const [addressFieldAdded, setAddressFieldAdded] = useState(false);
   const [title, setTitle] = useState<string>(null);
   const [description, setDescription] = useState<string>(null);

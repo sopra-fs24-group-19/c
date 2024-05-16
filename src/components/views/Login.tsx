@@ -60,7 +60,7 @@ const Login = () => {
 
 
       // Store the token into the local storage.
-      // localStorage.setItem("token", user.token);
+      // sessionStorage.setItem("token", user.token);
       // console.log("Header:", response.headers);
 
       // const token = response.data.token;
@@ -69,9 +69,9 @@ const Login = () => {
       // Debugging: Log before saving the token
       //console.log("Token from header:", token);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("currentUser", user);
-      localStorage.setItem("currentUserId", user.id);
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("currentUser", user);
+      sessionStorage.setItem("currentUserId", user.id);
 
       
       

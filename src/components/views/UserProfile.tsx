@@ -4,6 +4,7 @@ import { api, handleError } from "helpers/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import "styles/views/UserProfile.scss";
+import dayjs from 'dayjs';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const UserProfile = () => {
         setAverageReview(user.averageStars);
 
         // Fetch ratings data
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const ratingsResponse = await api.get(`/ratings/${id}`, {
           headers: {
             "Accept": "application/json",
@@ -52,8 +53,8 @@ const UserProfile = () => {
         const ratings = ratingsResponse.data;
 
         const reviews = ratings.map(rating => {
-          const dateTime = new Date(rating.creationDate);
-          const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+          const dateTime = dayjs(rating.creationDate);
+          const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm') 
           return {
             comment: rating.comment,
             reviewer: rating.reviewer ? rating.reviewer.username : "Anonymous",
@@ -73,7 +74,7 @@ const UserProfile = () => {
 
 
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, [id]);

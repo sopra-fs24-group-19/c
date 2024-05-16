@@ -1,5 +1,6 @@
 import { Button } from "components/ui/Button";
 import NavBar from 'components/ui/NavBar';
+import dayjs from "dayjs";
 import { api, handleError } from "helpers/api";
 import Task from "models/Task";
 import * as PropTypes from "prop-types";
@@ -19,8 +20,8 @@ const getStatusSymbol = (status) => {
 };
 
 const FormField = (props) => {
-  const dateTime = new Date(props.date);
-  const formattedDateTime = `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`;
+  const dateTime = dayjs(props.date);
+  const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm') 
   return (
     <div className="mytasks field">
       {/* Task details */}
@@ -60,7 +61,7 @@ FormField.propTypes = {
 //   try {
 //     const response = await api.delete(`/tasks/${taskId}`, 
 //     {
-//       headers: {"AuthorizationToken":localStorage.getItem("token")}
+//       headers: {"AuthorizationToken":sessionStorage.getItem("token")}
 //     });
 //     setTasks(tasks.filter(task => task.id !== taskId));
 //   } catch (error) {
@@ -72,15 +73,18 @@ FormField.propTypes = {
 
 const MyTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("currentUserId")
+  const currentUserId = sessionStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [reviewStatuses, setReviewStatuses] = useState({});
+
+  
 
   const doDeleteTask = async (taskId) => {
     try {
       const response = await api.delete(`/tasks/${taskId}`,
         {
-          headers: { "AuthorizationToken": localStorage.getItem("token") }
+          headers: { "AuthorizationToken": sessionStorage.getItem("token") }
         });
       setTasks(tasks.filter(task => task.id !== taskId));
       alert("You have successfully deleted your task!")
@@ -120,10 +124,36 @@ const MyTasks = () => {
     };
 
     fetchHelperNames();
-    if (localStorage.getItem("token")) {
+
+    const fetchIsReviewed = async (taskId) => {
+      try {
+        const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
+          headers: { "Authorization": sessionStorage.getItem("token") }
+        });
+        const isReviewed = response.data;  
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: isReviewed
+        }));
+      } catch (error) {
+        console.error(`Failed to fetch review status for task with ID ${taskId}: ${error}`);
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: false 
+        }));
+      }
+    };
+    
+    
+    tasks.forEach(task => {
+      fetchIsReviewed(task.id);
+    });
+
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchHelperNames, 2000);
       return () => clearInterval(intervalId);
     }
+    
   }, [tasks]);
 
   useEffect(() => {
@@ -145,7 +175,7 @@ const MyTasks = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(fetchData, 2000);
       return () => clearInterval(intervalId);
     }
@@ -217,12 +247,21 @@ const MyTasks = () => {
               ) : (
                 <div className="mytasks button-container">
 
-                  {task.status === "IN_PROGRESS" && (
+                  {(task.status === "IN_PROGRESS" || task.status === "CONFIRMED_BY_HELPER") && (
                     <Button
                       width="30%"
                       onClick={() => navigate(`/todo/${task.id}`)}
                     >
                       Check out the To-Do list
+                    </Button>
+                  )}
+                  {(task.status === "CONFIRMED_BY_CREATOR" || task.status === "DONE") && (
+                    <Button
+                      width="40%"
+                      disabled={reviewStatuses[task.id] === true} 
+                      onClick={() => navigate(`/leavereview/${task.helperId}/${task.id}`, { state: { userStatus: "Creator" } })}
+                    >
+                      Leave Review
                     </Button>
                   )}
 

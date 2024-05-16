@@ -17,7 +17,7 @@ const ToDo = () => {
     const [editingTodoId, setEditingTodoId] = useState({});
     const [descriptions, setDescriptions] = useState({});
     const { taskId } = useParams(); // Retrieve the task ID from the URL
-    const userId = localStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
+    const userId = sessionStorage.getItem('currentUserId'); // Retrieve the user ID from local storage
     const [task, setTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [allTodosDone, setAllTodosDone] = useState(false);
@@ -63,7 +63,7 @@ const ToDo = () => {
             //console.log(taskId);
             try {
                 if (taskId) {
-                    const token = localStorage.getItem('token');
+                    const token = sessionStorage.getItem('token');
                     const todosResponse = await api.get(`/todo/${taskId}`, {
                         headers: {
                             'Content-Type': 'application/json',
@@ -85,13 +85,13 @@ const ToDo = () => {
         };
     
         fetchTodos();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
         const intervalId = setInterval(fetchTodos, 2000);
         return () => clearInterval(intervalId);}
     }, [taskId]);
 
     const confirmTaskAndNavigate = async () => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         try {
             // Confirm the task
             await api.put(`/tasks/${taskId}/confirm`, {}, {
@@ -113,7 +113,7 @@ const ToDo = () => {
 
 
       const postTodo = async () => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const requestBody = {
             description: newTodo,
             taskId: taskId,
@@ -133,7 +133,7 @@ const ToDo = () => {
     };
   
     const updateTodo = async (todoId, done, description) => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const requestBody = {
             description: description,
             done: done,
@@ -156,7 +156,7 @@ const ToDo = () => {
             return; 
         }
     
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const requestBody = {
             description: description,
             done: true,
@@ -181,7 +181,7 @@ const ToDo = () => {
     };
 
     const deleteTodo = async (todoId) => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         try {
             await api.delete(`/todo/${todoId}`, {
                 headers: {

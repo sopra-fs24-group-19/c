@@ -1,39 +1,75 @@
-import { SlTrophy } from "react-icons/sl";
-import * as PropTypes from "prop-types";
 import { Button } from "components/ui/Button";
+import { api } from "helpers/api";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { FiLogOut } from "react-icons/fi";
+import { SlTrophy } from "react-icons/sl";
+import { TbCoins } from "react-icons/tb";
+import { TiUser } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import "../../styles/views/Header.scss";
-import { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import { TiUser } from "react-icons/ti";
-import { TbCoins } from "react-icons/tb";
-import { FiLogOut } from "react-icons/fi";
 
 const Header = (props) => {
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId");
   const [currentUser, setCurrentUser] = useState(null);
+  const [isValid, setIsValid] = useState(null);
+  const token = sessionStorage.getItem("token");
 
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //           const response = await api.get(`/users/${currentUserId}`);
+  //           await new Promise((resolve) => setTimeout(resolve, 1000));
+  //           setCurrentUser(response.data)
+  //     } catch (error) {
+  //       console.error("Details:", error);
+  //     }
+  //   };
+  //   fetchUserData();
+  //   if (sessionStorage.getItem("token")) {
+  //   const intervalId = setInterval(fetchUserData, 1000);
+  //   return () => clearInterval(intervalId);}
+  // }, []);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-            const response = await api.get(`/users/${currentUserId}`);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setCurrentUser(response.data)
+        const response = await api.get(`/users/${currentUserId}`);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setCurrentUser(response.data);
       } catch (error) {
         console.error("Details:", error);
       }
     };
-    fetchUserData();
-    if (localStorage.getItem("token")) {
-    const intervalId = setInterval(fetchUserData, 1000);
-    return () => clearInterval(intervalId);}
-  }, []);
+
+    const validateTokenAndUserId = async () => {
+      try {
+        const response = await api.get(`/auth/${currentUserId}`, {
+          headers: {
+            'Authorization': token
+          }
+        });
+        setIsValid(response.data);
+      } catch (error) {
+        console.error(`Something went wrong: ${error}`);
+        setIsValid(false);
+      }
+    };
+
+    if (token && currentUserId) {
+      fetchUserData();
+      validateTokenAndUserId();
+      const intervalId = setInterval(fetchUserData, 1000);
+      return () => clearInterval(intervalId);
+    } else {
+      setIsValid(false);
+    }
+  }, [token, currentUserId]);
 
   const doLogout = async () => {
     try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("currentUserId");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("currentUser");
+      sessionStorage.removeItem("currentUserId");
       window.location.href = "/login";
     } catch (error) {
       console.error("Error logging out:", error);
@@ -48,7 +84,7 @@ const Header = (props) => {
     <div className="header container">
       <div className="header logo">
         <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
-        {localStorage.getItem("token") !== null && currentUser !== null ? (
+        {isValid && sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <>
         <Link to="/leaderboard" className="header-trophy-button">
           <SlTrophy size={35} className="header-trophy-icon"/> 
@@ -61,7 +97,7 @@ const Header = (props) => {
       </div>
       <h1 className="header title">Helping Hands</h1>
 
-      {localStorage.getItem("token") !== null && currentUser !== null ? (
+      {isValid && sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <div className="header user-container">
           <div className="header icon-column">
             <TiUser className="header icons" size={35}/>

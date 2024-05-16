@@ -8,15 +8,15 @@ import { User } from "types";
 
 const Candidates = () => {
   const navigate = useNavigate();
-  //const currentId = localStorage.getItem("UserId")
+  //const currentId = sessionStorage.getItem("UserId")
   const location = useLocation();
   const taskId = location.state;
   const [candidates, setCandidates] = useState<User[]>([]);
 
   const doAcceptHelper = async (helperId) => {
     try {
-      const userId = localStorage.getItem("currentUserId");
-      const token = localStorage.getItem("token");
+      const userId = sessionStorage.getItem("currentUserId");
+      const token = sessionStorage.getItem("token");
       const requestBody = JSON.stringify({ taskId, userId, helperId });
 
       const response = await api.put(`/tasks/${taskId}`, requestBody, {
@@ -49,7 +49,7 @@ const Candidates = () => {
       }
     }
     fetchData();
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
     const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);}
   }, []); // Empty dependency array to run the effect only once
