@@ -43,9 +43,12 @@ const ToDo = () => {
                 setIsLoading(false);
             }
         };
-    
         fetchTask();
-    }, []);
+        if (sessionStorage.getItem("token")) {
+            const intervalId = setInterval(fetchTask, 2000);
+            return () => clearInterval(intervalId);}
+        }, [taskId]);
+
 
     const fetchAllTodosDone = async () => {
         try {
@@ -56,9 +59,9 @@ const ToDo = () => {
         }
     };
 
-  
+
     useEffect(() => {
-        
+
         const fetchTodos = async () => {
             //console.log(taskId);
             try {
@@ -83,7 +86,7 @@ const ToDo = () => {
                 console.error(error);
             }
         };
-    
+
         fetchTodos();
     if (sessionStorage.getItem("token")) {
         const intervalId = setInterval(fetchTodos, 2000);
@@ -100,7 +103,7 @@ const ToDo = () => {
                     "Authorization": token
                 },
             });
-    
+
             // Navigate to the review page
             const redirectUserId = Number(userId) === Number(task.creatorId) ? task.helperId : task.creatorId;
             const userStatus = (redirectUserId === task.creatorId) ? "Helper" : "Creator";
@@ -131,14 +134,14 @@ const ToDo = () => {
             console.error(`Something went wrong: ${error}`);
         }
     };
-  
+
     const updateTodo = async (todoId, done, description) => {
         const token = sessionStorage.getItem('token');
         const requestBody = {
             description: description,
             done: done,
         };
-    
+
         try {
             await api.put(`/todo/${todoId}`, requestBody, {
                 headers: {
@@ -153,15 +156,15 @@ const ToDo = () => {
 
     const doneTodo = async (todoId, description) => {
         if (Number(userId) !== Number(task.creatorId)) {
-            return; 
+            return;
         }
-    
+
         const token = sessionStorage.getItem('token');
         const requestBody = {
             description: description,
             done: true,
         };
-    
+
         try {
             await api.put(`/todo/${todoId}`, requestBody, {
                 headers: {
@@ -196,7 +199,7 @@ const ToDo = () => {
         } catch (error) {
             console.error(`Something went wrong: ${error}`);
         }
-        
+
     };
 
     const updateDescription = (todoId, description) => {
@@ -209,7 +212,7 @@ const ToDo = () => {
     return (
         <>
         {isLoading ? (
-            <div>Loading...</div>
+            <div>Loading...{task}</div>
         ) : (
             <>
                       <NavBar />
@@ -221,7 +224,7 @@ const ToDo = () => {
                         <br/>This will make it easier to track your progress and ensure nothing will be forgotten.
                         <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task efficiently!</p>
                         <br/>
-                    
+
                     <div className="todo form">
 
 
@@ -308,21 +311,37 @@ const ToDo = () => {
 
                         <br/>
                         {/*Here new ToDo's can be added*/}
-                        <div className="todo task-container">
-                            <input
-                                className="todo input"
-                                placeholder="Add a new subtask"
-                                value={newTodo}
-                                onChange={(e) => setNewTodo(e.target.value)}
-                            />
-                            <div className="todo button-container">
-                                <Button
-                                    onClick={postTodo}
-                                    disabled={!newTodo}>
-                                    Submit
-                                </Button>
+                        {task.status === "IN_PROGRESS"? (
+                            <div className="todo task-container">
+                                <input
+                                    className="todo input"
+                                    placeholder="Add a new subtask"
+                                    value={newTodo}
+                                    onChange={(e) => setNewTodo(e.target.value)}
+                                />
+                                <div className="todo button-container">
+                                    <Button
+                                        onClick={postTodo}
+                                        disabled={!newTodo}>
+                                        Submit
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
+                        ):(
+                            <div className="todo task-container">
+                                <label
+                                    className="todo close_todo"
+                                    >The other party has closed this task</label>
+                                <div className="todo button-container">
+                                    <Button
+                                        onClick={postTodo}
+                                        disabled={true}>
+                                        Submit
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
 
 
                         <br/>

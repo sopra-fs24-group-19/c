@@ -77,7 +77,7 @@ const Login = () => {
       
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/homefeed");
+      window.location.href = "/homefeed";
     } catch (error) {
       alert(
         "Oops, your password does not seem to match your username...Please try again!"

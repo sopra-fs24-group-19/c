@@ -5,13 +5,14 @@ import { api, handleError } from "helpers/api";
 import Task from "models/Task";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "styles/views/MyApplications.scss";
 
 const getStatusSymbol = (status) => {
   switch (status) {
     case "CREATED":
       return "APPLIED";
+    case "CONFIRMED_BY_HELPER":
     case "DONE":
       return "DONE";
    default:
@@ -74,6 +75,7 @@ const MyApplications = () => {
       try {
         const response = await api.get(`/tasks/appliedfor/${currentUserId}`);
         setTasks(response.data);
+
       } catch (error) {
         console.error(
           `Something went wrong while fetching the tasks: \n${handleError(
@@ -81,18 +83,25 @@ const MyApplications = () => {
           )}`
         );
         console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the tasks! See the console for details."
-        );
+        alert("Something went wrong while fetching the tasks! See the console for details.");
       }
     }
+
     fetchData();
+
+    if (sessionStorage.getItem("token")) {
+          const intervalId = setInterval(fetchData, 2000);
+          return () => clearInterval(intervalId);
+        }
+      }, [currentUserId]);
+
+  useEffect(() => {
     const fetchIsReviewed = async (taskId) => {
       try {
         const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
           headers: { "Authorization": sessionStorage.getItem("token") }
         });
-        const isReviewed = response.data;  
+        const isReviewed = response.data;
         setReviewStatuses(prevStatuses => ({
           ...prevStatuses,
           [taskId]: isReviewed
@@ -105,15 +114,12 @@ const MyApplications = () => {
         }));
       }
     };
-    
+
     tasks.forEach(task => {
       fetchIsReviewed(task.id);
     });
-    if (sessionStorage.getItem("token")) {
-      const intervalId = setInterval(fetchData, 2000);
-      return () => clearInterval(intervalId);
-    }
-  }, []); 
+  }, [tasks, currentUserId]);
+
 
   const filteredTasks = tasks.filter(task => {
     if (filterStatus === "ALL") return true;
@@ -132,7 +138,7 @@ const MyApplications = () => {
       );
     }
   }
-
+  //console.log(reviewStatuses)
   return (
     <>
       <NavBar />
@@ -151,7 +157,7 @@ const MyApplications = () => {
         <br />
         {/* Wrap the tasks in a scrollable element*/}
         <section id="taskContainer" style={{ height: 600, overflow: "auto", width: 1000 }}>
-          {tasks.map((task: Task) => (
+          {filteredTasks.map((task: Task) => (
             <div className="myapplications form" key={task.id}>
 
               {/*Show all needed attributes for a task*/}
@@ -167,6 +173,8 @@ const MyApplications = () => {
                 />
               </div>
 
+
+              {getStatusSymbol(task.status) !== "DONE"? (
               <div className="myapplications button-container">
                 <Button
                   width="40%"
@@ -175,15 +183,6 @@ const MyApplications = () => {
                 >
                   Withdraw my application
                 </Button>
-                {(task.status === "CONFIRMED_BY_HELPER" || task.status === "DONE") ? (
-                <Button
-                  width="40%"
-                  disabled={reviewStatuses[task.id] === true}
-                  onClick={() => navigate(`/leavereview/${task.creatorId}/${task.id}`, {state: {userStatus}})}
-                >
-                  Leave Review
-                </Button>
-              ) : (
                 <Button
                   width="40%"
                   disabled={getStatusSymbol(task.status) !== "IN PROGRESS"}
@@ -191,8 +190,27 @@ const MyApplications = () => {
                 >
                   Look at your To-Do list
                 </Button>
-        )}
               </div>
+              ):(
+              reviewStatuses[task.id] ? (
+              <p style={{fontWeight: 'bold'}}>This task is done, thanks for your help!</p>
+              ):(
+              <p style={{fontWeight: 'bold'}}>Don{"'"}t forget to{" "}
+              <Link
+                to={{
+                  pathname: `/leavereview/${task.creatorId}/${task.id}`,
+                  state: { userStatus }
+                }}
+              >
+              leave a review</Link>
+              {" "}to earn your coins!
+              </p>
+              )
+              )}
+
+
+
+
             </div>
           ))}
         </section>
