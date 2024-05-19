@@ -21,9 +21,10 @@ const getStatusSymbol = (status) => {
 
 const FormField = (props) => {
   const dateTime = dayjs(props.date);
-  const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm');
+  const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm') 
   return (
     <div className="mytasks field">
+      {/* Task details */}
       <title className="mytasks split-wrapper">
         <label className="mytasks title">{props.task}</label>
         <div className="mytasks status-box">{getStatusSymbol(props.status)}</div>
@@ -47,7 +48,6 @@ const FormField = (props) => {
     </div>
   );
 };
-
 FormField.propTypes = {
   task: PropTypes.string,
   desc: PropTypes.string,
@@ -57,42 +57,129 @@ FormField.propTypes = {
   comp: PropTypes.number,
   status: PropTypes.string,
 };
+// const doDeleteTask = async (taskId) => {
+//   try {
+//     const response = await api.delete(`/tasks/${taskId}`, 
+//     {
+//       headers: {"AuthorizationToken":sessionStorage.getItem("token")}
+//     });
+//     setTasks(tasks.filter(task => task.id !== taskId));
+//   } catch (error) {
+//           alert(
+//             `Something went wrong during the task deletion: \n${handleError(error)}`
+//           );
+//   }
+// }
 
 const MyTasks = () => {
   const navigate = useNavigate();
-  const currentUserId = sessionStorage.getItem("currentUserId");
+  const currentUserId = sessionStorage.getItem("currentUserId")
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [reviewStatuses, setReviewStatuses] = useState({});
+
+  
+
+  const doDeleteTask = async (taskId) => {
+    try {
+      const response = await api.delete(`/tasks/${taskId}`,
+        {
+          headers: { "AuthorizationToken": sessionStorage.getItem("token") }
+        });
+      setTasks(tasks.filter(task => task.id !== taskId));
+      alert("You have successfully deleted your task!")
+    } catch (error) {
+      alert(
+        `Something went wrong during the task deletion: \n${handleError(error)}`
+      );
+    }
+  }
+
+  const [helperNames, setHelperNames] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
-    const fetchData = async () => {
+    // Function to fetch helper name
+    const fetchHelperName = async (id: number) => {
+      try {
+        const response = await api.get(`/users/${id}`);
+        return response.data.name;
+      } catch (error) {
+        console.error(`Failed to fetch user with ID ${id}: ${error}`);
+      }
+    };
+
+    // Fetch helper names for all tasks
+    const fetchHelperNames = async () => {
+      const newHelperNames: { [key: number]: string } = {};
+      const fetchPromises = tasks.map(async (task) => {
+        if (task.helperId !== 0 && !(task.helperId in helperNames)) {
+          newHelperNames[task.helperId] = await fetchHelperName(task.helperId);
+        }
+      });
+
+      await Promise.all(fetchPromises);
+
+      // Update the helperNames state
+      setHelperNames((prevHelperNames) => ({ ...prevHelperNames, ...newHelperNames }));
+    };
+
+    fetchHelperNames();
+
+    const fetchIsReviewed = async (taskId) => {
+      try {
+        const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
+          headers: { "Authorization": sessionStorage.getItem("token") }
+        });
+        const isReviewed = response.data;  
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: isReviewed
+        }));
+      } catch (error) {
+        console.error(`Failed to fetch review status for task with ID ${taskId}: ${error}`);
+        setReviewStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [taskId]: false 
+        }));
+      }
+    };
+    
+    
+    tasks.forEach(task => {
+      fetchIsReviewed(task.id);
+    });
+
+    if (sessionStorage.getItem("token")) {
+      const intervalId = setInterval(fetchHelperNames, 2000);
+      return () => clearInterval(intervalId);
+    }
+    
+  }, []);
+
+  useEffect(() => {
+
+    async function fetchData() {
       try {
         const response = await api.get(`/tasks/created/${currentUserId}`);
         setTasks(response.data);
       } catch (error) {
-        console.error(`Something went wrong while fetching the tasks: \n${handleError(error)}`);
-        alert("Something went wrong while fetching the tasks! See the console for details.");
+        console.error(
+          `Something went wrong while fetching the tasks: \n${handleError(
+            error
+          )}`
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the tasks! See the console for details."
+        );
       }
-    };
-
+    }
+    fetchData();
     if (sessionStorage.getItem("token")) {
-      fetchData();  // Fetch initially on component mount
-      const intervalId = setInterval(fetchData, 2000);  // Set up an interval to fetch data every 1 seconds
-      return () => clearInterval(intervalId);  // Clean up the interval on component unmount
+      const intervalId = setInterval(fetchData, 2000);
+      return () => clearInterval(intervalId);
     }
-  }, [currentUserId]);  // Dependency on `currentUserId` to avoid unnecessary re-runs
-
-  const doDeleteTask = async (taskId) => {
-    try {
-      const response = await api.delete(`/tasks/${taskId}`, {
-        headers: { "AuthorizationToken": sessionStorage.getItem("token") }
-      });
-      setTasks(tasks.filter(task => task.id !== taskId));
-      alert("You have successfully deleted your task!");
-    } catch (error) {
-      alert(`Something went wrong during the task deletion: \n${handleError(error)}`);
-    }
-  };
+  }, []); // Empty dependency array to run the effect only once
 
   const filteredTasks = tasks.filter(task => {
     if (filterStatus === "ALL") return true;
@@ -103,8 +190,9 @@ const MyTasks = () => {
     <>
       <NavBar />
       <div className="mytasks container">
-        <h1>My tasks</h1>
+        <h1 >My tasks</h1>
         <p>Here is an overview of all tasks you posted</p>
+
         <div className="mytasks filter-container">
           <label style={{ marginRight: '10px' }}>Filter by status:</label>
           <select className="mytasks filter" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
@@ -115,9 +203,13 @@ const MyTasks = () => {
           </select>
         </div>
         <br />
+
+        {/* Wrap the tasks in a scrollable element*/}
         <section id="tasksSection" style={{ height: 600, overflowY: 'auto', width: 1000 }}>
           {filteredTasks.map((task: Task) => (
             <div className="mytasks form" key={task.id}>
+
+              {/*Show all needed attributes for a task*/}
               <div className="task-wrapper">
                 <FormField
                   task={task.title}
@@ -129,21 +221,67 @@ const MyTasks = () => {
                   status={task.status}
                 />
               </div>
-              <div className="mytasks button-container">
-                <Button
-                  width="30%"
-                  disabled={task.status !== "CREATED"}
-                  onClick={() => doDeleteTask(task.id)}
-                >
-                  Delete Task
-                </Button>
-                <Button
-                  width="30%"
-                  onClick={() => navigate(`/task/${task.id}`)}
-                >
-                  View Task
-                </Button>
-              </div>
+
+              {task.helperId === 0 ? (
+
+                <div className="mytasks button-container">
+                  <Button
+                    style={{ marginRight: '300px' }}
+                    width="30%"
+                    disabled={task.status === "DONE"}
+                    onClick={() => doDeleteTask(task.id)}
+                  >
+                    Delete task
+                  </Button>
+
+                  <Button
+                    width="30%"
+                    // Maybe we have to think about the status and when to give this option
+                    disabled={task.status === "Undone"}
+                    onClick={() => navigate(`/candidates`, { state: task.id })}
+                  >
+                    Check out helpers
+                  </Button>
+                </div>
+
+              ) : (
+                <div className="mytasks button-container">
+
+                  {(task.status === "IN_PROGRESS" || task.status === "CONFIRMED_BY_HELPER") && (
+                    <Button
+                      width="30%"
+                      onClick={() => navigate(`/todo/${task.id}`)}
+                    >
+                      Check out the To-Do list
+                    </Button>
+                  )}
+                  {(task.status === "CONFIRMED_BY_CREATOR" || task.status === "DONE") && (
+                    <Button
+                      width="40%"
+                      disabled={reviewStatuses[task.id] === true} 
+                      onClick={() => navigate(`/leavereview/${task.helperId}/${task.id}`, { state: { userStatus: "Creator" } })}
+                    >
+                      Leave Review
+                    </Button>
+                  )}
+
+                  <p className="mytasks button-replacement">
+                    You have chosen {helperNames[task.helperId]} as a helper!
+                  </p>
+
+                </div>
+
+              )}
+
+              {/* <Button
+              width="30%"
+              // Maybe we have to think about the status and when to give this option
+              disabled={task.status === "Undone"}
+              onClick={() => navigate(`/candidates`, {state: task.id} )}
+              >
+              Check out helpers
+              </Button> */}
+
             </div>
           ))}
         </section>
