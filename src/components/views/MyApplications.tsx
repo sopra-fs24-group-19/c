@@ -151,7 +151,7 @@ const MyApplications = () => {
         <br />
         {/* Wrap the tasks in a scrollable element*/}
         <section id="taskContainer" style={{ height: 600, overflow: "auto", width: 1000 }}>
-          {tasks.map((task: Task) => (
+          {filteredTasks.map((task: Task) => (
             <div className="myapplications form" key={task.id}>
 
               {/*Show all needed attributes for a task*/}

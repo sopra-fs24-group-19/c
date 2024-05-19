@@ -43,9 +43,14 @@ const ToDo = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchTask();
-    }, []);
+        if (sessionStorage.getItem("token")) {
+            const intervalId = setInterval(fetchTask, 2000);
+            return () => clearInterval(intervalId);
+        }
+    }, [taskId]);
+
 
     const fetchAllTodosDone = async () => {
         try {
@@ -308,21 +313,37 @@ const ToDo = () => {
 
                         <br/>
                         {/*Here new ToDo's can be added*/}
-                        <div className="todo task-container">
-                            <input
-                                className="todo input"
-                                placeholder="Add a new subtask"
-                                value={newTodo}
-                                onChange={(e) => setNewTodo(e.target.value)}
-                            />
-                            <div className="todo button-container">
-                                <Button
-                                    onClick={postTodo}
-                                    disabled={!newTodo}>
-                                    Submit
-                                </Button>
+                        {task.status === "IN_PROGRESS"? (
+                            <div className="todo task-container">
+                                <input
+                                    className="todo input"
+                                    placeholder="Add a new subtask"
+                                    value={newTodo}
+                                    onChange={(e) => setNewTodo(e.target.value)}
+                                />
+                                <div className="todo button-container">
+                                    <Button
+                                        onClick={postTodo}
+                                        disabled={!newTodo}>
+                                        Submit
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
+                        ):(
+                            <div className="todo task-container">
+                                <label
+                                    className="todo close_todo"
+                                    >The other party has closed this task</label>
+                                <div className="todo button-container">
+                                    <Button
+                                        onClick={postTodo}
+                                        disabled={true}>
+                                        Submit
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
 
 
                         <br/>
