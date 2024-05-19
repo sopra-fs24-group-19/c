@@ -76,7 +76,7 @@ const Register = () => {
   return (
     <BaseContainer>
       <div className="register container">
-        <img src={process.env.PUBLIC_URL + "/HHlogo.png"} alt="Company Logo" className="logo" />
+        <img src={process.env.PUBLIC_URL + "/favicon.ico"} alt="Company Logo" className="logo" />
         <h1>Create your account</h1>
         <p>Please make sure your username is unique</p>
         <div className="register form">
