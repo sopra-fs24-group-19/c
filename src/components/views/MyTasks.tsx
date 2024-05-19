@@ -208,7 +208,7 @@ const MyTasks = () => {
         <br />
 
         {/* Wrap the tasks in a scrollable element*/}
-        <section id="tasksSection" style={{ height: 600, overflowY: 'auto', width: 1000 }}>
+        <section id="tasksSection" style={{ height: 600, overflow: "auto", width: '100%' }}>
           {filteredTasks.map((task: Task) => (
             <div className="mytasks form" key={task.id}>
 

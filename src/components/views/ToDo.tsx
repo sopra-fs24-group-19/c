@@ -225,7 +225,7 @@ const ToDo = () => {
                         <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task efficiently!</p>
                         <br/>
 
-                    <div className="todo form">
+                    <div className="todo form" style={{ overflowY: 'auto', width: '100%' }}>
 
 
                         <br/>

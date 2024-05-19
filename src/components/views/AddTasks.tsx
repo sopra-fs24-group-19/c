@@ -395,7 +395,7 @@ const AddTasks = () => {
           <div className="addtasks container">
             <h1 >Create a new task</h1>
             <p>Ask your community for help by creating a task that you need help with</p>
-            <div className="addtasks form">
+            <div className="addtasks form" style={{overflowY: 'auto', width: '100%' }}>
 
               {/*Define all needed attributes for a new task*/}
               <FormField
