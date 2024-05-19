@@ -83,7 +83,7 @@ const Header = (props) => {
   return (
     <div className="header container">
       <div className="header logo">
-        <img src="HHlogo.png" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
+        <img src="/favicon.ico" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
         {isValid && sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <>
         <Link to="/leaderboard" className="header-trophy-button">
