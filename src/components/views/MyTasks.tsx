@@ -154,7 +154,7 @@ const MyTasks = () => {
       return () => clearInterval(intervalId);
     }
     
-  }, [tasks]);
+  }, []);
 
   useEffect(() => {
 
