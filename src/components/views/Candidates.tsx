@@ -62,12 +62,12 @@ const Candidates = () => {
         <p>These are your neighbors that would like to help you with this task</p>
 
         {/* Wrap the candidates in a scrollable element*/}
-        <section id="candidatesSection" style={{ height: 600, overflow: "auto", width: 1000 }}>
+        <section id="candidatesSection" style={{ height: 600, overflow: "auto", width: '100' }}>
           {candidates.map((candidate: User) => (
             <div className="candidates form" key={candidate.id}>
               <label className="candidates title">
                 <span id="candidateName">{candidate.name}</span>
-                <img src={process.env.PUBLIC_URL + "/profilepic.png"} alt="Profile picture" className="img" style={{ height: 80, borderRadius: '50%' }} />
+                <img src={process.env.PUBLIC_URL + "/profilepic.ico"} alt="Profile picture" className="img" style={{ height: 80, borderRadius: '50%' }} />
               </label>
               <section id="candidateRating" className="candidates button-container">
                 <Button

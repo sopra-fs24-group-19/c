@@ -57,7 +57,7 @@ const Leaderboard = () => {
             <div className="leaderboard field">
               <div className="leaderboard rank">{user.rank}.</div>
               <div className="leaderboard username">
-                <img src={process.env.PUBLIC_URL + "/profilepic.png"} alt="Profile" className="img" style={{ height: 30, borderRadius: '50%', marginRight: '10px' }}/>
+                <img src={process.env.PUBLIC_URL + "/profilepic.ico"} alt="Profile" className="img" style={{ height: 30, borderRadius: '50%', marginRight: '10px' }}/>
                 {user.id.toString() === userId ? `${user.username} (you)` : user.username}
               </div>
               <div className="leaderboard task-count">{user.taskCount}</div>
