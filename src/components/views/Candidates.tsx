@@ -62,7 +62,7 @@ const Candidates = () => {
         <p>These are your neighbors that would like to help you with this task</p>
 
         {/* Wrap the candidates in a scrollable element*/}
-        <section id="candidatesSection" style={{ height: 600, overflow: "auto", width: '100' }}>
+        <section id="candidatesSection" style={{ height: 600, overflow: "auto", width: '80%' }}>
           {candidates.map((candidate: User) => (
             <div className="candidates form" key={candidate.id}>
               <label className="candidates title">

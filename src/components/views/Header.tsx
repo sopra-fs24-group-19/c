@@ -83,7 +83,7 @@ const Header = (props) => {
   return (
     <div className="header container">
       <div className="header logo">
-        <img src="/favicon.ico" alt="Company Logo" style={{width: "50px", borderRadius: "0.75em"}}/>
+        <img src="/favicon.ico" alt="Company Logo" style={{width: "calc(1vw + 2vh + 20px)", height: "calc(1vw + 2vh + 20px)", borderRadius: "0.75em"}}/>
         {isValid && sessionStorage.getItem("token") !== null && currentUser !== null ? (
         <>
         <Link to="/leaderboard" className="header-trophy-button">
@@ -109,7 +109,7 @@ const Header = (props) => {
           </div>
           <div className="header button-column">
             <Button to="/leaderboard" className="header-trophy-button" onClick={doLogout}>
-              <FiLogOut className="header-trophy-icon"/>
+            <FiLogOut className="header-trophy-icon"/>
             </Button>
           </div>
         </div>

@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 60%;
+    width: 100%;
     max-width: 30em;
     height: auto;
     padding-top: 2em; 
@@ -33,15 +33,24 @@
     justify-content: center;
   }
   &.input {
+    width: 100%;
+    margin-right: 10px;
     height: 35px;
     padding-left: 15px;
     border: none;
     border-radius: 0.75em;
     background: transparentize(white, 0.85);
     color: $our_brown;
-    flex: 0.95;
   }
+  &.item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   &.input-button-container {
+    width: 60%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -50,6 +59,9 @@
     display: flex;
     margin-top: 2px;
     margin-bottom: 2px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     align-items: center; // Vertically center items
     justify-content: space-between; // Pushes the button to the right
   }
@@ -65,6 +77,7 @@
     margin-right: 15px;
     margin-left: auto;
     align-self: center;
+
   }
   &.close_todo {
     color: $our_brown;
@@ -73,8 +86,10 @@
     align-self: center;
   }
   &.button-container {
+    padding-top: 10px;
     display: flex;
     justify-content: center;
+
 
     button {
       margin-right: 3px;
@@ -84,6 +99,7 @@
     }
   }
   .tick {
+    flex-shrink: 0;
     cursor: pointer; // Set cursor to pointer to indicate it's clickable
     margin-left: 6px;
     color: grey; // Initial color of the tick
@@ -94,4 +110,5 @@
   .tick.clicked {
     color: green; // Change color to green when clicked
   }
+
 }
