@@ -48,7 +48,7 @@ const FormField = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const {userStatus} = location.state;
+    const userStatus  = location.state;
 
     const [showPopup, setShowPopup] = useState(false);
     const togglePopup = () => {
@@ -71,7 +71,6 @@ const FormField = (props) => {
           comment: review,
           taskId: taskId
         };
-
         try {
           const response = await api.post(`/ratings/${reviewedId}`, requestBody, {
             headers: {

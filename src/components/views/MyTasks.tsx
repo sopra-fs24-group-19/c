@@ -5,13 +5,14 @@ import { api, handleError } from "helpers/api";
 import Task from "models/Task";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "styles/views/MyTasks.scss";
 
 const getStatusSymbol = (status) => {
   switch (status) {
     case "CREATED":
       return "OPEN FOR APPLICATION";
+    case "CONFIRMED_BY_CREATOR":
     case "DONE":
       return "DONE";
     default:
@@ -77,9 +78,8 @@ const MyTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
   const [reviewStatuses, setReviewStatuses] = useState({});
-
+  const [helperNames, setHelperNames] = useState<{ [key: number]: string }>({});
   
-
   const doDeleteTask = async (taskId) => {
     try {
       const response = await api.delete(`/tasks/${taskId}`,
@@ -95,7 +95,36 @@ const MyTasks = () => {
     }
   }
 
-  const [helperNames, setHelperNames] = useState<{ [key: number]: string }>({});
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`/tasks/created/${currentUserId}`);
+        setTasks(response.data);
+      } catch (error) {
+        console.error(
+          `Something went wrong while fetching the tasks: \n${handleError(
+            error
+          )}`
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the tasks! See the console for details."
+        );
+      }
+    }
+    fetchData();
+    if (sessionStorage.getItem("token")) {
+      const intervalId = setInterval(fetchData, 2000);
+      return () => clearInterval(intervalId);
+    }
+  }, [currentUserId]);
+
+  const filteredTasks = tasks.filter(task => {
+    if (filterStatus === "ALL") return true;
+    return task.status === filterStatus;
+  });
+
+
 
   useEffect(() => {
     // Function to fetch helper name
@@ -123,8 +152,6 @@ const MyTasks = () => {
       setHelperNames((prevHelperNames) => ({ ...prevHelperNames, ...newHelperNames }));
     };
 
-    fetchHelperNames();
-
     const fetchIsReviewed = async (taskId) => {
       try {
         const response = await api.get(`/ratings/${taskId}/${currentUserId}/isReviewed`, {
@@ -143,48 +170,25 @@ const MyTasks = () => {
         }));
       }
     };
-    
-    
-    tasks.forEach(task => {
-      fetchIsReviewed(task.id);
-    });
+
+   if (tasks.length > 0) {
+      fetchHelperNames();
+      tasks.forEach(task => {
+        fetchIsReviewed(task.id);
+      });
+    }
 
     if (sessionStorage.getItem("token")) {
-      const intervalId = setInterval(fetchHelperNames, 2000);
+      const intervalId = setInterval(() => {
+        fetchHelperNames();
+        tasks.forEach(task => {
+          fetchIsReviewed(task.id);
+        });
+      }, 2000);
       return () => clearInterval(intervalId);
     }
-    
-  }, []);
+  }, [tasks, currentUserId, helperNames]);
 
-  useEffect(() => {
-
-    async function fetchData() {
-      try {
-        const response = await api.get(`/tasks/created/${currentUserId}`);
-        setTasks(response.data);
-      } catch (error) {
-        console.error(
-          `Something went wrong while fetching the tasks: \n${handleError(
-            error
-          )}`
-        );
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the tasks! See the console for details."
-        );
-      }
-    }
-    fetchData();
-    if (sessionStorage.getItem("token")) {
-      const intervalId = setInterval(fetchData, 2000);
-      return () => clearInterval(intervalId);
-    }
-  }, []); // Empty dependency array to run the effect only once
-
-  const filteredTasks = tasks.filter(task => {
-    if (filterStatus === "ALL") return true;
-    return task.status === filterStatus;
-  });
 
   return (
     <>
@@ -226,15 +230,6 @@ const MyTasks = () => {
 
                 <div className="mytasks button-container">
                   <Button
-                    style={{ marginRight: '300px' }}
-                    width="30%"
-                    disabled={task.status === "DONE"}
-                    onClick={() => doDeleteTask(task.id)}
-                  >
-                    Delete task
-                  </Button>
-
-                  <Button
                     width="30%"
                     // Maybe we have to think about the status and when to give this option
                     disabled={task.status === "Undone"}
@@ -242,45 +237,50 @@ const MyTasks = () => {
                   >
                     Check out helpers
                   </Button>
+                  <Button
+                    width="30%"
+                    disabled={task.status === "DONE"}
+                    onClick={() => doDeleteTask(task.id)}
+                  >
+                    Delete task
+                  </Button>
                 </div>
-
               ) : (
-                <div className="mytasks button-container">
-
-                  {(task.status === "IN_PROGRESS" || task.status === "CONFIRMED_BY_HELPER") && (
-                    <Button
-                      width="30%"
-                      onClick={() => navigate(`/todo/${task.id}`)}
-                    >
-                      Check out the To-Do list
-                    </Button>
-                  )}
-                  {(task.status === "CONFIRMED_BY_CREATOR" || task.status === "DONE") && (
-                    <Button
-                      width="40%"
-                      disabled={reviewStatuses[task.id] === true} 
-                      onClick={() => navigate(`/leavereview/${task.helperId}/${task.id}`, { state: { userStatus: "Creator" } })}
-                    >
-                      Leave Review
-                    </Button>
-                  )}
-
-                  <p className="mytasks button-replacement">
-                    You have chosen {helperNames[task.helperId]} as a helper!
-                  </p>
-
+                getStatusSymbol(task.status) !== "DONE"? (
+               <div className="mytasks button-container">
+                <p className="mytasks button-replacement">
+                  You have chosen {helperNames[task.helperId]} as a helper!
+                </p>
+                <Button
+                  width="30%"
+                  onClick={() => navigate(`/todo/${task.id}`)}
+                >
+                  Check out the To-Do list
+                </Button>
                 </div>
+                ):(
 
-              )}
 
-              {/* <Button
-              width="30%"
-              // Maybe we have to think about the status and when to give this option
-              disabled={task.status === "Undone"}
-              onClick={() => navigate(`/candidates`, {state: task.id} )}
+              reviewStatuses[task.id] ? (
+              <p style={{fontWeight: 'bold'}}>This task is finished!</p>
+              ):(
+              <p style={{fontWeight: 'bold'}}>Don{"'"}t forget to{" "}
+              <Link
+
+                to={{
+                  pathname: `/leavereview/${task.helperId}/${task.id}`,
+                  state: { userStatus: "Creator" }
+                }}
               >
-              Check out helpers
-              </Button> */}
+              leave a review</Link>
+              {" "}for your helper!
+              </p>
+              )
+
+
+
+                )
+                )}
 
             </div>
           ))}
