@@ -113,7 +113,7 @@ const MyApplications = () => {
       const intervalId = setInterval(fetchData, 2000);
       return () => clearInterval(intervalId);
     }
-  }, [tasks]); 
+  }, []); 
 
   const filteredTasks = tasks.filter(task => {
     if (filterStatus === "ALL") return true;
