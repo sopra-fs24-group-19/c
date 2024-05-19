@@ -53,7 +53,7 @@ const RadiusDropdown = (props) => {
           className="myprofile input"
           value={props.value !== null ? props.value : ''}
           onChange={handleChange}
-          style={{width: '410px', color: props.value === null ? '#999999' : '#553842'}}
+          style={{width: '100%', color: props.value === null ? '#999999' : '#553842'}}
         >
           <option value="" disabled >{props.placeholder}</option>
           <option value="1">1 km</option>

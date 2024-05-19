@@ -225,45 +225,42 @@ const ToDo = () => {
                         <br/>Simply type in your to-dos below and hit &apos;Submit&apos; to organize your task efficiently!</p>
                         <br/>
 
-                    <div className="todo form" style={{ overflowY: 'auto', width: '100%' }}>
+                    <div className="todo form">
 
 
                         <br/>
                         {/*Obtain tasks that the counter-part has submitted*/}
                         {todos.otherTodos.map((todo) =>
-                            <div key={todo.id} className="todo item">
-                            <div className="todo task-container">
+                            <div key={todo.id} className="todo task-container">
                                 <input
                                     className="todo input"
                                     value={todo.description}
                                     style={{background:'none'}}
                                 />
                                 <label className="todo description">Not changeable</label>
-                                    {Number(userId) === Number(task.creatorId) ?
-                                    (
-                                        <span
-                                          className={`todo tick ${todo.done ? 'clicked' : ''}`}
-                                          onClick={() => {doneTodo(todo.id, descriptions[todo.id] || todo.description)}}
-                                        >
-                                          ✔
-                                        </span>
-                                    )
-                                    :
-                                    (
-                                    <span className={`todo tick ${todo.done ? 'clicked' : ''}`} style={{cursor: 'initial'}}>
+                                {Number(userId) === Number(task.creatorId) ?
+                                (
+                                    <span
+                                      className={`todo tick ${todo.done ? 'clicked' : ''}`}
+                                      onClick={() => {doneTodo(todo.id, descriptions[todo.id] || todo.description)}}
+                                    >
                                       ✔
                                     </span>
-                                    )
-                                    }
-                            </div>
+                                )
+                                :
+                                (
+                                <span className={`todo tick ${todo.done ? 'clicked' : ''}`} style={{cursor: 'initial'}}>
+                                  ✔
+                                </span>
+                                )
+                                }
                             </div>
                         )}
 
 
                         {/*Obtain tasks that the logged-in user has submitted*/}
                         {todos.myTodos.map((todo) =>
-                            <div key={todo.id} className="todo item">
-                            <div className="todo task-container">
+                            <div key={todo.id} className="todo task-container">
                                 <input
                                     className="todo input"
                                     value={descriptions[todo.id] || todo.description}
@@ -305,7 +302,6 @@ const ToDo = () => {
                                     }
                                 </div>
                             </div>
-                            </div>
                        )}
 
 
@@ -343,8 +339,6 @@ const ToDo = () => {
                         )}
 
 
-
-                        <br/>
                        {/*This button terminates the task and marks it as done*/}
                         <div className="todo button-container">
                             <Button

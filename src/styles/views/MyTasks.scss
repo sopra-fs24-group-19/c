@@ -59,7 +59,7 @@
     margin-bottom: 20px;
     color: $our_brown;
     text-transform: uppercase;
-    font-size: 30px;
+    font-size: calc(2vw + 13px);
     font-weight: 700;
     display: block;
   }
@@ -80,9 +80,6 @@
 
   //The status box defines the look of the status box for each task
   &.status-box {
-    position: relative;
-    top: 0;
-    right: 0;
     background: $our_beige;
     color: $our_brown;
     border: 2px solid $our_brown;
@@ -91,8 +88,9 @@
     justify-content: center;
     text-transform: uppercase;
     font-weight: 600;
+    font-size: calc(0.8*(0.5vw + 13px));
+    align-items: center;
     width: 25%;
-    padding: 8px 6px;
     margin-top: 2em;
   }
 

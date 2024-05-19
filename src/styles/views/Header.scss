@@ -6,6 +6,7 @@ html, body {
   text-align: center !important;
 }
 
+
 .header {
   background-color: $our_green;
   width: 100%;
@@ -27,15 +28,16 @@ html, body {
 
   &.title {
     font-weight: bold;
+    font-size: calc(1vw + 20px);
     color: $our_brown;
     text-align: center;
   }
   &.button {
     color: $our_beige;
     background-color: $our_brown;
-    font-size: 0.8em;
-    width: 80px;
-    height: 50px;
+    font-size: calc(0.2*(1vw + 2vh + 20px));
+    width: calc(1vw + 2vh + 20px);
+    height: calc(1vw + 2vh + 20px);
     border-radius: 0.75em;
     margin-left: 10px;
     cursor: pointer;
@@ -84,7 +86,7 @@ html, body {
 
   &.text {
     color: $our_brown;
-    font-size: 1.1em;
+    font-size: calc(0.35*(1vw + 2vh + 20px));
     font-weight: 500;
     text-align: left;
     margin-top:7px;
@@ -94,30 +96,32 @@ html, body {
   &.icons {
     color: $our_brown;
     margin-top: 1px;
-    width: auto;
+    width: calc(0.7*(1vw + 2vh + 20px));
   }
 
   .header-trophy-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: $our_brown; 
+    background-color: $our_brown;
     border-radius: 0.75em;
     padding: 5px;
     margin-left: 10px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    height: 50px;
-  
+    height: calc(1vw + 2vh + 20px);
+    width: calc(1vw + 2vh + 20px);
+
     &:hover {
       background-color: $our_brown;
       transform: translateY(-2px);
     }
 
   }
-  
+
   .header-trophy-icon {
     color: white; // Icon color
-    font-size: 25px; // Adjust size as needed
+    font-size: calc(1vw + 13px); // Adjust size as needed
+    //font-size: 25px; // Adjust size as needed
   }
 }

@@ -98,15 +98,18 @@ const FormField = (props) => {
               <h1>Leave a review!</h1>
               <div className="review form">
               <label className="review label">Stars</label>
+                <div style={{ paddingBottom: '20px' }}>
                     <StarRatings
-                    rating={stars}
-                    starRatedColor= "#553842" // Color of filled stars
-                    starHoverColor="#8d6e63" // Color of stars when hovering
-                    starEmptyColor="#ebe8e5" 
-                    changeRating={(newRating: number) => setStars(newRating)}
-                    numberOfStars={5}
-                    name='rating'
+                        rating={stars}
+                        starRatedColor="#553842"
+                        starHoverColor="#8d6e63"
+                        starEmptyColor="#ebe8e5"
+                        changeRating={(newRating: number) => setStars(newRating)}
+                        numberOfStars={5}
+                        name='rating'
+                        starDimension="calc(1vw + 2vh + 20px)"
                     />
+                </div>
                 <FormField
                   label="Your Review"
                   type="textarea"

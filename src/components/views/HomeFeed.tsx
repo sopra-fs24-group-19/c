@@ -89,7 +89,7 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
     }
     catch (error) {
       if (error.response && error.response.status === 409) {
-        alert('You have already applied for this task.');
+        alert('You already applied to this task.');
       } else {
         console.error(`Something went wrong: ${error}`);
       }
@@ -125,7 +125,7 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
           (!hasApplied?
                        (<Button width="40%" onClick={handleHelpClick}>Help</Button>)
                        :
-                       (<Button width="40%" disabled={true}>You have already applied to this task!</Button>)
+                       (<Button width="40%" disabled={true}>You have already applied!</Button>)
           )
           }
       </div>
