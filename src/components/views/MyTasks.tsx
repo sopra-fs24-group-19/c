@@ -180,14 +180,13 @@ const MyTasks = () => {
 
     if (sessionStorage.getItem("token")) {
       const intervalId = setInterval(() => {
-        fetchHelperNames();
         tasks.forEach(task => {
           fetchIsReviewed(task.id);
         });
       }, 2000);
       return () => clearInterval(intervalId);
     }
-  }, [tasks, currentUserId, helperNames]);
+  }, [tasks, currentUserId]);
 
 
   return (
