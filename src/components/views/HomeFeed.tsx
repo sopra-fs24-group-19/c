@@ -9,6 +9,15 @@ import "styles/views/HomeFeed.scss";
 import { User } from "types";
 import dayjs from 'dayjs';
 
+const getDuration = (dur) => {
+  switch (dur) {
+    case 241:
+      return ">4";
+   default:
+      return (dur / 60).toFixed(2);
+  }
+}
+
 type Task = {
   id: number;
   creatorId: number;
@@ -113,7 +122,7 @@ const TaskItem = ({ task, myApplications }: { task: Task; myApplications: number
           <label className="myapplications label">{"Date"}</label>
           <label className="myapplications content">{formattedDateTime}</label>
           <label className="myapplications label">{"Duration"}</label>
-          <label className="myapplications content">{`${(task.duration / 60).toFixed(2)} hrs`}</label>
+          <label className="myapplications content">{`${getDuration(task.duration)} hrs`}</label>
           <label className="myapplications label">{"Compensation"}</label>
           <label className="myapplications content">{`${task.compensation} tokens`}</label>
         </aside>
@@ -291,7 +300,6 @@ const HomeFeed = () => {
       content = (
         <div className="homefeed" style={{ height: '75vh', overflowY: 'auto', width: '100%' }}>
           <ul className="homefeed task-list" style={{ listStyleType: 'none', paddingLeft: 0 }}>
-
 
               {myApplications && tasks.map((task: Task) => (
                 <li key={task.id}>
