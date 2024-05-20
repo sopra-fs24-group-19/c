@@ -20,6 +20,15 @@ const getStatusSymbol = (status) => {
   }
 };
 
+const getDuration = (dur) => {
+  switch (dur) {
+    case 241:
+      return ">4";
+   default:
+      return (dur / 60).toFixed(2);
+  }
+}
+
 
 const FormField = (props) => {
   const dateTime = dayjs(props.date);
@@ -42,7 +51,7 @@ const FormField = (props) => {
           <label className="myapplications label">{"Date"}</label>
           <label className="myapplications content">{formattedDateTime}</label>
           <label className="myapplications label">{"Duration"}</label>
-          <label className="myapplications content">{`${(props.dur / 60).toFixed(2)} hrs`}</label>
+          <label className="myapplications content">{`${getDuration(props.dur)} hrs`}</label>
           <label className="myapplications label">{"Compensation"}</label>
           <label className="myapplications content">{`${props.comp} coins`}</label>
         </aside>
@@ -155,8 +164,10 @@ const MyApplications = () => {
           </select>
         </div>
         <br />
+        <br />
         {/* Wrap the tasks in a scrollable element*/}
-        <section id="taskContainer" style={{ height: 600, overflow: "auto", width: '100%' }}>
+
+        <div className="myapplications" id="taskContainer" style={{ height: '75vh', overflowY: 'auto', width: '100%'}}>
           {filteredTasks.map((task: Task) => (
             <div className="myapplications form" key={task.id}>
 
@@ -213,7 +224,7 @@ const MyApplications = () => {
 
             </div>
           ))}
-        </section>
+        </div>
         <div className="myapplications button-container">
           <Button
             style={{ marginTop: '20px' }}

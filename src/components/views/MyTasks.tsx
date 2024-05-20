@@ -20,6 +20,15 @@ const getStatusSymbol = (status) => {
   }
 };
 
+const getDuration = (dur) => {
+  switch (dur) {
+    case 241:
+      return ">4";
+   default:
+      return (dur / 60).toFixed(2);
+  }
+}
+
 const FormField = (props) => {
   const dateTime = dayjs(props.date);
   const formattedDateTime = dateTime.format('DD MMMM YYYY, HH:mm') 
@@ -41,7 +50,7 @@ const FormField = (props) => {
           <label className="mytasks label">{"Date"}</label>
           <label className="mytasks content">{formattedDateTime}</label>
           <label className="mytasks label">{"Duration"}</label>
-          <label className="mytasks content">{`${(props.dur / 60).toFixed(2)} hrs`}</label>
+          <label className="mytasks content">{`${getDuration(props.dur)} hrs`}</label>
           <label className="mytasks label">{"Compensation"}</label>
           <label className="mytasks content">{`${props.comp} coins`}</label>
         </aside>
@@ -208,7 +217,7 @@ const MyTasks = () => {
         <br />
 
         {/* Wrap the tasks in a scrollable element*/}
-        <section id="tasksSection" style={{ height: 600, overflow: "auto", width: '100%' }}>
+        <section id="tasksSection" style={{ height: '75vh', overflowY: 'auto', width: '100%'}}>
           {filteredTasks.map((task: Task) => (
             <div className="mytasks form" key={task.id}>
 

@@ -103,6 +103,11 @@ DurationDropdown.propTypes = {
 
 
 const OurDatePicker = (props) => {
+  const currentDate = new Date();
+  const currentHour = currentDate.getHours();
+  const currentMinute = currentDate.getMinutes();
+  const isToday = props.value ? props.value.toDateString() === currentDate.toDateString() : true;
+
   return (
     <div className="addtasks field">
       <label className="addtasks label">{props.label}</label>
@@ -112,6 +117,8 @@ const OurDatePicker = (props) => {
             onChange={props.onChange}
             placeholderText={props.placeholder}
             minDate={new Date()}
+            minTime={isToday ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentHour, currentMinute) : null}
+            maxTime={isToday ? new Date(new Date().setHours(23, 59, 59)) : null}
             showTimeSelect // Add this prop to enable time selection
             dateFormat="dd MMMM yyyy, HH:mm"
             style={{width: "410px !important"}}

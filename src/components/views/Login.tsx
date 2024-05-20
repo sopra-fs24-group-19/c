@@ -89,7 +89,7 @@ const Login = () => {
   return (
     <BaseContainer>
       <div className="login container">
-        <img src={process.env.PUBLIC_URL + "/favicon.ico"} alt="Company Logo" className="logo" />
+        <img src={process.env.PUBLIC_URL + "/favicon.ico"} alt="Company Logo" className="logo" style={{ width: '10vw', height: '10vw' }} />
         <h1>Hi there!</h1>
         <h5>Please enter your credentials</h5>
         <div className="login form">
