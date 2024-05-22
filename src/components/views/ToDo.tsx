@@ -263,7 +263,7 @@ const ToDo = () => {
                             <div key={todo.id} className="todo task-container">
                                 <input
                                     className="todo input"
-                                    value={descriptions[todo.id] || todo.description}
+                                    value={descriptions[todo.id] !== undefined ? descriptions[todo.id] : todo.description}
                                     onChange={(e) => updateDescription(todo.id, e.target.value)}
                                     onFocus={() => setEditingTodoId(todo.id)}
                                     onBlur={() => setEditingTodoId(null)}
