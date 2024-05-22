@@ -26,87 +26,126 @@ Our vision is to restore the neighborly spirit of mutual assistance and goodwill
 
 Helping Hands is more than just an app; it’s a movement to rekindle the sense of community and solidarity that seems to have faded in our modern world. Join us in making neighborhoods friendlier and more supportive places to live. Together, we can make a difference, one helping hand at a time.
 
-## Technologies Used
+## Technologies
 
-## High-level coponents
+**Frontend**:
 
-## Launch & Deployment
+- [React](https://reactjs.org/)
+- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)/[TypeScript](https://www.typescriptlang.org/)
+- [Axios](https://axios-http.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [CRACO](https://github.com/gsoft-inc/craco)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- [Geoapify](https://www.geoapify.com/)
 
-## Technologies Used
+## High-level Components
+### Frontend
+
+## Launch & Development
+
+The onboarding process is crucial for a new developer and it involves training to ensure the frontend components function properly.
+
+### Cloning the Repositories
+
+**Client:**
+```sh
+git clone https://github.com/sopra-fs24-group-19/client-group19
+```
+
+### Running the application
+
+**Frontend**
+
+For the client, the developer must ensure to have Node.js version 20.11.0 and npm version 10.4.0 installed.
+
+Installing Dependencies:
+It is important to ensure all dependencies are installed with:
+```sh
+npm install
+```
+To run the application:
+```sh
+npm run start
+```
 
 ## Illustrations
+### Registration and Login
+To begin using the application, users must first register by providing the following information: name, username, and password. After registration, users will be redirected to the HomeFeed page. To view all tasks, navigate to the "My Profile" page located at the top left corner and complete the remaining profile details, including address and the maximum radius for viewing tasks from the provided address. Optionally, users can also add their phone number. 
+
+The user's username and remaining coin balance (initially set to 50 coins upon registration) are always displayed in the page header, next to the logout button.
+
+
+### Creating a Task
+After completing the profile, users can either view existing tasks or create a new one. To create a new task, click on the "Create New Task" button located at the top left and enter the following information: task title, description, compensation (in coins), address where the task needs to be performed, date, and an approximate duration of the task. 
+
+Users can verify the successful creation of the task by navigating to the "My Tasks" page, where they can view and manage their posted tasks. This includes checking the list of applicants by clicking on "Check out Helpers" or deleting the task by clicking on "Delete Task."
+
+
+### Applying to a task
+Once a task is created, it will appear in the HomeFeed of users whose filters, set directly on the HomeFeed page and in "My Profile," match the task's criteria.
+
+Users can apply to assist with a task by clicking the "Help" button. The task creator will see the new applicant in real-time under "My Tasks" -> "Check out Helpers." The creator can view the applicant's profile by clicking on "Look at Ratings" and accept them as a helper by clicking "Accept as Helper".
+
+Applicants can withdraw their application by clicking "Withdraw my application" until they are selected as helpers.
+
+
+### To-Do List
+Once a helper is accepted, both the creator and the helper can access the To-Do list, which outlines the actions required to complete the task. The creator can access this list by clicking on "My Tasks" -> "Check out the To-Do List," and the helper can access it by clicking on "My Tasks" -> "Look at your To-Do List".
+
+On the To-Do list page, both the creator and the helper can add tasks related to the ongoing task. The person who posted the To-Do can update or delete it, but only the task creator can mark To-Dos as completed.
+
+
+### Reviews
+Only when all To-Dos are marked as done can users click on "Mark Task As Done," which redirects them to the page for leaving a review for the other user. If the review is not left immediately, it can be done later on the "My Tasks" or "My Applications" page by clicking on "Leave a review."
+
+Users can also view their profiles and respective reviews by clicking on "My Profile" -> "Check out my reviews".
+
+
+### Leaderboard
+The spirit of Helping Hands is to create a supportive community where everyone helps as much as they can. Therefore, we have included a page called "Leaderboard," accessible by clicking on the trophy icon next to "Create New Task." This page allows users to view all members and identify the most virtuous ones who have helped others with the most tasks.
+
 
 ## Roadmap
 
-## Authors and acknowledgment
+Envisioning continued development on the proposed application, it would be interesting to implement the following functionalities both on the frontend and the supporting backend services:
+
+- **Notification System**: Implement a notification system that can communicate with users via various platforms such as email, SMS, or a dedicated application released on Android and iOS. This system would notify users about service updates, such as being selected for a task, the completion of a to-do, or receiving a review.
+
+- **Real-time Interaction**: Utilize WebSockets to ensure real-time interaction between users. This would allow immediate updates and communication without the need for frequent page refreshes.
+
+- **Enhanced Task Filtering**: Incorporate additional filtering systems to improve task search capabilities. As the number of tasks grows with the increase in users, effective filtering becomes essential. Implementing a search bar that allows filtering by keywords could fulfill this requirement, making it easier for users to find relevant tasks.
+
+
+## Authors and Acknowledgement
+
+### Authors
+
+- **Nina Rubesa**  
+  - Matriculation Number: 23744667  
+  - Email: [nina.rubesa@uzh.ch](mailto:nina.rubesa@uzh.ch)  
+  - GitHub: [nina22221111](https://github.com/nina22221111)
+ 
+- **Sina Klerings**  
+  - Matriculation Number: 23729627  
+  - Email: [sinacaecilia.klerings@uzh.ch](mailto:sinacaecilia.klerings@uzh.ch)  
+  - GitHub: [sinakle](https://github.com/sinakle)
+ 
+### Contributors
+
+- **Dana Rapp**  
+  - Matriculation Number: 23731995  
+  - Email: [dana.rapp@uzh.ch](mailto:dana.rapp@uzh.ch)  
+  - GitHub: [dana-jpg](https://github.com/dana-jpg)
+
+- **Francesco Manzionna**  
+  - Matriculation Number: 23745979  
+  - Email: [francesco.manzionna@uzh.ch](mailto:francesco.manzionna@uzh.ch)  
+  - GitHub: [Holwy](https://github.com/Holwy)
+
 
 ## License
 
+This project is licensed under the GNU General Public License v3.0, see the [LICENSE](LICENSE) file for details.
 
-
-# SoPra FS24 - Client Template with build pack
-
-## Getting started
-
-Read and go through these Tutorials. It will make your life easier:)
-
-- Read the React [Docs](https://react.dev/learn)
-- Do this React [Getting Started](https://react.dev/learn/tutorial-tic-tac-toe) Tutorial (it doesn't assume any existing React knowledge)
-- Get an Understanding of [CSS](https://www.w3schools.com/Css/), [SCSS](https://sass-lang.com/documentation/syntax), and [HTML](https://www.w3schools.com/html/html_intro.asp)!
-
-Next, there are two other technologies that you should look at:
-
-* [react-router-dom](https://reactrouter.com/en/main/start/concepts) offers declarative routing for React. It is a collection of navigational components that fit nicely with the application. 
-* [react-hooks](https://blog.logrocket.com/using-hooks-react-router/) let you access the router's state and perform navigation from inside your components.
-
-## Prerequisites and Installation
-For your local development environment, you will need Node.js.\
-We urge you to install the exact version **v20.11.0** which comes with the npm package manager. You can download it [here](https://nodejs.org/download/release/v20.11.0/).\
-If you are confused about which download to choose, feel free to use these direct links:
-
-- **MacOS:** [node-v20.11.0.pkg](https://nodejs.org/download/release/v20.11.0/node-v20.11.0.pkg)
-- **Windows 32-bit:** [node-v20.11.0-x86.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x86.msi)
-- **Windows 64-bit:** [node-v20.11.0-x64.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x64.msi)
-- **Linux:** [node-v20.11.0.tar.xz](https://nodejs.org/dist/v20.11.0/node-v20.11.0.tar.xz) (use this [installation guide](https://medium.com/@tgmarinho/how-to-install-node-js-via-binary-archive-on-linux-ab9bbe1dd0c2) if you are new to Linux)
-
-If you happen to have a package manager the following commands can be used:
-
-- **Homebrew:** `brew install node@20.11.0`
-- **Chocolatey:** `choco install nodejs-lts --version=20.11.0`
-
-After the installation, update the npm package manager to **10.4.0** by running ```npm install -g npm@10.4.0```\
-You can ensure the correct version of node and npm by running ```node -v``` and ```npm --version```, which should give you **v20.11.0** and **10.4.0** respectively.\
-Before you start your application for the first time, run this command to install all other dependencies, including React:
-
-```npm install```
-
-Next, you can start the app with:
-
-```npm run dev```
-
-Now you can open [http://localhost:3000](http://localhost:3000) to view it in the browser.\
-Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use a Chrome-based browser).\
-The client will send HTTP requests to the server which can be found [here](https://github.com/HASEL-UZH/sopra-fs24-template-server).\
-In order for these requests to work, you need to install and start the server as well.
-
-### Testing
-Testing is optional, and you can run the tests with `npm run test`\
-This launches the test runner in an interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-> For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
-
-### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance:\
-The build is minified, and the filenames include hashes.<br>
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Learn More
-
-To learn React, check out the [React documentation](https://react.dev/).
-
-
-> Thanks to Lucas Pelloni Kyrill Hux and Marco Leder for working on the template.
-
+We chose the GPL v3.0 to ensure that our project remains free and open, allowing users to use, modify, and distribute the software while ensuring that all modifications remain open and accessible to the community.
