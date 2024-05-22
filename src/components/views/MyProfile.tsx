@@ -53,7 +53,7 @@ const RadiusDropdown = (props) => {
           className="myprofile input"
           value={props.value !== "0" ? props.value : ''}
           onChange={handleChange}
-          style={{width: '410px', color: props.value === "0" ? '#999999' : '#553842'}}
+          style={{width: '100%', color: props.value === "0" ? '#999999' : '#553842'}}
         >
           <option value="" disabled >{props.placeholder}</option>
           <option value="1">1 km</option>
@@ -208,7 +208,6 @@ function addressAutocomplete(containerElement, callback, options, clearAddress) 
         });
       }, DEBOUNCE_DELAY);
     });
-
   // Every time the user adjusts the selected item, we need to set the flag to false as it is not in the desired format anymore
   inputElement.addEventListener("input", function(e) {
     const currentValue = this.value;
