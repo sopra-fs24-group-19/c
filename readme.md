@@ -66,7 +66,7 @@ npm install
 ```
 To run the application:
 ```sh
-npm run start
+npm start
 ```
 
 ## Illustrations
