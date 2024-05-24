@@ -214,7 +214,7 @@ const MyApplications = () => {
                 }}
               >
               leave a review</Link>
-              {" "}to earn your coins!
+              {" "}for this task!
               </p>
               )
               )}
